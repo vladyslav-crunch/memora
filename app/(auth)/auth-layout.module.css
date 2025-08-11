@@ -1,0 +1,17 @@
+.authLayout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.authMain {
+    justify-content: space-between;
+    padding: 70px;
+    align-items: center;
+    height: calc(100% - 92px);
+    display: flex;
+}
+
+
+

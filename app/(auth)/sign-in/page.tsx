@@ -1,10 +1,12 @@
 import SignInForm from "@/components/auth/sign-in-form";
+
 async function SignInPage() {
     return (
-        <main className="max-w-sm mx-auto p-6">
-            <h1 className="text-2xl font-semibold mb-4">Sign in</h1>
-            <SignInForm />
-        </main>
+        <div className="w-full">
+            <h1 className="text-[28px] font-semibold mb-4">Welcome back!</h1>
+            <SignInForm/>
+        </div>
     );
 }
+
 export default SignInPage

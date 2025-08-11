@@ -1,32 +1,47 @@
-:root {
-  --background: #FFD2CA;
-  --foreground: #171717;
-}
+@import "tailwindcss";
 
+:root {
+    --background: #FFD2CA;
+    --foreground: #333;
+}
 
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+    max-width: 100vw;
+    overflow-x: hidden;
+    height: 100%;
+}
+
+.pageShell {
+    /* full viewport height (mobile-safe) */
+    height: 100dvh;
+    /* your padding */
+    padding: 20px 50px;
+    /* so children can stretch */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    color: var(--foreground);
+    background: var(--background);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+@layer base {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+    }
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 
