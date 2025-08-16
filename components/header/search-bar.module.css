@@ -1,0 +1,23 @@
+.searchBarContainer {
+    position: relative;
+}
+
+.searchBarIcon {
+    position: absolute;
+    pointer-events: none;
+    transform: translateY(15px);
+    left: 15px;
+    z-index: 1;
+    color: #817f85;
+}
+
+.searchBar {
+    background: #FFE5E0;
+    height: 55px;
+    width: 350px;
+    border-radius: 50px;
+    padding: 20px 10px 20px 45px;
+    outline: none;
+}
+
+

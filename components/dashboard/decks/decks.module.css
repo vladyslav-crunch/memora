@@ -1,0 +1,6 @@
+.decksContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    width: 714px;
+}

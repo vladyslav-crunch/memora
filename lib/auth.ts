@@ -24,7 +24,8 @@ export const {
             authorize: async (credentials) => {
                 const parsed = SignInSchema.safeParse(credentials);
                 if (!parsed.success) return null;
-                const {email, password} = parsed.data;
+                const email = parsed.data.email.toLowerCase().trim();
+                const {password} = parsed.data;
 
                 const user = await prisma.user.findUnique({where: {email}});
                 if (!user?.passwordHash) return null;
@@ -56,12 +57,14 @@ export const {
     },
     callbacks: {
         async jwt({token, user}) {
-            if (user) token.uid = (user as any).id as string;
+            if (user?.id) token.sub = user.id;
             return token;
         },
         async session({session, token}) {
-            if (session.user && token.uid) (session.user as any).id = token.uid as string;
+            if (session.user && typeof token.sub === "string") {
+                session.user.id = token.sub;
+            }
             return session;
-        },
-    },
+        }
+    }
 });

@@ -6,7 +6,7 @@ import {useRouter} from "next/navigation";
 import {signIn} from "next-auth/react";
 import Input from "@/components/ui/input/input";
 import Button, {BUTTON_COLOR, BUTTON_VARIANT} from "@/components/ui/button/button";
-import {User, Mail, Lock} from 'lucide-react'
+import {UserRound, Mail, Lock} from 'lucide-react'
 import Link from "next/link";
 import {SignUpInputsType, SignUpSchema} from "@/lib/validation/auth/auth-schemas";
 
@@ -55,7 +55,7 @@ export default function SignUpForm() {
                         type="text"
                         placeholder="Username"
                         {...register("name")}
-                        icon={User}
+                        icon={UserRound}
                         error={errors.name?.message}
                     />
                     <Input

@@ -1,13 +1,14 @@
 .headerContainer {
     display: flex;
     height: 80px;
-
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
 }
 
-.headerLogo {
-    font-size: 28px;
-    font-weight: bold;
+.headerRightSide {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
 }
+

@@ -1,7 +1,4 @@
 import SignUpForm from "@/components/auth/sign-up-form";
-import {auth} from "@/lib/auth";
-import {redirect} from "next/navigation";
-import Link from "next/link";
 
 export default async function SignUpPage() {
     return (

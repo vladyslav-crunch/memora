@@ -1,25 +1,25 @@
-// components/Header.tsx
-"use client";
-
-import Image from "next/image";
 import styles from "./header.module.css";
+import Logo from "@/components/header/logo";
+import SearchBar from "@/components/header/search-bar";
+import ProfileMenu from "@/components/header/profile-menu";
+import Link from "next/link";
 
-export default function Header() {
+type HeaderMode = "auth" | "dashboard" | "learning";
+
+type HeaderProps = {
+    mode?: HeaderMode;
+};
+
+export default function Header({mode}: HeaderProps) {
     return (
-        <header className={styles.headerContiner}>
-            <div className={styles.headerLogo}>
-                <Image
-                    src="/logo.svg"
-                    alt="Memora Logo"
-                    width={72}
-                    height={72}
-                    priority
-                />
-                <span>Memora</span>
+        <header className={styles.headerContainer}>
+            <div className={styles.headerLeftSide}>
+                <Link href={"/"}><Logo/></Link>
             </div>
-
-            {/* right side (keep empty for now, add buttons later) */}
-            <div/>
+            {mode !== "auth" && <div className={styles.headerRightSide}>
+                <SearchBar/>
+                <ProfileMenu/>
+            </div>}
         </header>
     );
 }
