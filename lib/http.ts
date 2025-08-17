@@ -11,16 +11,16 @@ export async function getJSON<T>(url: string): Promise<T> {
         }
         throw err;
     }
-    return res.json() as Promise<T>;
+    return await res.json() as Promise<T>;
 }
 
 export async function sendJSON<T>(
     url: string,
-    init: RequestInit & { body?: unknown }
+    init: Omit<RequestInit, "body"> & { body?: unknown }
 ): Promise<T> {
     const res = await fetch(url, {
         credentials: "include",
-        headers: {"Content-Type": "application/json", ...(init.headers || {})},
+        headers: {"Content-Type": "application/json", ...(init.headers ?? {})},
         ...init,
         body: init.body !== undefined ? JSON.stringify(init.body) : undefined,
     });

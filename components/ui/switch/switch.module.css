@@ -1,0 +1,66 @@
+.switchWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.switchLabel {
+    display: block;
+    color: #333;
+    font-size: 18px;
+}
+
+.switch {
+    position: relative;
+    width: 50px;
+    height: 28px;
+    border: none;
+    border-radius: 999px;
+    padding: 0;
+    cursor: pointer;
+    transition: background 180ms ease, box-shadow 180ms ease;
+    background: #eee5df; /* off bg */
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06);
+}
+
+.switch:focus-visible {
+    outline: 2px solid #f59e0b; /* amber-ish focus */
+    outline-offset: 2px;
+}
+
+.on {
+    background: #f7c9a4; /* amber-500 */
+}
+
+.off {
+    background: #d9d6d5;
+}
+
+.thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    background: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+    transition: transform 180ms ease;
+}
+
+/* Move the thumb when ON */
+.on .thumb {
+    transform: translateX(22px);
+}
+
+/* Disabled state */
+.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.disabled .switch {
+    cursor: not-allowed;
+}

@@ -35,7 +35,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         },
         ref
     ) => {
-        const inputClass = `${styles.input} ${option ? styles[option] : ""} ${error ? styles.inputError : ""}`;
+        const inputClass = `
+            ${styles.input} 
+            ${option ? styles[option] : ""} 
+            ${error ? styles.inputError : ""} 
+            ${!Icon ? styles.noIcon : ""}
+        `;
 
         return (
             <>

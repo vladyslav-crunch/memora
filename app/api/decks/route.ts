@@ -3,17 +3,10 @@ import {NextResponse} from "next/server";
 import {z} from "zod";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
+import {CreateDeckSchema} from "@/lib/validation/deck/deck-schemas";
 
 export const runtime = "nodejs";
 
-const CreateSchema = z.object({
-    name: z.string().min(1).max(200),
-    isQuizNormal: z.boolean().optional().default(true),
-    isQuizReversed: z.boolean().optional().default(false),
-    isQuizTyping: z.boolean().optional().default(false),
-    isQuizRandomized: z.boolean().optional().default(false),
-    isPrivate: z.boolean().optional().default(false),
-});
 
 const QuerySchema = z.object({
     take: z.coerce.number().min(1).max(100).optional(),
@@ -23,7 +16,7 @@ const QuerySchema = z.object({
 export async function POST(req: Request) {
     try {
         const userId = await requireUserId();
-        const data = CreateSchema.parse(await req.json());
+        const data = CreateDeckSchema.parse(await req.json());
 
         const deck = await prisma.deck.create({
             data: {userId, ...data},

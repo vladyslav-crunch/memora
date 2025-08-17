@@ -1,9 +1,12 @@
 import React from 'react';
 import styles from './deck.module.css';
+import {DeckStatsItem} from "@/lib/types/api";
 
-function Deck({deck}) {
-    console.log(deck);
+type DeckProps = {
+    deck: DeckStatsItem;
+}
 
+function Deck({deck}: DeckProps) {
     return (
         <div className={styles.deckContainer}>
             <p className={styles.deckCount}>{deck.counts.totalCards} cards</p>

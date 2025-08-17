@@ -83,10 +83,10 @@
 
 .inputLabel {
     display: block;
-    color: #44305E;
-    font-weight: 500;
-    font-size: 18px;
-    margin-bottom: 12px;
+    color: #333;
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 8px;
 }
 
 .modal {
@@ -111,4 +111,8 @@
 .input:-webkit-autofill:focus {
     box-shadow: 0 0 0 1000px #FFF7F0 inset;
     -webkit-text-fill-color: #000;
+}
+
+.noIcon {
+    padding-left: 20px; /* override when no icon */
 }

@@ -1,0 +1,40 @@
+.group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.toggle {
+    border: none;
+    border-radius: 2px;
+    padding: 8px 13px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background 160ms ease, box-shadow 160ms ease, transform 40ms ease;
+}
+
+.toggle:active {
+    transform: translateY(1px);
+}
+
+.on {
+    background: #f9cba5; /* warm peach */
+    color: #333;
+}
+
+.off {
+    background: rgba(255, 255, 255, 0.3);
+    color: #111827;
+}
+
+.toggleLabel {
+    display: block;
+    color: #333;
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.toggle:hover.off {
+    background: rgba(255, 255, 255, 0.4);
+}
