@@ -29,7 +29,8 @@ export function useCreateDeck() {
         mutationFn: (body: Partial<Deck> & { name: string }) =>
             sendJSON<Deck>("/api/decks", {method: "POST", body}),
         onSuccess: () => {
-            qc.invalidateQueries({queryKey: ["decks"]}); // refetch all paginated lists
+            qc.invalidateQueries({queryKey: ["decks"]});
+            qc.invalidateQueries({queryKey: ["deckStats"]});
         },
     });
 }

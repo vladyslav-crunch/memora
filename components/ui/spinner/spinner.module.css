@@ -1,0 +1,24 @@
+.loaderWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.loaderRing {
+    border-style: solid;
+    border-color: #fde3de;
+    border-top-color: #eb9d8e;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    box-sizing: border-box;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

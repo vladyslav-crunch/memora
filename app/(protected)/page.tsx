@@ -7,7 +7,7 @@ export default async function Dashboard() {
     const session = await auth()
     console.log(session);
     return (
-        <div className={"flex w-full justify-between"}>
+        <div className={"flex w-full h-full justify-between "}>
             <div>
                 <Report/>
                 <SharedDecks/>

@@ -1,6 +1,83 @@
 .decksContainer {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    width: 730px;
+    height: 100%;
+}
+
+.deckFallback {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 100px);
+
+    & h4 {
+        font-weight: 500;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    & p {
+        color: #575757;
+        font-weight: 400;
+    }
+}
+
+.createDeckBtn {
+    padding: 0.5rem 1.25rem; /* py-2 px-5 */
+    border-radius: 0.375rem; /* rounded-md */
+    background-color: #f89b8b; /* Tailwind bg-red-300 */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.createDeckBtn:hover {
+    background-color: #fa8b7d; /* Tailwind bg-red-300 */
+}
+
+.browseCommunityBtn {
+    padding: 0.5rem 1.25rem; /* py-2 px-5 */
+    border-radius: 0.375rem;
+    background-color: white;
+    color: #262626; /* neutral-800 */
+    border: 1px solid #ffffff; /* border */
+    transition: background-color 0.2s ease;
+}
+
+.browseCommunityBtn:hover {
+    background-color: #fffafa; /* neutral-100 */
+}
+
+
+.decksGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: max-content; /* рядки ростуть тільки по контенту */
     gap: 14px;
-    width: 714px;
+    overflow-y: auto;
+    height: calc(100dvh - 180px - 32px - 20px);
+    scrollbar-width: thin;
+    scrollbar-color: #f28b82 #fce8e6;
+    padding-right: 8px;
+}
+
+/* Chrome, Edge, Safari */
+.decksGrid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.decksGrid::-webkit-scrollbar-track {
+    background: #fce8e6; /* light pink track */
+    border-radius: 10px;
+}
+
+.decksGrid::-webkit-scrollbar-thumb {
+    background-color: #f28b82; /* darker pink thumb */
+    border-radius: 10px;
+    border: 2px solid #fce8e6; /* padding effect */
+}
+
+.decksGrid::-webkit-scrollbar-thumb:hover {
+    background-color: #e57373; /* hover effect */
 }
