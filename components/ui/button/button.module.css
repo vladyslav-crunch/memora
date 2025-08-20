@@ -9,6 +9,7 @@
     font-weight: 400;
     border-radius: 10px;
     color: #fff;
+    position: relative;
 }
 
 .base {
@@ -42,6 +43,17 @@
     }
 }
 
+.orangeLight {
+    background-color: #fdd1b9;
+    color: #333;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: #ffc6a7;
+    }
+}
+
 .google {
     border: 0;
     background-color: #FFF7F0;
@@ -70,4 +82,12 @@
     &:hover {
         background-color: #8c8c8c;
     }
+}
+
+.buttonIcon {
+    position: absolute;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

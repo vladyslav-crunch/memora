@@ -5,6 +5,7 @@
     margin: 0; /* reset UA margin */
     max-width: none;
     max-height: none;
+    outline: none;
 }
 
 .dialog[open] {
@@ -26,6 +27,12 @@
     padding: 27px 22px;
 }
 
+.compact {
+    width: 360px;
+    gap: 6px;
+    padding: 10px;
+}
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -44,6 +51,7 @@
     cursor: pointer;
     padding: 0.25rem;
     border-radius: 6px;
+    outline: none;
 }
 
 

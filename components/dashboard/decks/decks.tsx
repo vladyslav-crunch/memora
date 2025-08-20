@@ -15,7 +15,7 @@ const CreateDeckModal = dynamic(
 
 export default function Decks() {
     const {data: decksRes, isLoading: decksLoading} = useDeckStats({take: 20, skip: 0});
-    const [open, setOpen] = useState(false);
+    const [open, setopen] = useState(false);
 
     const itemsCount = decksRes?.items?.length ?? 0;
 
@@ -23,7 +23,7 @@ export default function Decks() {
         <div className={styles.decksContainer}>
             <div className="flex justify-between w-full items-center mb-4">
                 <h3 className="text-2xl font-semibold">My decks</h3>
-                <PlusIcon size={30} className="cursor-pointer" onClick={() => setOpen(true)}/>
+                <PlusIcon size={30} className="cursor-pointer" onClick={() => setopen(true)}/>
             </div>
 
             <div className={"h-full "}>
@@ -46,7 +46,7 @@ export default function Decks() {
                                 </Link>
                                 <button
                                     type="button"
-                                    onClick={() => setOpen(true)}
+                                    onClick={() => setopen(true)}
                                     className={styles.createDeckBtn}
                                 >
                                     Create Deck
@@ -64,7 +64,7 @@ export default function Decks() {
                 )}
             </div>
 
-            <CreateDeckModal open={open} onOpenChange={setOpen}/>
+            <CreateDeckModal open={open} onOpenChange={setopen}/>
         </div>
     );
 }

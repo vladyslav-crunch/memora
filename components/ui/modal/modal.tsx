@@ -24,6 +24,7 @@ type Props = {
     onOpenChange: (o: boolean) => void;
     labelledBy?: string;
     closeOnBackdrop?: boolean;
+    variant?: "default" | "compact";
 };
 
 export default function Modal({
@@ -31,6 +32,7 @@ export default function Modal({
                                   onOpenChange,
                                   labelledBy,
                                   closeOnBackdrop = true,
+                                  variant = "default",
                                   children,
                               }: PropsWithChildren<Props>) {
     const ref = useRef<HTMLDialogElement>(null);
@@ -77,11 +79,11 @@ export default function Modal({
         <ModalCtx.Provider value={{close}}>
             <dialog
                 ref={ref}
-                className={styles.dialog}
+                className={`${styles.dialog} `}
                 aria-labelledby={labelledBy}
                 onCancel={handleCancel}
             >
-                <div className={styles.modal}>{children}</div>
+                <div className={`${styles.modal} ${styles[variant ?? "default"]}`}>{children}</div>
             </dialog>
         </ModalCtx.Provider>,
         document.body

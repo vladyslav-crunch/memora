@@ -21,12 +21,12 @@ const MODE_OPTIONS: ToggleOption[] = [{id: "normal", label: "Normal"}, {
     label: "Reversed"
 }, {id: "typing", label: "Typing"}, {id: "randomized", label: "Randomized"},];
 
-type Props = {
+type CreateDeckModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void
 };
 
-export default function CreateDeckModal({open, onOpenChange}: Props) {
+export default function CreateDeckModal({open, onOpenChange}: CreateDeckModalProps) {
     const createDeck = useCreateDeck();
 
     // schema defaults (OUTPUT)
@@ -56,6 +56,7 @@ export default function CreateDeckModal({open, onOpenChange}: Props) {
         if (v.isQuizRandomized) sel.push("randomized");
         return sel;
     };
+
     const applySelectedIds = (ids: string[]) => {
         setValue("isQuizNormal", ids.includes("normal"), {shouldValidate: true});
         setValue("isQuizReversed", ids.includes("reversed"), {shouldValidate: true});
