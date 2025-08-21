@@ -42,6 +42,7 @@ export function useUpdateDeck(id: number) {
             sendJSON<Deck>(`/api/decks/${id}`, {method: "PATCH", body}),
         onSuccess: () => {
             qc.invalidateQueries({queryKey: ["decks"]});
+            qc.invalidateQueries({queryKey: ["deckStats"]});
             qc.invalidateQueries({queryKey: ["decks", "one", id]});
         },
     });
@@ -54,6 +55,7 @@ export function useDeleteDeck(id: number) {
             sendJSON<{ success: true }>(`/api/decks/${id}`, {method: "DELETE"}),
         onSuccess: () => {
             qc.invalidateQueries({queryKey: ["decks"]});
+            qc.invalidateQueries({queryKey: ["deckStats"]});
         },
     });
 }

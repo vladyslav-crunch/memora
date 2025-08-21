@@ -33,13 +33,13 @@
 }
 
 .orange {
-    background-color: #fa9c8c;
+    background-color: #f8907e;
     color: white;
     border: none;
     transition: background-color 0.3s ease;
 
     &:hover {
-        background-color: #f8907e;
+        background-color: #fd816c;
     }
 }
 
@@ -48,6 +48,7 @@
     color: #333;
     font-size: 16px;
     transition: background-color 0.2s ease;
+    outline: none;
 
     &:hover {
         background-color: #ffc6a7;
@@ -61,7 +62,7 @@
 }
 
 .red {
-    background-color: #fd9d9d;
+    background-color: #fd7e7e;
     color: #fff;
     transition: background-color 0.3s ease;
 
@@ -76,11 +77,12 @@
 }
 
 .cancel {
-    background-color: #d2d0d0;
+    background-color: #ffffff;
     transition: background-color 0.3s ease;
+    color: #333;
 
     &:hover {
-        background-color: #8c8c8c;
+        background-color: #f8f8f8;
     }
 }
 

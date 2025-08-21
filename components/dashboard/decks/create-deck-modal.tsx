@@ -15,6 +15,7 @@ import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useCreateDeck} from "@/hooks/useDecks";
 import Spinner from "@/components/ui/spinner/spinner";
+import {toast} from "sonner";
 
 const MODE_OPTIONS: ToggleOption[] = [{id: "normal", label: "Normal"}, {
     id: "reversed",
@@ -72,11 +73,17 @@ export default function CreateDeckModal({open, onOpenChange}: CreateDeckModalPro
     };
 
     // onSubmit receives INPUT; coerce once to OUTPUT for API
-    const onSubmit = (values: CreateDeckInput) => {
+    const onSubmit = async (values: CreateDeckInput) => {
         const payload: CreateDeckValues = CreateDeckSchema.parse(values);
-        createDeck.mutate(payload, {
-            onSuccess: () => closeAndReset(),
-        });
+
+        try {
+            await createDeck.mutateAsync(payload);
+            closeAndReset();
+            toast.success("Deck created successfully!");
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to create deck.");
+        }
     };
 
     return (

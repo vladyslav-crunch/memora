@@ -40,11 +40,10 @@ export async function GET(_req: Request, {params}: { params: { id: string } }) {
     }
 }
 
-export async function PATCH(req: Request, {params}: { params: { id: string } }) {
+export async function PATCH(req: Request, context: { params: Promise<{ id: string }> }) {
     try {
         const userId = await requireUserId();
-        const {id} = IdParam.parse(params);
-
+        const {id} = IdParam.parse(await context.params);
         const data = EditSchema.parse(await req.json());
 
         const existing = await prisma.deck.findFirst({where: {id, userId}});
@@ -67,10 +66,10 @@ export async function PATCH(req: Request, {params}: { params: { id: string } }) 
     }
 }
 
-export async function DELETE(_req: Request, {params}: { params: { id: string } }) {
+export async function DELETE(_req: Request, context: { params: Promise<{ id: string }> }) {
     try {
         const userId = await requireUserId();
-        const {id} = IdParam.parse(params);
+        const {id} = IdParam.parse(await context.params);
 
         const existing = await prisma.deck.findFirst({where: {id, userId}});
         if (!existing) return NextResponse.json({error: "Not found"}, {status: 404});
