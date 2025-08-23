@@ -1,7 +1,7 @@
 import {z} from "zod";
 
 export const CreateDeckSchema = z.object({
-    name: z.string().min(1, "Deck name must be at least 1 character").max(200).default(""),
+    name: z.string().min(1, "Deck name must be at least 1 character").max(200).default("").transform((s) => s.trim()),
     isQuizNormal: z.coerce.boolean().default(true),
     isQuizReversed: z.coerce.boolean().default(false),
     isQuizTyping: z.coerce.boolean().default(false),
@@ -25,7 +25,7 @@ export const CreateDeckSchema = z.object({
 
 export const UpdateDeckSchema = z
     .object({
-        name: z.string().min(1, "Deck name must be at least 1 character").max(200).optional(),
+        name: z.string().min(1, "Deck name must be at least 1 character").max(200).optional().transform((s) => s?.trim()),
         isQuizNormal: z.coerce.boolean().optional(),
         isQuizReversed: z.coerce.boolean().optional(),
         isQuizTyping: z.coerce.boolean().optional(),

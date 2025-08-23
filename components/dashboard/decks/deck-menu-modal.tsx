@@ -4,6 +4,7 @@ import {DeckStatsItem} from "@/lib/types/api";
 import Button, {BUTTON_COLOR, BUTTON_VARIANT} from "@/components/ui/button/button";
 import {Rocket, Plus, List, Pencil, FolderOutput, FolderInput} from "lucide-react";
 import EditDeckModal from "@/components/dashboard/decks/edit-deck-modal";
+import AddCardModal from "@/components/dashboard/cards/add-card-modal";
 
 type DeckMenuModalProps = {
     open: boolean;
@@ -13,6 +14,7 @@ type DeckMenuModalProps = {
 
 function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
     const [isEdit, setEdit] = useState(false);
+    const [isAdd, setAdd] = useState(false);
     return (
         <>
             <Modal open={open} onOpenChange={onOpenChange} variant="compact">
@@ -25,6 +27,7 @@ function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
                 </Button>
 
                 <Button
+                    onClick={() => setAdd(true)}
                     buttonType={BUTTON_VARIANT.modal}
                     buttonColor={BUTTON_COLOR.orangeLight}
                     icon={Plus}
@@ -67,6 +70,7 @@ function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
                 </Button>
             </Modal>
             <EditDeckModal deck={deck} open={isEdit} onOpenChange={() => setEdit(false)}/>
+            <AddCardModal deck={deck} open={isAdd} onOpenChange={() => setAdd(false)}/>
         </>
     );
 }

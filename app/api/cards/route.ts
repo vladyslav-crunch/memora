@@ -4,6 +4,7 @@ import {z} from "zod";
 import {prisma} from "@/lib/prisma";
 import {bucketFromInterval, incrementDailyProgression} from "@/lib/api/progression-helpers";
 import {ensureDeckOwnership, requireUserId} from "@/lib/api/auth-helper";
+import {CreateCardSchema} from "@/lib/validation/card/card-shemas";
 
 export const runtime = "nodejs";
 
@@ -13,13 +14,6 @@ const listQuery = z.object({
     skip: z.coerce.number().int().min(0).optional(),
 });
 
-const createSchema = z.object({
-    deckId: z.number().int(),
-    front: z.string().min(1),
-    back: z.string().min(1),
-    context: z.string().optional().nullable(),
-    intervalStrength: z.number().min(0).max(1).optional().nullable(),
-});
 
 export async function GET(req: Request) {
     try {
@@ -48,7 +42,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
     try {
         const userId = await requireUserId();
-        const parsed = createSchema.safeParse(await req.json());
+        const parsed = CreateCardSchema.safeParse(await req.json());
         if (!parsed.success) {
             return NextResponse.json({error: parsed.error.flatten()}, {status: 400});
         }

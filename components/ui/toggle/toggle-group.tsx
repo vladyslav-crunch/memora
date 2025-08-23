@@ -39,7 +39,8 @@ export default function ToggleGroup({
         onChange(Array.from(next));
     }
 
-    return (<>
+    return (
+        <div>
             {label && <label className={styles.toggleLabel}>{label}</label>}
             <div className={[styles.group, className].join(" ")} role="group">
                 {options.map((opt) => {
@@ -57,6 +58,6 @@ export default function ToggleGroup({
                     );
                 })}
             </div>
-        </>
+        </div>
     );
 }

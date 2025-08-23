@@ -37,11 +37,9 @@ export function useCreateCard() {
         }) =>
             sendJSON<Card>("/api/cards", {method: "POST", body}),
         onSuccess: (card) => {
-            // refetch card lists for this deck
             qc.invalidateQueries({queryKey: ["cards"]});
-            // and decks lists (if you show counts/ordering)
             qc.invalidateQueries({queryKey: ["decks"]});
-            // if you also have a progression graph hook, invalidate that key here
+            qc.invalidateQueries({queryKey: ["deckStats"]});
             qc.invalidateQueries({queryKey: ["progression", "today"]});
         },
     });

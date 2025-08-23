@@ -91,32 +91,28 @@ export default function CreateDeckModal({open, onOpenChange}: CreateDeckModalPro
             <ModalHeader>Create new deck</ModalHeader>
             <ModalBody>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-                    <div>
-                        <Input
-                            label="Deck name"
-                            placeholder="Enter deck name"
-                            error={errors.name?.message}
-                            {...register("name")}
-                            option="modal"
-                        />
-                    </div>
-                    <div>
-                        <ToggleGroup
-                            label="Modes"
-                            options={MODE_OPTIONS}
-                            value={selectedIds}
-                            onChange={(ids) => {
-                                if (ids.length < 1) return;
-                                applySelectedIds(ids);
-                            }}
-                            minSelected={1}
-                        />
-                        {"modes" in errors && (
-                            <p style={{color: "#b91c1c", fontSize: 12, marginTop: 6}}>
-                                {(errors as any).modes?.message}
-                            </p>
-                        )}
-                    </div>
+                    <Input
+                        label="Deck name"
+                        placeholder="Enter deck name"
+                        error={errors.name?.message}
+                        {...register("name")}
+                        option="modal"
+                    />
+                    <ToggleGroup
+                        label="Modes"
+                        options={MODE_OPTIONS}
+                        value={selectedIds}
+                        onChange={(ids) => {
+                            if (ids.length < 1) return;
+                            applySelectedIds(ids);
+                        }}
+                        minSelected={1}
+                    />
+                    {"modes" in errors && (
+                        <p style={{color: "#b91c1c", fontSize: 12, marginTop: 6}}>
+                            {(errors as any).modes?.message}
+                        </p>
+                    )}
 
                     <div>
                         <label style={{display: "block", fontSize: "18px", color: "#333", marginBottom: "8px"}}>

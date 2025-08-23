@@ -43,7 +43,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         `;
 
         return (
-            <>
+            <div>
                 {label && <label className={styles.inputLabel}>{label}</label>}
                 <div className={styles.inputContainer}>
                     {hint && (
@@ -66,7 +66,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                         </p>
                     )}
                 </div>
-            </>
+            </div>
         );
     }
 );

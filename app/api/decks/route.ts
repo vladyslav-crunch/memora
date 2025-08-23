@@ -1,4 +1,3 @@
-// app/api/decks/route.ts
 import {NextResponse} from "next/server";
 import {z} from "zod";
 import {prisma} from "@/lib/prisma";
@@ -6,7 +5,6 @@ import {requireUserId} from "@/lib/api/auth-helper";
 import {CreateDeckSchema} from "@/lib/validation/deck/deck-schemas";
 
 export const runtime = "nodejs";
-
 
 const QuerySchema = z.object({
     take: z.coerce.number().min(1).max(100).optional(),
