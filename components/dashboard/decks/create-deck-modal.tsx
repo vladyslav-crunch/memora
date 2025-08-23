@@ -16,6 +16,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useCreateDeck} from "@/hooks/useDecks";
 import Spinner from "@/components/ui/spinner/spinner";
 import {toast} from "sonner";
+import {Deck, DeckStatsItem} from "@/lib/types/api";
 
 const MODE_OPTIONS: ToggleOption[] = [{id: "normal", label: "Normal"}, {
     id: "reversed",
@@ -24,10 +25,11 @@ const MODE_OPTIONS: ToggleOption[] = [{id: "normal", label: "Normal"}, {
 
 type CreateDeckModalProps = {
     open: boolean;
-    onOpenChange: (open: boolean) => void
+    onOpenChange: (open: boolean) => void;
+    onCreated?: (deck: Deck) => void;
 };
 
-export default function CreateDeckModal({open, onOpenChange}: CreateDeckModalProps) {
+export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateDeckModalProps) {
     const createDeck = useCreateDeck();
 
     // schema defaults (OUTPUT)
@@ -77,9 +79,12 @@ export default function CreateDeckModal({open, onOpenChange}: CreateDeckModalPro
         const payload: CreateDeckValues = CreateDeckSchema.parse(values);
 
         try {
-            await createDeck.mutateAsync(payload);
+            const deck = await createDeck.mutateAsync(payload);
             closeAndReset();
             toast.success("Deck created successfully!");
+            if (onCreated) {
+                onCreated(deck); // 👈 notify parent
+            }
         } catch (error) {
             console.error(error);
             toast.error("Failed to create deck.");

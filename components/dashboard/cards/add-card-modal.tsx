@@ -8,16 +8,15 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import Spinner from "@/components/ui/spinner/spinner";
 import {toast} from "sonner";
-import {DeckStatsItem} from "@/lib/types/api";
+import {Deck} from "@/lib/types/api";
 import {CreateCardSchema, type CreateCardValues} from "@/lib/validation/card/card-shemas";
 
-// ⚡️ you’ll need a useCreateCard hook (similar to useCreateDeck)
 import {useCreateCard} from "@/hooks/useCards";
 
 type AddCardModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    deck: DeckStatsItem;
+    deck: Deck;
 };
 
 export default function AddCardModal({open, onOpenChange, deck}: AddCardModalProps) {
@@ -34,12 +33,12 @@ export default function AddCardModal({open, onOpenChange, deck}: AddCardModalPro
             deckId: deck.id,
             front: "",
             back: "",
-            context: "",
+            context: null,
             intervalStrength: null,
         },
     });
 
-    const closeAndReset = () => {
+    const Reset = () => {
         reset({
             deckId: deck.id,
             front: "",
@@ -47,13 +46,12 @@ export default function AddCardModal({open, onOpenChange, deck}: AddCardModalPro
             context: "",
             intervalStrength: null,
         });
-        onOpenChange(false);
     };
 
     const onSubmit = async (values: CreateCardValues) => {
         try {
             await createCard.mutateAsync(values);
-            closeAndReset();
+            Reset();
             toast.success("Card added successfully!");
         } catch (error) {
             console.error(error);
