@@ -1,20 +1,22 @@
 import React, {useState} from 'react';
 import Modal from "@/components/ui/modal/modal";
-import {DeckStatsItem} from "@/lib/types/api";
+import {Deck, DeckStatsItem} from "@/lib/types/api";
 import Button, {BUTTON_COLOR, BUTTON_VARIANT} from "@/components/ui/button/button";
 import {Rocket, Plus, List, Pencil, FolderOutput, FolderInput} from "lucide-react";
 import EditDeckModal from "@/components/dashboard/decks/edit-deck-modal";
 import AddCardModal from "@/components/dashboard/cards/add-card-modal";
+import {useRouter} from "next/navigation";
 
 type DeckMenuModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void
-    deck: DeckStatsItem
+    deck: Deck
 };
 
 function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
     const [isEdit, setEdit] = useState(false);
     const [isAdd, setAdd] = useState(false);
+    const router = useRouter()
     return (
         <>
             <Modal open={open} onOpenChange={onOpenChange} variant="compact">
@@ -22,6 +24,7 @@ function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
                     buttonType={BUTTON_VARIANT.modal}
                     buttonColor={BUTTON_COLOR.orangeLight}
                     icon={Rocket}
+                    onClick={() => router.push("/practice")}
                 >
                     Start learning
                 </Button>

@@ -16,12 +16,14 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useCreateDeck} from "@/hooks/useDecks";
 import Spinner from "@/components/ui/spinner/spinner";
 import {toast} from "sonner";
-import {Deck, DeckStatsItem} from "@/lib/types/api";
+import {Deck} from "@/lib/types/api";
 
-const MODE_OPTIONS: ToggleOption[] = [{id: "normal", label: "Normal"}, {
-    id: "reversed",
-    label: "Reversed"
-}, {id: "typing", label: "Typing"}, {id: "randomized", label: "Randomized"},];
+const MODE_OPTIONS: ToggleOption[] = [
+    {id: "normal", label: "Normal"},
+    {id: "reversed", label: "Reversed"},
+    {id: "typing", label: "Typing"},
+    {id: "randomized", label: "Randomized"},
+];
 
 type CreateDeckModalProps = {
     open: boolean;
@@ -32,10 +34,8 @@ type CreateDeckModalProps = {
 export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateDeckModalProps) {
     const createDeck = useCreateDeck();
 
-    // schema defaults (OUTPUT)
     const defaultsOutput: CreateDeckValues = CreateDeckSchema.parse({});
 
-    // RHF must use the INPUT type:
     const {
         register,
         handleSubmit,
@@ -45,12 +45,10 @@ export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateD
         reset,
         formState: {errors, isSubmitting},
     } = useForm<CreateDeckInput>({
-        resolver: zodResolver(CreateDeckSchema),   // Resolver<input, any, output>
-        // defaultValues can be the output; it's assignable to the input structurally
+        resolver: zodResolver(CreateDeckSchema),
         defaultValues: defaultsOutput as CreateDeckInput,
     });
 
-    // helpers now use INPUT type for watch()
     const toSelectedIds = (v: CreateDeckInput) => {
         const sel: string[] = [];
         if (v.isQuizNormal) sel.push("normal");
@@ -74,7 +72,6 @@ export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateD
         onOpenChange(false);
     };
 
-    // onSubmit receives INPUT; coerce once to OUTPUT for API
     const onSubmit = async (values: CreateDeckInput) => {
         const payload: CreateDeckValues = CreateDeckSchema.parse(values);
 
@@ -82,9 +79,7 @@ export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateD
             const deck = await createDeck.mutateAsync(payload);
             closeAndReset();
             toast.success("Deck created successfully!");
-            if (onCreated) {
-                onCreated(deck); // 👈 notify parent
-            }
+            if (onCreated) onCreated(deck);
         } catch (error) {
             console.error(error);
             toast.error("Failed to create deck.");
@@ -95,7 +90,10 @@ export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateD
         <Modal open={open} onOpenChange={onOpenChange}>
             <ModalHeader>Create new deck</ModalHeader>
             <ModalBody>
-                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+                <form onSubmit={(e) => {
+                    e.preventDefault(); // ✅ stop native dialog close
+                    handleSubmit(onSubmit)(e); // run RHF submit + validation
+                }} className="flex flex-col gap-3">
                     <Input
                         label="Deck name"
                         placeholder="Enter deck name"
@@ -103,6 +101,7 @@ export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateD
                         {...register("name")}
                         option="modal"
                     />
+
                     <ToggleGroup
                         label="Modes"
                         options={MODE_OPTIONS}
@@ -120,29 +119,40 @@ export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateD
                     )}
 
                     <div>
-                        <label style={{display: "block", fontSize: "18px", color: "#333", marginBottom: "8px"}}>
+                        <label
+                            style={{
+                                display: "block",
+                                fontSize: "18px",
+                                color: "#333",
+                                marginBottom: "8px",
+                            }}
+                        >
                             Visibility
                         </label>
                         <Controller
                             control={control}
                             name="isPrivate"
                             render={({field}) => (
-                                <Switch label="Public" checked={!field.value} onChange={(v) => field.onChange(!v)}/>
+                                <Switch
+                                    label="Public"
+                                    checked={!field.value}
+                                    onChange={(v) => field.onChange(!v)}
+                                />
                             )}
                         />
                     </div>
+
+                    <ModalFooter>
+                        <Button
+                            buttonColor={BUTTON_COLOR.orange}
+                            disabled={isSubmitting || createDeck.isPending}
+                            type="submit"
+                        >
+                            {createDeck.isPending ? <Spinner size={35}/> : "Create"}
+                        </Button>
+                    </ModalFooter>
                 </form>
             </ModalBody>
-
-            <ModalFooter>
-                <Button
-                    buttonColor={BUTTON_COLOR.orange}
-                    onClick={handleSubmit(onSubmit)}
-                    disabled={isSubmitting || createDeck.isPending}
-                >
-                    {createDeck.isPending ? <Spinner size={35}/> : "Create"}
-                </Button>
-            </ModalFooter>
         </Modal>
     );
 }

@@ -15,7 +15,7 @@ const ModalCtx = createContext<ModalContextValue | null>(null);
 
 export function useModal() {
     const ctx = useContext(ModalCtx);
-    if (!ctx) throw new Error("useModal must be used inside <Modal>");
+    if (!ctx) throw new Error("useModal must be used inside Modal");
     return ctx;
 }
 
@@ -35,59 +35,61 @@ export default function Modal({
                                   variant = "default",
                                   children,
                               }: PropsWithChildren<Props>) {
-    const ref = useRef<HTMLDialogElement>(null);
-
-    // keep <dialog> open state in sync
-    useEffect(() => {
-        const d = ref.current;
-        if (!d) return;
-        if (open && !d.open) d.showModal();
-        if (!open && d.open) d.close();
-    }, [open]);
+    const modalRef = useRef<HTMLDivElement>(null);
 
     const close = () => onOpenChange(false);
 
-    // ESC/cancel
-    const handleCancel = (e: React.SyntheticEvent<HTMLDialogElement, Event>) => {
-        e.preventDefault();
-        close();
-    };
+    // auto-focus first input when opened
+    useEffect(() => {
+        if (open) {
+            const firstInput = modalRef.current?.querySelector<HTMLInputElement>("input");
+            firstInput?.focus();
+        }
+    }, [open]);
 
     // backdrop click
     useEffect(() => {
-        if (!closeOnBackdrop) return;
-        const d = ref.current;
-        if (!d) return;
+        if (!closeOnBackdrop || !modalRef.current) return;
 
-        const onClick = (e: MouseEvent) => {
-            const r = d.getBoundingClientRect();
-            const inside =
-                e.clientX >= r.left &&
-                e.clientX <= r.right &&
-                e.clientY >= r.top &&
-                e.clientY <= r.bottom;
-            if (!inside) close();
+        const handleClick = (e: MouseEvent) => {
+            if (!modalRef.current) return;
+            if (!modalRef.current.contains(e.target as Node)) {
+                close();
+            }
         };
 
-        d.addEventListener("click", onClick);
-        return () => d.removeEventListener("click", onClick);
+        document.addEventListener("mousedown", handleClick);
+        return () => document.removeEventListener("mousedown", handleClick);
     }, [closeOnBackdrop]);
 
-    if (typeof window === "undefined") return null; // avoid SSR mismatch
+    if (!open) return null;
 
     return createPortal(
         <ModalCtx.Provider value={{close}}>
-            <dialog
-                ref={ref}
-                className={`${styles.dialog} `}
+            <div
+                className={styles.dialog}
                 aria-labelledby={labelledBy}
-                onCancel={handleCancel}
+                onMouseDown={(e) => {
+                    // If click is outside modal content, close
+                    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+                        close();
+                    }
+                }}
             >
-                <div className={`${styles.modal} ${styles[variant ?? "default"]}`}>{children}</div>
-            </dialog>
+                <div
+                    ref={modalRef}
+                    className={`${styles.modal} ${styles[variant ?? "default"]}`}
+                    onKeyDown={(e) => {
+                        if (e.key === "Escape") close();
+                    }}
+                >
+                    {children}
+                </div>
+            </div>
         </ModalCtx.Provider>,
         document.body
     );
+
 }
 
 export function ModalHeader({children}: PropsWithChildren<{}>) {

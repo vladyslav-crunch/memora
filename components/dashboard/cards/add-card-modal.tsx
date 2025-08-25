@@ -51,8 +51,9 @@ export default function AddCardModal({open, onOpenChange, deck}: AddCardModalPro
     const onSubmit = async (values: CreateCardValues) => {
         try {
             await createCard.mutateAsync(values);
-            Reset();
             toast.success("Card added successfully!");
+            console.log("asda");
+            Reset();
         } catch (error) {
             console.error(error);
             toast.error("Failed to add card.");
@@ -85,18 +86,18 @@ export default function AddCardModal({open, onOpenChange, deck}: AddCardModalPro
                         {...register("context")}
                         option="modal"
                     />
+
+                    <ModalFooter>
+                        <Button
+                            buttonColor={BUTTON_COLOR.orange}
+                            disabled={isSubmitting || createCard.isPending}
+                            type="submit"
+                        >
+                            {createCard.isPending ? <Spinner size={35}/> : "Add"}
+                        </Button>
+                    </ModalFooter>
                 </form>
             </ModalBody>
-
-            <ModalFooter>
-                <Button
-                    buttonColor={BUTTON_COLOR.orange}
-                    onClick={handleSubmit(onSubmit)}
-                    disabled={isSubmitting || createCard.isPending}
-                >
-                    {createCard.isPending ? <Spinner size={35}/> : "Add"}
-                </Button>
-            </ModalFooter>
         </Modal>
     );
 }

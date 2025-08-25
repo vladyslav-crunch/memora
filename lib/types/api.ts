@@ -49,6 +49,7 @@ export type DeckStatsItem = {
         totalCards: number;
         dueCards: number;
     };
+    userId: string;
 };
 
 export type DeckStatsResponse = {
