@@ -1,8 +1,6 @@
 // lib/api/progression-helpers.ts
-import {prisma} from "@/lib/prisma";
-import type {Prisma, PrismaClient} from "@prisma/client";
+import {Prisma, PrismaClient} from "@prisma/client";
 
-// Allow passing a transaction client or the prisma client
 type Tx = PrismaClient | Prisma.TransactionClient;
 
 export function bucketFromInterval(intervalStrength: number | null | undefined) {
@@ -13,62 +11,72 @@ export function bucketFromInterval(intervalStrength: number | null | undefined) 
     return "veryLow";
 }
 
-/** UTC day bounds. Swap to the TZ version below if you need Europe/Warsaw day buckets. */
+/** UTC day bounds (start inclusive, next exclusive). */
 export function utcDayBounds(d = new Date()) {
     const start = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0));
-    const next = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1, 0, 0, 0, 0));
+    const next = new Date(start);
+    next.setUTCDate(start.getUTCDate() + 1);
     return {start, next};
 }
 
-/** Europe/Warsaw day bounds (optional) */
-// import { zonedTimeToUtc } from "date-fns-tz";
-// const TIMEZONE = "Europe/Warsaw";
-// export function warsawDayBounds(d = new Date()) {
-//   const local = new Date(d.toLocaleString("en-US", { timeZone: TIMEZONE }));
-//   const startLocal = new Date(local.getFullYear(), local.getMonth(), local.getDate(), 0, 0, 0, 0);
-//   const nextLocal = new Date(local.getFullYear(), local.getMonth(), local.getDate() + 1, 0, 0, 0, 0);
-//   return { start: zonedTimeToUtc(startLocal, TIMEZONE), next: zonedTimeToUtc(nextLocal, TIMEZONE) };
-// }
+/**
+ * Upsert the single persistent UserProgressionEntry for (userId, cardId).
+ * Assumes you have a composite unique @@unique([userId, cardId]) in Prisma schema.
+ */
+export async function upsertUserProgressionEntry(tx: Tx, userId: string, cardId: number, bucket: string, now = new Date()) {
+    return tx.userProgressionEntry.upsert({
+        where: {userId_cardId: {userId, cardId} as any},
+        create: {userId, cardId, bucket, lastSeenAt: now} as any,
+        update: {bucket, lastSeenAt: now} as any,
+    });
+}
 
 /**
- * Increment today's UserProgressionHistory bucket for a user.
- * Call this inside a transaction if you're also creating a Card.
+ * Recalculate today's UserProgressionHistory from UserProgressionEntry rows.
+ * Creates today's row if missing, or updates it to match current counts.
  */
-export async function incrementDailyProgression(
-    tx: Tx,
-    userId: string,
-    indication: "high" | "mid" | "low" | "veryLow",
-    now = new Date()
-) {
-    const {start, next} = utcDayBounds(now); // or warsawDayBounds(now)
+export async function recalcUserProgressionHistoryForToday(tx: Tx, userId: string, now = new Date()) {
+    const {start} = utcDayBounds(now);
 
-    const today = await tx.userProgressionHistory.findFirst({
-        where: {userId, createdAt: {gte: start, lt: next}},
-        orderBy: {id: "asc"},
+    // Count buckets from entries (preferred)
+    const group = await tx.userProgressionEntry.groupBy({
+        by: ["bucket"],
+        where: {userId},
+        _count: {bucket: true},
     });
 
-    const increments: any = {lastModifiedAt: now};
-    if (indication === "high") increments.highIndicationCount = {increment: 1};
-    if (indication === "mid") increments.midIndicationCount = {increment: 1};
-    if (indication === "low") increments.lowIndicationCount = {increment: 1};
-    if (indication === "veryLow") increments.veryLowIndicationCount = {increment: 1};
+    const counts: Record<string, number> = {high: 0, mid: 0, low: 0, veryLow: 0};
+    for (const g of group as any) counts[g.bucket] = Number(g._count.bucket);
 
-    if (today) {
-        await tx.userProgressionHistory.update({
-            where: {id: today.id},
-            data: increments,
+    // Fallback to cards if no entries
+    if (group.length === 0) {
+        counts.veryLow = await tx.card.count({
+            where: {deck: {userId}, OR: [{intervalStrength: null}, {intervalStrength: {lt: 0.25}}]},
         });
-    } else {
-        await tx.userProgressionHistory.create({
-            data: {
-                userId,
-                createdAt: now,
-                lastModifiedAt: now,
-                highIndicationCount: indication === "high" ? 1 : 0,
-                midIndicationCount: indication === "mid" ? 1 : 0,
-                lowIndicationCount: indication === "low" ? 1 : 0,
-                veryLowIndicationCount: indication === "veryLow" ? 1 : 0,
-            },
-        });
+        counts.low = await tx.card.count({where: {deck: {userId}, intervalStrength: {gte: 0.25, lt: 0.5}}});
+        counts.mid = await tx.card.count({where: {deck: {userId}, intervalStrength: {gte: 0.5, lt: 0.75}}});
+        counts.high = await tx.card.count({where: {deck: {userId}, intervalStrength: {gte: 0.75}}});
     }
+
+    // Upsert today's history
+    await tx.userProgressionHistory.upsert({
+        where: {userId_createdAt: {userId, createdAt: start} as any}, // needs @@unique([userId, createdAt])
+        update: {
+            lastModifiedAt: now,
+            highIndicationCount: counts.high,
+            midIndicationCount: counts.mid,
+            lowIndicationCount: counts.low,
+            veryLowIndicationCount: counts.veryLow,
+        },
+        create: {
+            userId,
+            createdAt: start,
+            lastModifiedAt: now,
+            highIndicationCount: counts.high,
+            midIndicationCount: counts.mid,
+            lowIndicationCount: counts.low,
+            veryLowIndicationCount: counts.veryLow,
+        },
+    });
 }
+

@@ -2,7 +2,11 @@
 import {NextResponse} from "next/server";
 import {z} from "zod";
 import {prisma} from "@/lib/prisma";
-import {bucketFromInterval, incrementDailyProgression} from "@/lib/api/progression-helpers";
+import {
+    bucketFromInterval,
+    recalcUserProgressionHistoryForToday,
+    upsertUserProgressionEntry,
+} from "@/lib/api/progression-helpers";
 import {ensureDeckOwnership, requireUserId} from "@/lib/api/auth-helper";
 import {CreateCardSchema} from "@/lib/validation/card/card-shemas";
 
@@ -48,24 +52,31 @@ export async function POST(req: Request) {
         }
 
         const {deckId, front, back, context, intervalStrength} = parsed.data;
-        const deck = await ensureDeckOwnership(deckId, userId);
-        const indication = bucketFromInterval(intervalStrength ?? 0); // default to 0
+        await ensureDeckOwnership(deckId, userId);
+
         const now = new Date();
+        const indication = bucketFromInterval(intervalStrength ?? 0);
 
         const created = await prisma.$transaction(async (tx) => {
+            // 1. create card
             const card = await tx.card.create({
                 data: {
                     deckId,
                     front,
                     back,
                     context: context ?? null,
-                    intervalStrength: intervalStrength ?? 0, // default value
+                    intervalStrength: intervalStrength ?? 0,
                     nextRepetitionTime: now,
                     createdAt: now,
                 },
             });
 
-            await incrementDailyProgression(tx, deck.userId, indication, now);
+            // 2. upsert persistent entry for this card
+            await upsertUserProgressionEntry(tx, userId, card.id, indication, now);
+
+            // 3. recalc today's aggregated snapshot (will include this new entry)
+            await recalcUserProgressionHistoryForToday(tx, userId, now);
+
             return card;
         });
 

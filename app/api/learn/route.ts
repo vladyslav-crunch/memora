@@ -1,7 +1,7 @@
-import {NextRequest, NextResponse} from "next/server";
+// app/api/learn/route.ts
+import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
-
 
 type Mode = "normal" | "reversed" | "typing";
 
@@ -16,85 +16,100 @@ function shuffle<T>(arr: T[]): T[] {
         .map(({value}) => value);
 }
 
-export async function POST(req: NextRequest) {
+export async function GET(req: Request) {
     try {
         const userId = await requireUserId();
+
+        const url = new URL(req.url);
+        const deckIdParam = url.searchParams.get("deckId");
+        const onlyDeckId = deckIdParam ? Number(deckIdParam) : undefined;
+
         const decks = await prisma.deck.findMany({
-            where: {userId},
+            where: onlyDeckId ? {userId, id: onlyDeckId} : {userId},
             include: {cards: true},
         });
 
         const now = new Date();
-        let session: any[] = [];
+        const dueItems: any[] = [];
+        const generatedItems: any[] = [];
 
         for (const deck of decks) {
-            // find cards that are due
-            const dueCards = deck.cards.filter(
-                (c) => !c.nextRepetitionTime || c.nextRepetitionTime <= now
-            );
+            // collect enabled modes
+            const enabledModes: Mode[] = [];
+            if (deck.isQuizNormal) enabledModes.push("normal");
+            if (deck.isQuizReversed) enabledModes.push("reversed");
+            if (deck.isQuizTyping) enabledModes.push("typing");
+            if (enabledModes.length === 0) continue;
 
-            // figure out which modes are enabled for this deck
-            const availableModes: Mode[] = [];
-            if (deck.isQuizNormal) availableModes.push("normal");
-            if (deck.isQuizReversed) availableModes.push("reversed");
-            if (deck.isQuizTyping) availableModes.push("typing");
+            for (const card of deck.cards) {
+                const isDue = !card.nextRepetitionTime || new Date(card.nextRepetitionTime) <= now;
 
-            // skip if deck has no enabled modes
-            if (availableModes.length === 0) continue;
+                // pick one mode per card among enabledModes
+                const mode = pickRandom(enabledModes);
 
-            // build card entries
-            let deckSession = dueCards.map((card) => {
-                const mode = pickRandom(availableModes);
+                const buildItem = (dueFlag: boolean) => {
+                    let question: string;
+                    let answer: string;
 
-                let question: string;
-                let answer: string;
+                    switch (mode) {
+                        case "normal":
+                            question = card.front;
+                            answer = card.back;
+                            break;
+                        case "reversed":
+                            question = card.back;
+                            answer = card.front;
+                            break;
+                        case "typing":
+                            question = card.front;
+                            answer = card.back;
+                            break;
+                    }
 
-                switch (mode) {
-                    case "normal":
-                        question = card.front;
-                        answer = card.back;
-                        break;
-                    case "reversed":
-                        question = card.back;
-                        answer = card.front;
-                        break;
-                    case "typing":
-                        question = card.front;
-                        answer = card.back;
-                        break;
-                }
-
-                return {
-                    deckId: deck.id,
-                    deckName: deck.name,
-                    cardId: card.id,
-                    question,
-                    answer,
-                    context: card.context,
-                    mode,
+                    return {
+                        deckId: deck.id,
+                        deckName: deck.name,
+                        cardId: card.id,
+                        question,
+                        answer,
+                        context: card.context,
+                        mode,
+                        intervalStrength: card.intervalStrength,
+                        nextRepetitionTime: card.nextRepetitionTime
+                            ? new Date(card.nextRepetitionTime).toISOString()
+                            : null,
+                        isDue: dueFlag,
+                    };
                 };
-            });
 
-            // shuffle inside deck if randomized flag is on
-            if (deck.isQuizRandomized) {
-                deckSession = shuffle(deckSession);
+                if (isDue) dueItems.push(buildItem(true));
+                generatedItems.push(buildItem(false));
             }
 
-            session.push(...deckSession);
+            // shuffle card order if deck is randomized
+            if (deck.isQuizRandomized) {
+                dueItems.push(...shuffle(dueItems.splice(-deck.cards.length)));
+                generatedItems.push(...shuffle(generatedItems.splice(-deck.cards.length)));
+            }
         }
 
-        // final global shuffle across decks
-        session = shuffle(session);
+        let session: any[] = [];
+        let sessionType: "due" | "generated" = "generated";
 
-        return NextResponse.json({session});
-    } catch (error: any) {
-        console.error(error);
-        if (error.status === 401) {
+        if (dueItems.length > 0) {
+            session = shuffle(dueItems);
+            sessionType = "due";
+        } else {
+            session = shuffle(generatedItems);
+            sessionType = "generated";
+        }
+
+        return NextResponse.json({session, sessionType});
+    } catch (err: any) {
+        console.error("learn GET error:", err);
+        if (err?.status === 401) {
             return NextResponse.json({error: "Unauthorized"}, {status: 401});
         }
-        return NextResponse.json(
-            {error: "Internal server error"},
-            {status: 500}
-        );
+        return NextResponse.json({error: "Internal server error"}, {status: 500});
     }
 }

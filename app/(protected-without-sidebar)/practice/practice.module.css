@@ -23,6 +23,7 @@
 .practiceGameContainer {
     display: flex;
     height: calc(100% - 100px);
+    
 }
 
 .practiceGame {
@@ -43,17 +44,39 @@
 
 .practiceGameCard {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #FFE9DB;
     height: 350px;
     border-radius: 30px;
     font-size: 32px;
+    min-width: 300px;
 }
 
 .practiceGameQuestions {
     display: flex;
     justify-content: center;
+}
+
+.practiceGameCardAnswer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+}
+
+.answerDivider {
+    height: 1px;
+    color: #333;
+    width: 100%;
+}
+
+.answerContext {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 10px;
 }
 
 .practiceGameButtons {
