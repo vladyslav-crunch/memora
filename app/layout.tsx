@@ -3,6 +3,7 @@ import type {Metadata} from "next";
 import "./globals.css";
 import {Montserrat} from "next/font/google";
 import Providers from "@/app/providers";
+import AppBackground from "@/components/ui/app-background/app-background";
 
 const montserrat = Montserrat({
     subsets: ["latin"],
@@ -13,16 +14,17 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
     title: "Memora – Flashcards App",
     description:
-        "Memora helps you learn and retain new words faster with personalized decks, spaced repetition, and progress tracking. Study smarter, not harder.",
+        "Memora helps you practice and retain new words faster with personalized decks, spaced repetition, and progress tracking. Study smarter, not harder.",
 };
 
 export default function RootLayout({children}: { children: React.ReactNode }) {
     return (
-        <html lang="en" className={montserrat.className}>
+        <html lang="en" className={montserrat.className} data-scroll-behavior="smooth">
         <body>
         <Providers>
             <div className="pageShell">
                 {children}
+                <AppBackground/>
             </div>
         </Providers>
         </body>

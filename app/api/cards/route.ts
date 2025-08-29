@@ -70,11 +70,8 @@ export async function POST(req: Request) {
                     createdAt: now,
                 },
             });
-
-            // 2. upsert persistent entry for this card
+            
             await upsertUserProgressionEntry(tx, userId, card.id, indication, now);
-
-            // 3. recalc today's aggregated snapshot (will include this new entry)
             await recalcUserProgressionHistoryForToday(tx, userId, now);
 
             return card;

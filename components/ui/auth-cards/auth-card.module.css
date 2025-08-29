@@ -1,33 +1,30 @@
 .authCardContainer {
     position: relative;
-    width: 350px; /* similar proportions to mock */
-
-    padding: 22px 26px;
-    border-radius: 22px;
-    /* subtle darker outline like in the design */
+    width: 300px; /* smaller width */
+    padding: 16px 18px; /* smaller padding */
+    border-radius: 16px;
     border: 1px solid rgba(0, 0, 0, 0.25);
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     color: #333;
     overflow: hidden;
 }
 
-/* language chip in the top-right */
 .langPill {
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
-    top: 10px;
-    right: 12px;
-    width: 35px;
+    top: 8px;
+    right: 10px;
+    width: 28px;
     background: #4d4c4c;
     color: #fff;
-    padding: 4px 10px;
+    padding: 3px 8px;
     border-radius: 50px;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 1;
     font-weight: 500;
     box-shadow: 0 1px 0 rgb(63, 63, 63);
@@ -35,17 +32,17 @@
 
 /* typography to match hierarchy in the screenshot */
 .front {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 500;
 }
 
 .back {
-    font-size: 18px; /* translation: a bit larger & bolder */
+    font-size: 16px; /* translation: a bit larger & bolder */
     font-weight: 500;
 }
 
 .context {
-    font-size: 18px; /* muted description */
+    font-size: 16px; /* muted description */
 }
 
 .authCardContainer:nth-child(2) {

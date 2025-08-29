@@ -56,6 +56,7 @@ export default function ClientProfileMenu({userImage, userName, signOutAction}: 
                     alt={`${userName} avatar`}
                     width={75}
                     height={75}
+                    priority
                     className={styles.ProfileMenuImage}
                 />
             </button>

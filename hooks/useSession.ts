@@ -1,8 +1,7 @@
 // hooks/useCreateSession.ts
 "use client";
-
 import {useMutation} from "@tanstack/react-query";
-import {sendJSON} from "@/lib/http"; // optional helper; below uses fetch directly
+import {getJSON} from "@/lib/http";
 
 export type SessionCard = {
     cardId: number;
@@ -17,12 +16,13 @@ export type SessionCard = {
     isDue: boolean;
 };
 
+type SessionResponse = {
+    session: SessionCard[];
+    sessionType: "due" | "generated";
+};
+
 export function useCreateSession() {
-    return useMutation<{ session: SessionCard[]; sessionType: "due" | "generated" }, void>({
-        mutationFn: async () => {
-            const res = await fetch("/api/learn");
-            if (!res.ok) throw new Error("Failed to generate session");
-            return res.json();
-        },
+    return useMutation<SessionResponse, unknown>({
+        mutationFn: () => getJSON<SessionResponse>("/api/practice"),
     });
 }

@@ -71,6 +71,7 @@ export default function SignInForm() {
                     </Button>
 
                     <Button
+                        type="button"
                         buttonType={BUTTON_VARIANT.base}
                         buttonColor={BUTTON_COLOR.google}
                         onClick={handleGoogleSignIn}

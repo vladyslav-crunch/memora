@@ -1,0 +1,59 @@
+.redCircle {
+    width: 35vw; /* independent width */
+    height: 35vw; /* independent height */
+    border-radius: 50%;
+    filter: blur(8vw); /* independent blur */
+    position: absolute;
+    top: 1%;
+    right: 10%;
+    background-color: rgba(255, 168, 168, 0.5);
+    z-index: -1;
+}
+
+.blueCircle {
+    width: 25vw;
+    height: 25vw;
+    border-radius: 50%;
+    filter: blur(12vw);
+    position: absolute;
+    bottom: 1%;
+    right: 25%;
+    background-color: rgba(252, 163, 232, 0.7);
+    z-index: -1;
+}
+
+.yellowCircle {
+    width: 35vw;
+    height: 35vw;
+    border-radius: 50%;
+    filter: blur(7vw);
+    position: absolute;
+    bottom: 25%;
+    left: 25%;
+    background-color: rgba(252, 189, 164, 0.6);
+    z-index: -1;
+}
+
+.blueCircle2 {
+    width: 25vw;
+    height: 25vw;
+    border-radius: 50%;
+    filter: blur(12vw);
+    position: absolute;
+    left: 0;
+    bottom: 1%;
+    background-color: rgba(252, 163, 232, 0.2);
+    z-index: -1;
+}
+
+.redCircle2 {
+    width: 35vw; /* independent width */
+    height: 35vw; /* independent height */
+    border-radius: 50%;
+    filter: blur(8vw); /* independent blur */
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 168, 168, 0.4);
+    z-index: -1;
+}

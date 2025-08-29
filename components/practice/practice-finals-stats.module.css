@@ -1,0 +1,42 @@
+.finalStatsWrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.finalStatsContainer {
+    background-color: #FFE9DB;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.finalStatsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.finalStatsTable th {
+    background-color: #f4a372;
+}
+
+.finalStatsTable th,
+.finalStatsTable td {
+    border: none;
+    padding: 8px;
+    text-align: center;
+    vertical-align: top; /* keep alignment clean when wrapping */
+}
+
+.finalStatsTable td:first-child {
+    white-space: normal; /* allow line breaks */
+    word-break: break-word; /* break long words if necessary */
+    max-width: 300px; /* adjust width so it wraps nicely */
+}
+
+.finalCardsCount {
+    font-size: 24px;
+}

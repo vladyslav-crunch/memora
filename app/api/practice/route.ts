@@ -1,7 +1,8 @@
-// app/api/learn/route.ts
+// app/api/practice/route.ts
 import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
+import {SessionCard} from "@/hooks/useSession";
 
 type Mode = "normal" | "reversed" | "typing";
 
@@ -30,8 +31,8 @@ export async function GET(req: Request) {
         });
 
         const now = new Date();
-        const dueItems: any[] = [];
-        const generatedItems: any[] = [];
+        const dueItems: SessionCard[] = [];
+        const generatedItems: SessionCard[] = [];
 
         for (const deck of decks) {
             // collect enabled modes
@@ -61,8 +62,8 @@ export async function GET(req: Request) {
                             answer = card.front;
                             break;
                         case "typing":
-                            question = card.front;
-                            answer = card.back;
+                            question = card.back;
+                            answer = card.front;
                             break;
                     }
 
@@ -86,15 +87,14 @@ export async function GET(req: Request) {
                 generatedItems.push(buildItem(false));
             }
 
-            // shuffle card order if deck is randomized
             if (deck.isQuizRandomized) {
                 dueItems.push(...shuffle(dueItems.splice(-deck.cards.length)));
                 generatedItems.push(...shuffle(generatedItems.splice(-deck.cards.length)));
             }
         }
 
-        let session: any[] = [];
-        let sessionType: "due" | "generated" = "generated";
+        let session: SessionCard[]
+        let sessionType: "due" | "generated"
 
         if (dueItems.length > 0) {
             session = shuffle(dueItems);
@@ -106,7 +106,7 @@ export async function GET(req: Request) {
 
         return NextResponse.json({session, sessionType});
     } catch (err: any) {
-        console.error("learn GET error:", err);
+        console.error("practice GET error:", err);
         if (err?.status === 401) {
             return NextResponse.json({error: "Unauthorized"}, {status: 401});
         }

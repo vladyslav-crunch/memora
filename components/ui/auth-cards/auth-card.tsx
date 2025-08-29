@@ -5,7 +5,7 @@ export type AuthCardProps = {
     front: string;
     back: string;
     context: string;
-    color: string;     // card background (e.g. #cdb3ff)
+    color: string;     // card app-background (e.g. #cdb3ff)
     language: string;  // e.g. "jp"
 };
 
