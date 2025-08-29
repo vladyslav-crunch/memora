@@ -1,12 +1,14 @@
-import SignInForm from "@/components/auth/sign-in-form";
+"use client";
 
-async function SignInPage() {
+import SignInForm from "@/components/auth/sign-in-form";
+import AuthFormWrapper from "@/components/auth/auth-form-wrapper";
+
+function SignInPage() {
     return (
-        <div className="w-full">
-            <h1 className="text-[28px] font-semibold mb-4">Welcome back!</h1>
+        <AuthFormWrapper title={"Welcome back!"}>
             <SignInForm/>
-        </div>
+        </AuthFormWrapper>
     );
 }
 
-export default SignInPage
+export default SignInPage;

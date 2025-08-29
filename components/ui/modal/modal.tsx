@@ -1,14 +1,23 @@
 "use client";
-import React, {
-    PropsWithChildren,
-    createContext,
-    useContext,
-    useEffect,
-    useRef,
-} from "react";
+import React, {PropsWithChildren, createContext, useContext, useEffect, useRef} from "react";
 import {createPortal} from "react-dom";
 import styles from "./modal.module.css";
 import {X} from "lucide-react";
+import {motion, AnimatePresence, Variants} from "framer-motion";
+
+// modal animation
+const modalVariants: Variants = {
+    hidden: {opacity: 0, scale: 0.95},
+    visible: {opacity: 1, scale: 1, transition: {duration: 0.2, ease: "easeOut"}},
+    exit: {opacity: 0, scale: 0.95, transition: {duration: 0.15, ease: "easeIn"}},
+};
+
+// backdrop animation
+const backdropVariants: Variants = {
+    hidden: {opacity: 0},
+    visible: {opacity: 1, transition: {duration: 0.2}},
+    exit: {opacity: 0, transition: {duration: 0.15}},
+};
 
 type ModalContextValue = { close: () => void };
 const ModalCtx = createContext<ModalContextValue | null>(null);
@@ -36,10 +45,8 @@ export default function Modal({
                                   children,
                               }: PropsWithChildren<Props>) {
     const modalRef = useRef<HTMLDivElement>(null);
-
     const close = () => onOpenChange(false);
 
-    // auto-focus first input when opened
     useEffect(() => {
         if (open) {
             const firstInput = modalRef.current?.querySelector<HTMLInputElement>("input");
@@ -47,72 +54,66 @@ export default function Modal({
         }
     }, [open]);
 
-    // backdrop click
+    // Escape key
     useEffect(() => {
-        if (!closeOnBackdrop || !modalRef.current) return;
-
-        const handleClick = (e: MouseEvent) => {
-            if (!modalRef.current) return;
-            if (!modalRef.current.contains(e.target as Node)) {
-                close();
-            }
+        const handleKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") close();
         };
-
-        document.addEventListener("mousedown", handleClick);
-        return () => document.removeEventListener("mousedown", handleClick);
-    }, [closeOnBackdrop]);
-
-    if (!open) return null;
+        if (open) document.addEventListener("keydown", handleKey);
+        return () => document.removeEventListener("keydown", handleKey);
+    }, [open]);
 
     return createPortal(
         <ModalCtx.Provider value={{close}}>
-            <div
-                className={styles.dialog}
-                aria-labelledby={labelledBy}
-                onMouseDown={(e) => {
-                    // If click is outside modal content, close
-                    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-                        close();
-                    }
-                }}
-            >
-                <div
-                    ref={modalRef}
-                    className={`${styles.modal} ${styles[variant ?? "default"]}`}
-                    onKeyDown={(e) => {
-                        if (e.key === "Escape") close();
-                    }}
-                >
-                    {children}
-                </div>
-            </div>
+            <AnimatePresence>
+                {open && (
+                    <motion.div
+                        className={styles.dialog}
+                        aria-labelledby={labelledBy}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        variants={backdropVariants} // <-- backdrop animation
+                        onMouseDown={(e) => {
+                            if (closeOnBackdrop && modalRef.current && !modalRef.current.contains(e.target as Node)) {
+                                close();
+                            }
+                        }}
+                    >
+                        <motion.div
+                            ref={modalRef}
+                            className={`${styles.modal} ${styles[variant ?? "default"]}`}
+                            variants={modalVariants}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                        >
+                            {children}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </ModalCtx.Provider>,
         document.body
     );
-
 }
 
-export function ModalHeader({children}: PropsWithChildren<{}>) {
+export function ModalHeader({children}: PropsWithChildren<object>) {
     const {close} = useModal();
     return (
         <div className={styles.header}>
             <h2 className={styles.title}>{children}</h2>
-            <button
-                type="button"
-                className={styles.closeBtn}
-                onClick={close}
-                aria-label="Close"
-            >
+            <button type="button" className={styles.closeBtn} onClick={close} aria-label="Close">
                 <X size={25}/>
             </button>
         </div>
     );
 }
 
-export function ModalBody({children}: PropsWithChildren<{}>) {
+export function ModalBody({children}: PropsWithChildren<object>) {
     return <div className={styles.body}>{children}</div>;
 }
 
-export function ModalFooter({children}: PropsWithChildren<{}>) {
+export function ModalFooter({children}: PropsWithChildren<object>) {
     return <div className={styles.footer}>{children}</div>;
 }

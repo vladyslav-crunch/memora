@@ -1,6 +1,8 @@
+"use client"
 import React from 'react';
 import AuthCard, {AuthCardProps} from "@/components/ui/auth-cards/auth-card";
-import styles from './auth-cards.module.css'
+import styles from './auth-cards.module.css';
+import {motion, stagger, Variants} from "framer-motion";
 
 const authCards: AuthCardProps[] = [
     {
@@ -26,13 +28,29 @@ const authCards: AuthCardProps[] = [
     }
 ];
 
+const containerVariants: Variants = {
+    hidden: {opacity: 0},
+    visible: {
+        opacity: 1,
+        transition: {
+            delayChildren: stagger(0.3), // 👈 preferred way in v11+
+        },
+    },
+};
+
+
 function AuthCards() {
     return (
-        <div className={styles.authCardsContainer}>
-            {authCards.map((card) => (
-                <AuthCard key={card.front} card={card}/>
+        <motion.div
+            className={styles.authCardsWrapper}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            {authCards.map((card, index) => (
+                <AuthCard card={card} key={index}/>
             ))}
-        </div>
+        </motion.div>
     );
 }
 

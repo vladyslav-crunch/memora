@@ -1,10 +1,11 @@
 import SignUpForm from "@/components/auth/sign-up-form";
+import AuthFormWrapper from "@/components/auth/auth-form-wrapper";
+
 
 export default async function SignUpPage() {
     return (
-        <div className={"w-full"}>
-            <h1 className="text-[28px] font-semibold mb-4">Create your account</h1>
+        <AuthFormWrapper title={"Create your account"}>
             <SignUpForm/>
-        </div>
+        </AuthFormWrapper>
     );
 }

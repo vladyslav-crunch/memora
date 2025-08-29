@@ -1,8 +1,14 @@
-.authCardsContainer {
-    margin-right: 150px;
+.authCardsWrapper {
+    margin-right: 20px;
     list-style: none;
     padding: 0;
     display: flex;
     flex-direction: column;
     gap: 40px; /* vertical spacing between cards */
+}
+
+@media (max-width: 1024px) {
+    .authCardsWrapper {
+        display: none;
+    }
 }

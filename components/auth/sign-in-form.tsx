@@ -43,7 +43,7 @@ export default function SignInForm() {
     return (
         <div className={"w-full max-w-md"}>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                {serverError && <p className="text-red-600">{serverError}</p>}
+                {serverError && <p style={{color: "#E53935"}}>{serverError}</p>}
                 <div className="flex flex-col gap-3 ">
                     <Input
                         type="email"
