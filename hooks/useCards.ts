@@ -1,4 +1,3 @@
-// hooks/useCards.ts
 "use client";
 
 import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
@@ -6,13 +5,19 @@ import {getJSON, sendJSON} from "@/lib/http";
 import type {Card, CardListResponse} from "@/lib/types/api";
 
 const cardsKey = (deckId: number, params?: { take?: number; skip?: number }) =>
-    ["cards", {deckId, take: params?.take ?? 20, skip: params?.skip ?? 0}] as const;
+    ["cards", {deckId, ...(params ?? {})}] as const;
 
 export function useCards(deckId: number | undefined, params?: { take?: number; skip?: number }) {
-    const {take = 20, skip = 0} = params ?? {};
+    const search = new URLSearchParams();
+    if (params?.take !== undefined) search.set("take", String(params.take));
+    if (params?.skip !== undefined) search.set("skip", String(params.skip));
+
+    const query = search.toString();
+    const url = deckId ? `/api/cards?deckId=${deckId}${query ? `&${query}` : ""}` : "";
+
     return useQuery({
-        queryKey: deckId ? cardsKey(deckId, {take, skip}) : ["cards", "disabled"],
-        queryFn: () => getJSON<CardListResponse>(`/api/cards?deckId=${deckId}&take=${take}&skip=${skip}`),
+        queryKey: deckId ? cardsKey(deckId, params) : ["cards", "disabled"],
+        queryFn: () => getJSON<CardListResponse>(url),
         enabled: !!deckId,
     });
 }
@@ -33,10 +38,10 @@ export function useCreateCard() {
             front: string;
             back: string;
             context?: string | null;
-            intervalStrength?: number | null
+            intervalStrength?: number | null;
         }) =>
             sendJSON<Card>("/api/cards", {method: "POST", body}),
-        onSuccess: (card) => {
+        onSuccess: () => {
             qc.invalidateQueries({queryKey: ["cards"]});
             qc.invalidateQueries({queryKey: ["decks"]});
             qc.invalidateQueries({queryKey: ["deckStats"]});

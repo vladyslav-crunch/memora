@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "@/app/(protected-without-header)/practice/practice.module.css";
+import styles from "./practice-progression.module.css";
 import ProgressBar from "@/components/ui/progress-bar/progress-bar";
 
 type PracticeProgressionProps = {

@@ -22,7 +22,6 @@ const MODE_OPTIONS: ToggleOption[] = [
     {id: "normal", label: "Normal"},
     {id: "reversed", label: "Reversed"},
     {id: "typing", label: "Typing"},
-    {id: "randomized", label: "Randomized"},
 ];
 
 type CreateDeckModalProps = {
@@ -54,7 +53,6 @@ export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateD
         if (v.isQuizNormal) sel.push("normal");
         if (v.isQuizReversed) sel.push("reversed");
         if (v.isQuizTyping) sel.push("typing");
-        if (v.isQuizRandomized) sel.push("randomized");
         return sel;
     };
 
@@ -62,7 +60,6 @@ export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateD
         setValue("isQuizNormal", ids.includes("normal"), {shouldValidate: true});
         setValue("isQuizReversed", ids.includes("reversed"), {shouldValidate: true});
         setValue("isQuizTyping", ids.includes("typing"), {shouldValidate: true});
-        setValue("isQuizRandomized", ids.includes("randomized"), {shouldValidate: true});
     };
 
     const selectedIds = toSelectedIds(watch());
@@ -127,6 +124,29 @@ export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateD
                                 marginBottom: "8px",
                             }}
                         >
+                            Order
+                        </label>
+                        <Controller
+                            control={control}
+                            name="isQuizRandomized"
+                            render={({field}) => (
+                                <Switch
+                                    label="Randomized"
+                                    checked={!!field.value}
+                                    onChange={(v) => field.onChange(v)}
+                                />
+                            )}
+                        />
+                    </div>
+                    <div>
+                        <label
+                            style={{
+                                display: "block",
+                                fontSize: "18px",
+                                color: "#333",
+                                marginBottom: "8px",
+                            }}
+                        >
                             Visibility
                         </label>
                         <Controller
@@ -141,6 +161,7 @@ export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateD
                             )}
                         />
                     </div>
+
 
                     <ModalFooter>
                         <Button

@@ -42,13 +42,17 @@ export async function GET(req: Request) {
             if (deck.isQuizTyping) enabledModes.push("typing");
             if (enabledModes.length === 0) continue;
 
-            for (const card of deck.cards) {
+            // sort or shuffle cards
+            const cardsToUse = deck.isQuizRandomized
+                ? shuffle(deck.cards)
+                : [...deck.cards].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+
+            for (const card of cardsToUse) {
                 const isDue = !card.nextRepetitionTime || new Date(card.nextRepetitionTime) <= now;
 
-                // pick one mode per card among enabledModes
                 const mode = pickRandom(enabledModes);
 
-                const buildItem = (dueFlag: boolean) => {
+                const buildItem = (dueFlag: boolean): SessionCard => {
                     let question: string;
                     let answer: string;
 
@@ -58,9 +62,6 @@ export async function GET(req: Request) {
                             answer = card.back;
                             break;
                         case "reversed":
-                            question = card.back;
-                            answer = card.front;
-                            break;
                         case "typing":
                             question = card.back;
                             answer = card.front;
@@ -86,21 +87,17 @@ export async function GET(req: Request) {
                 if (isDue) dueItems.push(buildItem(true));
                 generatedItems.push(buildItem(false));
             }
-
-            if (deck.isQuizRandomized) {
-                dueItems.push(...shuffle(dueItems.splice(-deck.cards.length)));
-                generatedItems.push(...shuffle(generatedItems.splice(-deck.cards.length)));
-            }
         }
 
-        let session: SessionCard[]
-        let sessionType: "due" | "generated"
+        // if there are due items, session is due; otherwise use generated items
+        let session: SessionCard[];
+        let sessionType: "due" | "generated";
 
         if (dueItems.length > 0) {
-            session = shuffle(dueItems);
+            session = dueItems;
             sessionType = "due";
         } else {
-            session = shuffle(generatedItems);
+            session = generatedItems;
             sessionType = "generated";
         }
 

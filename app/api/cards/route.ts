@@ -22,22 +22,34 @@ const listQuery = z.object({
 export async function GET(req: Request) {
     try {
         const userId = await requireUserId();
-        const parsed = listQuery.safeParse(Object.fromEntries(new URL(req.url).searchParams));
+
+        const parsed = listQuery.safeParse(
+            Object.fromEntries(new URL(req.url).searchParams)
+        );
         if (!parsed.success) {
-            return NextResponse.json({error: parsed.error.flatten()}, {status: 400});
+            return NextResponse.json(
+                {error: parsed.error.flatten()},
+                {status: 400}
+            );
         }
 
-        const {deckId, take = 20, skip = 0} = parsed.data;
+        const {deckId, take, skip = 0} = parsed.data;
         await ensureDeckOwnership(deckId, userId);
 
         const [items, total] = await Promise.all([
-            prisma.card.findMany({where: {deckId}, orderBy: {id: "asc"}, take, skip}),
+            prisma.card.findMany({
+                where: {deckId},
+                orderBy: {id: "asc"},
+                take,
+                skip,
+            }),
             prisma.card.count({where: {deckId}}),
         ]);
 
         return NextResponse.json({items, total, take, skip});
     } catch (err: any) {
-        if (err?.status) return NextResponse.json({error: err.message}, {status: err.status});
+        if (err?.status)
+            return NextResponse.json({error: err.message}, {status: err.status});
         console.error("Cards GET error:", err);
         return NextResponse.json({error: "Internal Server Error"}, {status: 500});
     }
@@ -70,7 +82,7 @@ export async function POST(req: Request) {
                     createdAt: now,
                 },
             });
-            
+
             await upsertUserProgressionEntry(tx, userId, card.id, indication, now);
             await recalcUserProgressionHistoryForToday(tx, userId, now);
 

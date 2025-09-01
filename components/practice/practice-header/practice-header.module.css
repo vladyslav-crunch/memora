@@ -1,0 +1,23 @@
+.practiceHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    & button {
+        gap: 5px;
+        display: flex;
+        background: #f68f7d;
+        color: #ffffff;
+        padding: 10px 15px;
+        border-radius: 15px;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 420px) {
+    .practiceHeader button span {
+        display: none;
+    }
+}

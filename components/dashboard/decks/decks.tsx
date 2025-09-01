@@ -8,15 +8,15 @@ import Spinner from "@/components/ui/spinner/spinner";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import {Deck as DeckType} from '@/lib/types/api'
-import AddCardModal from "@/components/dashboard/cards/add-card-modal";
+import AddCardModal from "@/components/dashboard/cards/modals/add-card-modal";
 
 const CreateDeckModal = dynamic(
-    () => import("@/components/dashboard/decks/create-deck-modal"),
+    () => import("@/components/dashboard/decks/modals/create-deck-modal"),
     {ssr: false}
 );
 
 export default function Decks() {
-    const {data: decksRes, isLoading: decksLoading} = useDeckStats({take: 20, skip: 0});
+    const {data: decksRes, isLoading: decksLoading} = useDeckStats();
     const [isCreateOpen, setCreateOpen] = useState(false);
     const [isAddCardOpen, setAddCardOpen] = useState(false);
     const [newDeck, setNewDeck] = useState<DeckType | null>(null);

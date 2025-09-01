@@ -1,0 +1,15 @@
+.practiceGameButtons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+
+
+}
+
+@media (max-width: 420px) {
+    .practiceGameButtons {
+        & button {
+            height: 45px;
+        }
+    }
+}

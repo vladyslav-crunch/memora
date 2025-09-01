@@ -5,8 +5,8 @@ export const CreateDeckSchema = z.object({
     isQuizNormal: z.coerce.boolean().default(true),
     isQuizReversed: z.coerce.boolean().default(false),
     isQuizTyping: z.coerce.boolean().default(false),
-    isQuizRandomized: z.coerce.boolean().default(false),
-    isPrivate: z.coerce.boolean().default(false),
+    isQuizRandomized: z.coerce.boolean().default(true),
+    isPrivate: z.coerce.boolean().default(true),
 }).superRefine((val, ctx) => {
     const count =
         (val.isQuizNormal ? 1 : 0) +

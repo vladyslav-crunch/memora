@@ -1,7 +1,7 @@
 import React from "react";
 import Button, {BUTTON_COLOR} from "@/components/ui/button/button";
 import {Circle, RefreshCw, X} from "lucide-react";
-import styles from "@/app/(protected-without-header)/practice/practice.module.css";
+import styles from "./practice-buttons.module.css"
 
 type PracticeButtonsProps = {
     cardMode: string;

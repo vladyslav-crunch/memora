@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "@/app/(protected-without-header)/practice/practice.module.css";
+import styles from "./practice-questions.module.css";
 
 type PracticeGameQuestionsProps = {
     cardMode: string;
@@ -14,6 +14,10 @@ export default function PracticeQuestions({
                                               answerFeedback,
                                               resultMessage,
                                           }: PracticeGameQuestionsProps) {
+    // pick color for result message
+    const resultColor =
+        resultMessage === "Good job" ? "#3ea61c" : "#ed6464"
+
     return (
         <div className={styles.practiceGameQuestions}>
             {!showAnswer ? (
@@ -22,7 +26,11 @@ export default function PracticeQuestions({
                 <p>Did you remember correctly?</p>
             ) : (
                 <>
-                    {resultMessage && <p style={{fontWeight: "bold"}}>{resultMessage}</p>}
+                    {resultMessage && (
+                        <p style={{fontWeight: "bold", color: resultColor, textAlign: "center"}}>
+                            {resultMessage}
+                        </p>
+                    )}
                     <p>{answerFeedback}</p>
                 </>
             )}

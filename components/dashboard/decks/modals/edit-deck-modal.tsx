@@ -11,7 +11,7 @@ import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useDeleteDeck, useUpdateDeck} from "@/hooks/useDecks"; // <-- use update, not create
 import Spinner from "@/components/ui/spinner/spinner";
-import {Deck, DeckStatsItem} from "@/lib/types/api";
+import {Deck} from "@/lib/types/api";
 import {ConfirmModal} from "@/components/ui/confirm-modal/confirm-modal";
 import {toast} from "sonner";
 
@@ -19,7 +19,6 @@ const MODE_OPTIONS: ToggleOption[] = [
     {id: "normal", label: "Normal"},
     {id: "reversed", label: "Reversed"},
     {id: "typing", label: "Typing"},
-    {id: "randomized", label: "Randomized"},
 ];
 
 type UpdateDeckModalProps = {
@@ -56,7 +55,6 @@ export default function EditDeckModal({open, onOpenChange, deck}: UpdateDeckModa
         if (v.isQuizNormal) sel.push("normal");
         if (v.isQuizReversed) sel.push("reversed");
         if (v.isQuizTyping) sel.push("typing");
-        if (v.isQuizRandomized) sel.push("randomized");
         return sel;
     };
 
@@ -64,7 +62,6 @@ export default function EditDeckModal({open, onOpenChange, deck}: UpdateDeckModa
         setValue("isQuizNormal", ids.includes("normal"), {shouldValidate: true});
         setValue("isQuizReversed", ids.includes("reversed"), {shouldValidate: true});
         setValue("isQuizTyping", ids.includes("typing"), {shouldValidate: true});
-        setValue("isQuizRandomized", ids.includes("randomized"), {shouldValidate: true});
     };
 
     const selectedIds = toSelectedIds(watch());
@@ -137,6 +134,29 @@ export default function EditDeckModal({open, onOpenChange, deck}: UpdateDeckModa
                                 name="isPrivate"
                                 render={({field}) => (
                                     <Switch label="Public" checked={!field.value} onChange={(v) => field.onChange(!v)}/>
+                                )}
+                            />
+                        </div>
+                        <div>
+                            <label
+                                style={{
+                                    display: "block",
+                                    fontSize: "18px",
+                                    color: "#333",
+                                    marginBottom: "8px",
+                                }}
+                            >
+                                Order
+                            </label>
+                            <Controller
+                                control={control}
+                                name="isQuizRandomized"
+                                render={({field}) => (
+                                    <Switch
+                                        label="Randomized"
+                                        checked={!!field.value}
+                                        onChange={(v) => field.onChange(v)}
+                                    />
                                 )}
                             />
                         </div>

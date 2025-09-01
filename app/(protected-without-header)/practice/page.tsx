@@ -4,12 +4,13 @@ import Spinner from "@/components/ui/spinner/spinner";
 import {SessionCard, useCreateSession} from "@/hooks/useSession";
 import styles from "./practice.module.css";
 import {bucketFromInterval} from "@/lib/api/progression-helpers";
-import PracticeHeader from "@/components/practice/practice-header";
-import PracticeCard from "@/components/practice/practice-card";
-import PracticeQuestions from "@/components/practice/practice-questions";
-import PracticeButtons from "@/components/practice/practice-buttons";
-import PracticeFinalsStats from "@/components/practice/practice-finals-stats";
-import PracticeProgression from "@/components/practice/practice-progression";
+import PracticeHeader from "@/components/practice/practice-header/practice-header";
+import PracticeCard from "@/components/practice/practice-card/practice-card";
+import PracticeQuestions from "@/components/practice/practice-questions/practice-questions";
+import PracticeButtons from "@/components/practice/practice-buttons/practice-buttons";
+import PracticeFinalsStats from "@/components/practice/practice-finale-stats/practice-finals-stats";
+import PracticeProgression from "@/components/practice/practice-progression/practice-progression";
+import PracticeDeck from "@/components/practice/practice-deck/practice-deck";
 
 
 export type CardStat = {
@@ -95,7 +96,7 @@ export default function Practice() {
 
         const arrow = rating === "correct" ? "→" : "←";
 
-        setResultMessage(rating === "correct" ? "Correct ✅" : "Wrong ❌");
+        setResultMessage(rating === "correct" ? "Good job" : "Wrong, this question will be repeated");
 
         setAnswerFeedback(
             `${oldStrength.toFixed(2)} ${arrow} ${newStrength.toFixed(2)} ${bucket}`
@@ -158,18 +159,18 @@ export default function Practice() {
         <div className={styles.practiceContainer}>
             <PracticeHeader onFinish={() => setCurrentIndex(queue.length)}/>
 
-            <div style={{margin: "8px 0", fontSize: 13, color: "#666"}}>
-                {sessionType === "generated" ? (
-                    <strong>Practice mode — changes are NOT saved to your account.</strong>
-                ) : (
-                    <strong>Due session — answers will update your schedule.</strong>
-                )}
-            </div>
+            {/*<div style={{margin: "8px 0", fontSize: 13, color: "#666"}}>*/}
+            {/*    {sessionType === "generated" ? (*/}
+            {/*        <strong>Practice mode — changes are NOT saved to your account.</strong>*/}
+            {/*    ) : (*/}
+            {/*        <strong>Due session — answers will update your schedule.</strong>*/}
+            {/*    )}*/}
+            {/*</div>*/}
 
             <div className={styles.practiceGameContainer}>
                 <div className={styles.practiceGame}>
                     <PracticeProgression currentIndex={currentIndex} queueLength={queue.length}/>
-
+                    <PracticeDeck deckName={card.deckName}/>
                     <PracticeCard
                         card={card}
                         typedAnswer={typedAnswer}

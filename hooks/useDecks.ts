@@ -3,15 +3,21 @@ import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import {getJSON, sendJSON} from "@/lib/http";
 import {Deck, DeckListResponse, DeckStatsResponse} from "@/lib/types/api";
 
-
 const decksKey = (params?: { take?: number; skip?: number }) =>
-    ["decks", {take: params?.take ?? 20, skip: params?.skip ?? 0}] as const;
+    ["decks", params ?? {}] as const;
 
 export function useDecks(params?: { take?: number; skip?: number }) {
-    const {take = 20, skip = 0} = params ?? {};
+    // Build query string only if values exist
+    const search = new URLSearchParams();
+    if (params?.take !== undefined) search.set("take", String(params.take));
+    if (params?.skip !== undefined) search.set("skip", String(params.skip));
+
+    const query = search.toString();
+    const url = query ? `/api/decks?${query}` : "/api/decks";
+
     return useQuery({
-        queryKey: decksKey({take, skip}),
-        queryFn: () => getJSON<DeckListResponse>(`/api/decks?take=${take}&skip=${skip}`),
+        queryKey: decksKey(params),
+        queryFn: () => getJSON<DeckListResponse>(url),
     });
 }
 
@@ -61,12 +67,18 @@ export function useDeleteDeck(id: number) {
 }
 
 export const deckStatsKey = (params?: { take?: number; skip?: number }) =>
-    ["deckStats", {take: params?.take ?? 20, skip: params?.skip ?? 0}] as const;
+    ["deckStats", params ?? {}] as const;
 
 export function useDeckStats(params?: { take?: number; skip?: number }) {
-    const {take = 20, skip = 0} = params ?? {};
+    const search = new URLSearchParams();
+    if (params?.take !== undefined) search.set("take", String(params.take));
+    if (params?.skip !== undefined) search.set("skip", String(params.skip));
+
+    const query = search.toString();
+    const url = query ? `/api/decks/stats?${query}` : `/api/decks/stats`;
+
     return useQuery({
-        queryKey: deckStatsKey({take, skip}),
-        queryFn: () => getJSON<DeckStatsResponse>(`/api/decks/stats?take=${take}&skip=${skip}`),
+        queryKey: deckStatsKey(params),
+        queryFn: () => getJSON<DeckStatsResponse>(url),
     });
 }

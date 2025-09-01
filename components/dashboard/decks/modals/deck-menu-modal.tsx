@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import Modal from "@/components/ui/modal/modal";
-import {Deck, DeckStatsItem} from "@/lib/types/api";
+import {Deck} from "@/lib/types/api";
 import Button, {BUTTON_COLOR, BUTTON_VARIANT} from "@/components/ui/button/button";
 import {Rocket, Plus, List, Pencil, FolderOutput, FolderInput} from "lucide-react";
-import EditDeckModal from "@/components/dashboard/decks/edit-deck-modal";
-import AddCardModal from "@/components/dashboard/cards/add-card-modal";
+import EditDeckModal from "@/components/dashboard/decks/modals/edit-deck-modal";
+import AddCardModal from "@/components/dashboard/cards/modals/add-card-modal";
 import {useRouter} from "next/navigation";
 
 type DeckMenuModalProps = {

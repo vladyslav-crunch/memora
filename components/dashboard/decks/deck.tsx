@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styles from './deck.module.css';
 import {DeckStatsItem} from "@/lib/types/api";
-import DeckMenuModal from "@/components/dashboard/decks/deck-menu-modal";
+import DeckMenuModal from "@/components/dashboard/decks/modals/deck-menu-modal";
 
 type DeckProps = {
     deck: DeckStatsItem;

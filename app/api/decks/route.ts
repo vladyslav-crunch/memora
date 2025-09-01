@@ -45,7 +45,14 @@ export async function GET(req: Request) {
             take: searchParams.get("take") ?? undefined,
             skip: searchParams.get("skip") ?? undefined,
         });
-        const {take = 20, skip = 0} = parsed.success ? parsed.data : {take: 20, skip: 0};
+
+        let take: number | undefined = undefined;
+        let skip: number | undefined = undefined;
+
+        if (parsed.success) {
+            take = parsed.data.take;
+            skip = parsed.data.skip ?? 0; // default skip to 0
+        }
 
         const [items, total] = await Promise.all([
             prisma.deck.findMany({
@@ -66,3 +73,4 @@ export async function GET(req: Request) {
         return NextResponse.json({error: "Internal Server Error"}, {status: 500});
     }
 }
+
