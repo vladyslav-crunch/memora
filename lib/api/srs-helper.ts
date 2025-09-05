@@ -7,23 +7,17 @@ export function calculateNextRepetition(
     let strength = intervalStrength ?? 0;
 
     if (isCorrect) {
-        strength = Math.min(strength + 0.25, 1); // grow toward 1
+        strength = Math.min(strength + 0.15, 1);
     } else {
-        strength = Math.max(strength - 0.25, 0); // shrink toward 0
+        strength = Math.max(strength - 0.3, 0);
     }
 
-    // Example mapping of strength → interval (tweak as you like)
-    const intervals = [
-        5 * 60 * 1000,       // 0.0 → 5 min
-        30 * 60 * 1000,      // 0.25 → 30 min
-        12 * 60 * 60 * 1000, // 0.5 → 12 hours
-        24 * 60 * 60 * 1000, // 0.75 → 1 day
-        3 * 24 * 60 * 60 * 1000, // 1.0 → 3 days
-    ];
+    const minInterval = 5 * 60 * 1000;               // 5 min
+    const maxInterval = 180 * 24 * 60 * 60 * 1000;   // 6 mon
+    const factor = Math.pow(maxInterval / minInterval, strength);
+    const interval = minInterval * factor;
 
-    const index = Math.round(strength * 4); // 0–4
-    const offset = intervals[index];
-    const nextTime = new Date(now.getTime() + offset);
+    const nextTime = new Date(now.getTime() + interval);
 
     return {newStrength: strength, nextTime};
 }

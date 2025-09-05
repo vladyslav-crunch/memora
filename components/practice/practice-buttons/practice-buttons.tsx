@@ -11,9 +11,7 @@ type PracticeButtonsProps = {
     handleSubmitTypingOrMark: () => void;
     handleNext: (rating: "correct" | "wrong", isRetry?: boolean) => void;
     handleGoOn: () => void;
-    currentIndex: number;
     cardAnswerLength: number;
-    sessionLength: number;
 };
 
 export default function PracticeButtons({
@@ -22,11 +20,8 @@ export default function PracticeButtons({
                                             showAnswer,
                                             answerFeedback,
                                             handleSubmitTypingOrMark,
-
                                             handleNext,
                                             handleGoOn,
-                                            currentIndex,
-                                            sessionLength,
                                             cardAnswerLength
                                         }: PracticeButtonsProps) {
     if (!showAnswer) {
@@ -51,13 +46,13 @@ export default function PracticeButtons({
             <div className={styles.practiceGameButtons}>
                 <Button
                     buttonColor={BUTTON_COLOR.red}
-                    onClick={() => handleNext("wrong", currentIndex >= sessionLength)}
+                    onClick={() => handleNext("wrong")}
                 >
                     <X/>
                 </Button>
                 <Button
                     buttonColor={BUTTON_COLOR.orange}
-                    onClick={() => handleNext("correct", currentIndex >= sessionLength)}
+                    onClick={() => handleNext("correct")}
                 >
                     <Circle/>
                 </Button>

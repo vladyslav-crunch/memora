@@ -81,6 +81,7 @@ export async function GET(req: Request) {
                             ? new Date(card.nextRepetitionTime).toISOString()
                             : null,
                         isDue: dueFlag,
+                        isRepeated: false
                     };
                 };
 

@@ -26,7 +26,7 @@ export type CardStat = {
 
 export default function Practice() {
     const {mutate, data, isPending, isError} = useCreateSession();
-    const session = data?.session ?? [];
+    const session = React.useMemo(() => data?.session ?? [], [data]);
     const sessionType = data?.sessionType ?? "generated";
 
     const [queue, setQueue] = useState<SessionCard[]>([]);
@@ -63,7 +63,7 @@ export default function Practice() {
 
     const card = queue[currentIndex];
 
-    const handleNext = async (rating: "correct" | "wrong", isRetry = false) => {
+    const handleNext = async (rating: "correct" | "wrong") => {
         const oldStrength = card.intervalStrength ?? 0;
         let newStrength = oldStrength;
         let bucket = bucketFromInterval(oldStrength);
@@ -71,8 +71,8 @@ export default function Practice() {
 
         const nextRepIso = card.nextRepetitionTime;
         const isDueClient = card.isDue || !nextRepIso || new Date(nextRepIso) <= now;
-        const shouldCallApi = !isRetry && sessionType === "due" && isDueClient;
-
+        const shouldCallApi = !card.isRepeated && sessionType === "due" && isDueClient;
+        console.log(shouldCallApi)
         if (shouldCallApi) {
             try {
                 const res = await fetch(`/api/cards/${card.cardId}/answer`, {
@@ -120,14 +120,16 @@ export default function Practice() {
         });
 
         if (rating === "wrong") {
-            setQueue((prev) => [...prev, card]);
+            if (rating === "wrong") {
+                setQueue((prev) => [...prev, {...card, isRepeated: true}]);
+            }
         }
 
         setShowAnswer(true);
     };
 
 
-    const handleTypingSubmit = () => {
+    const handleTypingSubmit = async () => {
         if (!card) return;
 
         // prevent submission until fully typed
@@ -135,8 +137,7 @@ export default function Practice() {
 
         const isCorrect =
             typedAnswer.trim().toLowerCase() === card.answer.trim().toLowerCase();
-
-        handleNext(isCorrect ? "correct" : "wrong");
+        await handleNext(isCorrect ? "correct" : "wrong");
         setTypedAnswer("");
     };
 
@@ -196,8 +197,6 @@ export default function Practice() {
                         handleSubmitTypingOrMark={handleSubmitTypingOrMark}
                         handleNext={handleNext}
                         handleGoOn={handleGoOn}
-                        currentIndex={currentIndex}
-                        sessionLength={queue.length}
                     />
                 </div>
             </div>

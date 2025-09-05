@@ -14,6 +14,7 @@ export type SessionCard = {
     intervalStrength: number | null;
     nextRepetitionTime: string | null;
     isDue: boolean;
+    isRepeated: boolean;
 };
 
 type SessionResponse = {
