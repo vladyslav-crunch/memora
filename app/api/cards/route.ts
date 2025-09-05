@@ -4,7 +4,6 @@ import {z} from "zod";
 import {prisma} from "@/lib/prisma";
 import {
     bucketFromInterval,
-    recalcUserProgressionHistoryForToday,
     upsertUserProgressionEntry,
 } from "@/lib/api/progression-helpers";
 import {ensureDeckOwnership, requireUserId} from "@/lib/api/auth-helper";
@@ -84,7 +83,6 @@ export async function POST(req: Request) {
             });
 
             await upsertUserProgressionEntry(tx, userId, card.id, indication, now);
-            await recalcUserProgressionHistoryForToday(tx, userId, now);
 
             return card;
         });

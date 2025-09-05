@@ -5,7 +5,6 @@ import {requireUserId} from "@/lib/api/auth-helper";
 import {
     bucketFromInterval,
     upsertUserProgressionEntry,
-    recalcUserProgressionHistoryForToday
 } from "@/lib/api/progression-helpers";
 import {calculateNextRepetition} from "@/lib/api/srs-helper";
 import {z} from "zod";
@@ -38,9 +37,6 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
             });
 
             await upsertUserProgressionEntry(tx, userId, cardId, newBucket, now);
-
-            await recalcUserProgressionHistoryForToday(tx, userId, now);
-
             return c;
         });
 

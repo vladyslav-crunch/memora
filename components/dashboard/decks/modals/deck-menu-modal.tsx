@@ -13,10 +13,16 @@ type DeckMenuModalProps = {
     deck: Deck
 };
 
+
 function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
     const [isEdit, setEdit] = useState(false);
     const [isAdd, setAdd] = useState(false);
     const router = useRouter()
+
+    const startPractice = () => {
+        router.push(`/practice?deckId=${deck.id}`);
+    }
+
     return (
         <>
             <Modal open={open} onOpenChange={onOpenChange} variant="compact">
@@ -24,7 +30,7 @@ function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
                     buttonType={BUTTON_VARIANT.modal}
                     buttonColor={BUTTON_COLOR.orangeLight}
                     icon={Rocket}
-                    onClick={() => router.push("/practice")}
+                    onClick={startPractice}
                 >
                     Start learning
                 </Button>

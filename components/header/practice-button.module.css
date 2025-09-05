@@ -1,0 +1,25 @@
+.practiceButtonContainer {
+    background-color: #2f253f;
+    color: white;
+    height: 55px;
+    width: 55px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.practiceButtonDueCounter {
+    position: absolute;
+    background-color: #fd7e7e;
+    top: -5px;
+    right: -5px;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}

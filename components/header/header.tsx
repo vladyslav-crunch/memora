@@ -3,6 +3,7 @@ import Logo from "@/components/header/logo";
 import SearchBar from "@/components/header/search-bar";
 import ProfileMenu from "@/components/header/profile-menu";
 import Link from "next/link";
+import PracticeButton from "@/components/header/practice-button";
 
 type HeaderMode = "auth" | "dashboard" | "learning";
 
@@ -17,6 +18,7 @@ export default function Header({mode}: HeaderProps) {
                 <Link href={"/"}><Logo/></Link>
             </div>
             {mode !== "auth" && <div className={styles.headerRightSide}>
+                <PracticeButton/>
                 <SearchBar/>
                 <ProfileMenu/>
             </div>}

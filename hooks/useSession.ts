@@ -22,8 +22,8 @@ type SessionResponse = {
     sessionType: "due" | "generated";
 };
 
-export function useCreateSession() {
+export function useCreateSession(deckId?: number) {
     return useMutation<SessionResponse, unknown>({
-        mutationFn: () => getJSON<SessionResponse>("/api/practice"),
+        mutationFn: () => getJSON(`/api/practice${deckId ? `?deckId=${deckId}` : ""}`),
     });
 }

@@ -62,6 +62,7 @@ export function useDeleteDeck(id: number) {
         onSuccess: () => {
             qc.invalidateQueries({queryKey: ["decks"]});
             qc.invalidateQueries({queryKey: ["deckStats"]});
+            qc.invalidateQueries({queryKey: ["progressionHistory"]});
         },
     });
 }

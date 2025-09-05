@@ -45,7 +45,8 @@ export function useCreateCard() {
             qc.invalidateQueries({queryKey: ["cards"]});
             qc.invalidateQueries({queryKey: ["decks"]});
             qc.invalidateQueries({queryKey: ["deckStats"]});
-            qc.invalidateQueries({queryKey: ["progression", "today"]});
+            qc.invalidateQueries({queryKey: ["progressionHistory"]});
+            qc.invalidateQueries({queryKey: ["dueCards"]});
         },
     });
 }

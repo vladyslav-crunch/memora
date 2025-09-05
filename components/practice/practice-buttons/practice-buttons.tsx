@@ -12,6 +12,7 @@ type PracticeButtonsProps = {
     handleNext: (rating: "correct" | "wrong", isRetry?: boolean) => void;
     handleGoOn: () => void;
     cardAnswerLength: number;
+    isSubmitting: boolean;
 };
 
 export default function PracticeButtons({
@@ -22,7 +23,8 @@ export default function PracticeButtons({
                                             handleSubmitTypingOrMark,
                                             handleNext,
                                             handleGoOn,
-                                            cardAnswerLength
+                                            cardAnswerLength,
+                                            isSubmitting
                                         }: PracticeButtonsProps) {
     if (!showAnswer) {
         // Step 1: Refresh / submit
@@ -32,7 +34,7 @@ export default function PracticeButtons({
                     buttonColor={BUTTON_COLOR.orange}
                     onClick={handleSubmitTypingOrMark}
                     style={{width: cardMode === "typing" ? "350px" : "200px"}}
-                    disabled={cardMode === "typing" && typedAnswer.length < cardAnswerLength}
+                    disabled={cardMode === "typing" && typedAnswer.length < cardAnswerLength && isSubmitting}
                 >
                     <RefreshCw/>
                 </Button>
@@ -47,10 +49,12 @@ export default function PracticeButtons({
                 <Button
                     buttonColor={BUTTON_COLOR.red}
                     onClick={() => handleNext("wrong")}
+                    disabled={isSubmitting}
                 >
                     <X/>
                 </Button>
                 <Button
+                    disabled={isSubmitting}
                     buttonColor={BUTTON_COLOR.orange}
                     onClick={() => handleNext("correct")}
                 >

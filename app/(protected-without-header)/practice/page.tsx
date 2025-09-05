@@ -11,6 +11,7 @@ import PracticeButtons from "@/components/practice/practice-buttons/practice-but
 import PracticeFinalsStats from "@/components/practice/practice-finale-stats/practice-finals-stats";
 import PracticeProgression from "@/components/practice/practice-progression/practice-progression";
 import PracticeDeck from "@/components/practice/practice-deck/practice-deck";
+import {useSearchParams} from "next/navigation";
 
 
 export type CardStat = {
@@ -24,11 +25,15 @@ export type CardStat = {
     repeated: boolean;
 };
 
+
 export default function Practice() {
-    const {mutate, data, isPending, isError} = useCreateSession();
+    const searchParams = useSearchParams();
+    const deckIdParam = searchParams.get("deckId");
+    const deckId = deckIdParam ? Number(deckIdParam) : undefined;
+    const {mutate, data, isPending, isError} = useCreateSession(deckId);
     const session = React.useMemo(() => data?.session ?? [], [data]);
     const sessionType = data?.sessionType ?? "generated";
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [queue, setQueue] = useState<SessionCard[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false);
@@ -64,6 +69,9 @@ export default function Practice() {
     const card = queue[currentIndex];
 
     const handleNext = async (rating: "correct" | "wrong") => {
+        if (isSubmitting) return; // prevent double clicks
+        setIsSubmitting(true); // start loading
+
         const oldStrength = card.intervalStrength ?? 0;
         let newStrength = oldStrength;
         let bucket = bucketFromInterval(oldStrength);
@@ -72,7 +80,7 @@ export default function Practice() {
         const nextRepIso = card.nextRepetitionTime;
         const isDueClient = card.isDue || !nextRepIso || new Date(nextRepIso) <= now;
         const shouldCallApi = !card.isRepeated && sessionType === "due" && isDueClient;
-        console.log(shouldCallApi)
+
         if (shouldCallApi) {
             try {
                 const res = await fetch(`/api/cards/${card.cardId}/answer`, {
@@ -124,8 +132,8 @@ export default function Practice() {
                 setQueue((prev) => [...prev, {...card, isRepeated: true}]);
             }
         }
-
         setShowAnswer(true);
+        setIsSubmitting(false);
     };
 
 
@@ -197,6 +205,7 @@ export default function Practice() {
                         handleSubmitTypingOrMark={handleSubmitTypingOrMark}
                         handleNext={handleNext}
                         handleGoOn={handleGoOn}
+                        isSubmitting={isSubmitting}
                     />
                 </div>
             </div>

@@ -1,11 +1,12 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
+import {recalcUserProgressionHistoryForToday} from "@/lib/api/progression-helpers";
 
 export async function GET() {
     try {
         const userId = await requireUserId();
-
+        await recalcUserProgressionHistoryForToday(prisma, userId);
         const history = await prisma.userProgressionHistory.findMany({
             where: {userId},
             orderBy: {createdAt: "asc"},
