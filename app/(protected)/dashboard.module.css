@@ -1,0 +1,35 @@
+/* container wrapper */
+.container {
+    width: 100%;
+    height: 100%;
+}
+
+/* mobile layout */
+.mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* gap-8 in Tailwind */
+}
+
+/* desktop layout */
+.desktop {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
+    gap: 5rem; /* gap-20 in Tailwind */
+}
+
+.left {
+    flex: 1;
+    max-width: 750px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; /* gap-5 */
+}
+
+.right {
+
+    display: flex;
+    justify-content: flex-end;
+}

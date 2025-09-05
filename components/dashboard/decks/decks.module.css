@@ -1,7 +1,6 @@
 .decksContainer {
     display: flex;
     flex-direction: column;
-    width: 730px;
     height: 100%;
 }
 
@@ -60,6 +59,20 @@
     scrollbar-width: thin;
     scrollbar-color: #f28b82 #fce8e6;
     padding-right: 8px;
+}
+
+@media (max-width: 1439px) {
+    .decksGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .decksGrid {
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+    }
 }
 
 /* Chrome, Edge, Safari */

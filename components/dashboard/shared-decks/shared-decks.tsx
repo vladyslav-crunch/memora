@@ -1,9 +1,11 @@
 import React from 'react';
 
 function SharedDecks() {
-    
+
     return (
-        <div>Here will be shared decks</div>
+        <div>
+            <h3 className={"text-2xl font-semibold mb-4"}>Shared decks</h3>
+        </div>
     );
 }
 
