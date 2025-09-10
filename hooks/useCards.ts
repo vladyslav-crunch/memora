@@ -47,6 +47,7 @@ export function useCreateCard() {
             qc.invalidateQueries({queryKey: ["deckStats"]});
             qc.invalidateQueries({queryKey: ["progressionHistory"]});
             qc.invalidateQueries({queryKey: ["dueCards"]});
+            qc.invalidateQueries({queryKey: ["cardsExist"]});
         },
     });
 }
@@ -73,6 +74,7 @@ export function useDeleteCard(id: number, deckId?: number) {
             qc.invalidateQueries({queryKey: ["cards"]});
             if (deckId) qc.invalidateQueries({queryKey: ["cards", {deckId}]});
             qc.invalidateQueries({queryKey: ["decks"]});
+            qc.invalidateQueries({queryKey: ["cardsExist"]});
         },
     });
 }

@@ -33,7 +33,9 @@ export default function Decks() {
             <div className={"h-full "}>
                 {decksLoading && (
                     <div className={styles.deckFallback}>
-                        <Spinner size={60}/>
+                        <div className={styles.spinnerWrapper}>
+                            <Spinner size={60}/>
+                        </div>
                     </div>
                 )}
                 {!decksLoading && itemsCount === 0 && (

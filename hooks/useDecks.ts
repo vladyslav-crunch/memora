@@ -63,6 +63,8 @@ export function useDeleteDeck(id: number) {
             qc.invalidateQueries({queryKey: ["decks"]});
             qc.invalidateQueries({queryKey: ["deckStats"]});
             qc.invalidateQueries({queryKey: ["progressionHistory"]});
+            qc.invalidateQueries({queryKey: ["cardsExist"]});
+            qc.invalidateQueries({queryKey: ["cards"]});
         },
     });
 }
@@ -80,6 +82,6 @@ export function useDeckStats(params?: { take?: number; skip?: number }) {
 
     return useQuery({
         queryKey: deckStatsKey(params),
-        queryFn: () => getJSON<DeckStatsResponse>(url),
+        queryFn: () => getJSON<DeckStatsResponse>(url), refetchInterval: 1000 * 60,
     });
 }

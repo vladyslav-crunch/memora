@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, {useEffect} from "react";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "@/components/ui/modal/modal";
 import Button, {BUTTON_COLOR} from "@/components/ui/button/button";
 import Input from "@/components/ui/input/input";
@@ -38,22 +38,23 @@ export default function AddCardModal({open, onOpenChange, deck}: AddCardModalPro
         },
     });
 
-    const Reset = () => {
-        reset({
-            deckId: deck.id,
-            front: "",
-            back: "",
-            context: "",
-            intervalStrength: null,
-        });
-    };
+    useEffect(() => {
+        if (open) {
+            reset({
+                deckId: deck.id,
+                front: "",
+                back: "",
+                context: "",
+                intervalStrength: null,
+            });
+        }
+    }, [deck.id, open, reset]);
 
     const onSubmit = async (values: CreateCardValues) => {
         try {
             await createCard.mutateAsync(values);
             toast.success("Card added successfully!");
-            console.log("asda");
-            Reset();
+            reset({deckId: deck.id, front: "", back: "", context: "", intervalStrength: null});
         } catch (error) {
             console.error(error);
             toast.error("Failed to add card.");

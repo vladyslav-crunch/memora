@@ -1,4 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
+import {getJSON} from "@/lib/http";
 
 type DueCardsResponse = {
     hasDue: boolean;
@@ -9,14 +10,12 @@ export function useDueCards(deckId?: number) {
     return useQuery<DueCardsResponse, Error>({
         queryKey: ["dueCards", deckId],
         queryFn: async () => {
-            const url = new URL("/api/practice/due", window.location.origin);
-            if (deckId) url.searchParams.append("deckId", deckId.toString());
-
-            const res = await fetch(url.toString());
-            if (!res.ok) throw new Error("Failed to fetch due cards");
-
-            return res.json();
+            let url = "/api/practice/due";
+            if (deckId) {
+                url += `?deckId=${deckId}`;
+            }
+            return getJSON<DueCardsResponse>(url);
         },
-        refetchInterval: 1000 * 60,
+        refetchInterval: 1000 * 60, // 1 min
     });
 }

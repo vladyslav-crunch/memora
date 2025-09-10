@@ -2,7 +2,7 @@
 export async function getJSON<T>(url: string): Promise<T> {
     const res = await fetch(url, {credentials: "include"});
     if (!res.ok) {
-        let err: any = {status: res.status};
+        const err: any = {status: res.status};
         try {
             const body = await res.json();
             err.message = body?.error ?? `HTTP ${res.status}`;
@@ -25,7 +25,7 @@ export async function sendJSON<T>(
         body: init.body !== undefined ? JSON.stringify(init.body) : undefined,
     });
     if (!res.ok) {
-        let err: any = {status: res.status};
+        const err: any = {status: res.status};
         try {
             const body = await res.json();
             err.message = body?.error ?? `HTTP ${res.status}`;

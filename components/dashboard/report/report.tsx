@@ -7,34 +7,38 @@ import {
     XAxis,
     YAxis,
     Tooltip,
-    Legend,
     ResponsiveContainer,
 } from "recharts";
 import {useProgressionHistory} from "@/hooks/useProgressionHistory";
 import {fillLastWeek} from "@/lib/utility/fillLastWeek";
-import styles from './report.module.css'
+import styles from "./report.module.css";
+import Spinner from "@/components/ui/spinner/spinner";
 
 function Report() {
     const {data, isLoading} = useProgressionHistory();
 
-    if (isLoading) return <p>Loading...</p>;
-    if (!data) return <p>No history available</p>;
+    let content: React.ReactNode;
 
-    const filled = fillLastWeek(data);
+    if (isLoading) {
+        content = <div className={styles.reportSpinner}><Spinner size={60}/></div>; // replace with your spinner component
+    } else if (!data) {
+        content = <p>No history available</p>;
+    } else {
+        const filled = fillLastWeek(data);
 
-    const chartData = filled.map((d) => ({
-        date: new Date(d.createdAt).toLocaleDateString("en-US", {
-            weekday: "short",
-        }),
-        high: d.highIndicationCount,
-        mid: d.midIndicationCount,
-        low: d.lowIndicationCount,
-        veryLow: d.veryLowIndicationCount,
-    }));
-    const last = chartData.at(-1)
-    return (
-        <div className={styles.reportContainer}>
-            <h3 className={"text-2xl font-semibold mb-4"}>Weekly report</h3>
+        const chartData = filled.map((d) => ({
+            date: new Date(d.createdAt).toLocaleDateString("en-US", {
+                weekday: "short",
+            }),
+            high: d.highIndicationCount,
+            mid: d.midIndicationCount,
+            low: d.lowIndicationCount,
+            veryLow: d.veryLowIndicationCount,
+        }));
+
+        const last = chartData.at(-1);
+
+        content = (
             <div className={styles.reportChartContainer}>
                 <ResponsiveContainer className={styles.reportChart} width="100%">
                     <LineChart data={chartData}>
@@ -52,26 +56,33 @@ function Report() {
                 <div className={styles.reportChartLegend}>
                     {last && (
                         <>
-                          <span>
-                            <span className={`${styles.dot} ${styles.dotVeryLow}`}/>
-                            Very low – {last.veryLow}
-                          </span>
                             <span>
-                            <span className={`${styles.dot} ${styles.dotLow}`}/>
-                            Low – {last.low}
-                          </span>
+                                <span className={`${styles.dot} ${styles.dotVeryLow}`}/>
+                                Very low – {last.veryLow}
+                            </span>
                             <span>
-                            <span className={`${styles.dot} ${styles.dotMid}`}/>
-                            Mid – {last.mid}
-                          </span>
+                                <span className={`${styles.dot} ${styles.dotLow}`}/>
+                                Low – {last.low}
+                            </span>
                             <span>
-                            <span className={`${styles.dot} ${styles.dotHigh}`}/>
-                            High – {last.high}
-                          </span>
+                                <span className={`${styles.dot} ${styles.dotMid}`}/>
+                                Mid – {last.mid}
+                            </span>
+                            <span>
+                                <span className={`${styles.dot} ${styles.dotHigh}`}/>
+                                High – {last.high}
+                            </span>
                         </>
                     )}
                 </div>
             </div>
+        );
+    }
+
+    return (
+        <div className={styles.reportContainer}>
+            <h3 className="text-2xl font-semibold mb-4">Weekly report</h3>
+            {content}
         </div>
     );
 }

@@ -11,7 +11,7 @@ import PracticeButtons from "@/components/practice/practice-buttons/practice-but
 import PracticeFinalsStats from "@/components/practice/practice-finale-stats/practice-finals-stats";
 import PracticeProgression from "@/components/practice/practice-progression/practice-progression";
 import PracticeDeck from "@/components/practice/practice-deck/practice-deck";
-import {useSearchParams} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 
 
 export type CardStat = {
@@ -31,37 +31,46 @@ export default function Practice() {
     const deckIdParam = searchParams.get("deckId");
     const deckId = deckIdParam ? Number(deckIdParam) : undefined;
     const {mutate, data, isPending, isError} = useCreateSession(deckId);
-    const session = React.useMemo(() => data?.session ?? [], [data]);
+    const session = data?.session;
     const sessionType = data?.sessionType ?? "generated";
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [queue, setQueue] = useState<SessionCard[]>([]);
+    const [queue, setQueue] = useState<SessionCard[] | null>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false);
     const [stats, setStats] = useState<CardStat[]>([]);
     const [resultMessage, setResultMessage] = useState<string | null>(null);
     const [answerFeedback, setAnswerFeedback] = useState<string | null>(null);
     const [typedAnswer, setTypedAnswer] = useState("");
+    const router = useRouter();
 
     useEffect(() => {
         mutate();
     }, [mutate]);
 
     useEffect(() => {
-        if (session.length) {
+        if (session && session.length > 0) {
             setQueue(session);
             setCurrentIndex(0);
             setShowAnswer(false);
             setAnswerFeedback(null);
             setStats([]);
             setTypedAnswer("");
+        } else if (session && session.length === 0) {
+            router.replace("/");
         }
-    }, [session]);
+    }, [session, router]);
 
-    if (isPending) return <Spinner size={40}/>;
+
+    if (isPending || queue === null) {
+        return (
+            <div className={styles.spinnerWrapper}>
+                <Spinner size={64}/>
+            </div>
+        );
+    }
     if (isError) return <p>Failed to generate session</p>;
     if (!data) return null;
-    if (session.length === 0) return <p>No cards due today 🎉</p>;
-
+    if (session?.length === 0) return <p>No cards due today 🎉</p>;
     if (currentIndex >= queue.length) {
         return <PracticeFinalsStats stats={stats}/>;
     }
@@ -129,7 +138,7 @@ export default function Practice() {
 
         if (rating === "wrong") {
             if (rating === "wrong") {
-                setQueue((prev) => [...prev, {...card, isRepeated: true}]);
+                setQueue((prev) => [...prev!, {...card, isRepeated: true}]);
             }
         }
         setShowAnswer(true);
