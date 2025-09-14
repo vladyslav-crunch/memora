@@ -37,3 +37,10 @@
     font-size: 14px;
     color: #fff;
 }
+
+.deckReview {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    font-size: 13px;
+}

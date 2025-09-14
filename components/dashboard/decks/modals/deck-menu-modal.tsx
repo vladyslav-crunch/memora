@@ -76,6 +76,7 @@ function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
                     buttonType={BUTTON_VARIANT.modal}
                     buttonColor={BUTTON_COLOR.orangeLight}
                     icon={List}
+                    onClick={() => router.push(`/decks/${deck.id}`)}
                 >
                     Card list
                 </Button>

@@ -54,13 +54,13 @@ export async function GET(req: Request) {
             });
         }
 
-        // 2) Compute due counts in one query via groupBy
+        // 2) Compute due counts
         const now = new Date();
         const dueGroups = await prisma.card.groupBy({
             by: ["deckId"],
             where: {
                 deckId: {in: deckIds},
-                nextRepetitionTime: {lte: now}, // nulls are excluded automatically
+                nextRepetitionTime: {lte: now}, // nulls excluded
             },
             _count: {_all: true},
         });
@@ -68,7 +68,20 @@ export async function GET(req: Request) {
             dueGroups.map(g => [g.deckId, g._count._all])
         );
 
-        // 3) Merge & shape response
+        // 3) Compute closest next repetition per deck
+        const upcomingGroups = await prisma.card.groupBy({
+            by: ["deckId"],
+            where: {
+                deckId: {in: deckIds},
+                nextRepetitionTime: {gt: now}, // only future repetitions
+            },
+            _min: {nextRepetitionTime: true},
+        });
+        const upcomingMap = new Map<number, Date | null>(
+            upcomingGroups.map(g => [g.deckId, g._min.nextRepetitionTime])
+        );
+
+        // 4) Merge & shape response
         const items = decks.map(d => ({
             id: d.id,
             name: d.name,
@@ -82,6 +95,7 @@ export async function GET(req: Request) {
                 totalCards: d._count.cards,
                 dueCards: dueMap.get(d.id) ?? 0,
             },
+            nextRepetition: upcomingMap.get(d.id) ?? null,
         }));
 
         return NextResponse.json({items, total: totalDecks, take, skip});

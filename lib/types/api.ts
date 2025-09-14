@@ -50,6 +50,7 @@ export type DeckStatsItem = {
         dueCards: number;
     };
     userId: string;
+    nextRepetition: string | null;
 };
 
 export type DeckStatsResponse = {
