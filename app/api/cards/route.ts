@@ -94,3 +94,49 @@ export async function POST(req: Request) {
         return NextResponse.json({error: "Internal Server Error"}, {status: 500});
     }
 }
+
+const deleteSchema = z.object({
+    deckId: z.coerce.number().int(),
+    cardIds: z.array(z.coerce.number().int()).nonempty(),
+});
+
+export async function DELETE(req: Request) {
+    try {
+        const userId = await requireUserId();
+        const parsed = deleteSchema.safeParse(await req.json());
+
+        if (!parsed.success) {
+            return NextResponse.json(
+                {error: parsed.error.flatten()},
+                {status: 400}
+            );
+        }
+
+        const {deckId, cardIds} = parsed.data;
+        await ensureDeckOwnership(deckId, userId);
+
+        const deleted = await prisma.card.deleteMany({
+            where: {
+                deckId,
+                id: {in: cardIds},
+            },
+        });
+
+        return NextResponse.json(
+            {deletedCount: deleted.count},
+            {status: 200}
+        );
+    } catch (err: any) {
+        if (err?.status) {
+            return NextResponse.json(
+                {error: err.message},
+                {status: err.status}
+            );
+        }
+        console.error("Cards DELETE error:", err);
+        return NextResponse.json(
+            {error: "Internal Server Error"},
+            {status: 500}
+        );
+    }
+}

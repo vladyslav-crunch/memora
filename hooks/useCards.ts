@@ -78,3 +78,41 @@ export function useDeleteCard(id: number, deckId?: number) {
         },
     });
 }
+
+export function useMoveCards() {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (body: { cardIds: number[]; newDeckId: number }) =>
+            sendJSON<{ success: true; movedCount: number }>("/api/cards/move", {
+                method: "PUT",
+                body,
+            }),
+        onSuccess: (_data, variables) => {
+            // invalidate all affected queries
+            qc.invalidateQueries({queryKey: ["cards"]}); // all cards
+            qc.invalidateQueries({queryKey: ["cards", {deckId: variables.newDeckId}]}); // target deck
+            qc.invalidateQueries({queryKey: ["decks"]});
+            qc.invalidateQueries({queryKey: ["cardsExist"]});
+        },
+    });
+}
+
+export function useDeleteCards(deckId?: number) {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (body: { deckId: number; cardIds: number[] }) =>
+            sendJSON<{ deletedCount: number }>("/api/cards", {
+                method: "DELETE",
+                body,
+            }),
+        onSuccess: (_data, variables) => {
+            // Invalidate cache to refresh lists
+            qc.invalidateQueries({queryKey: ["cards"]});
+            if (deckId ?? variables.deckId) {
+                qc.invalidateQueries({queryKey: ["cards", {deckId: variables.deckId}]});
+            }
+            qc.invalidateQueries({queryKey: ["decks"]});
+            qc.invalidateQueries({queryKey: ["cardsExist"]});
+        },
+    });
+}

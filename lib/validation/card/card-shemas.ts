@@ -9,3 +9,26 @@ export const CreateCardSchema = z.object({
 });
 
 export type CreateCardValues = z.infer<typeof CreateCardSchema>;
+
+
+export const UpdateCardSchema = z.object({
+    deckId: z.number().int().optional(),
+    front: z
+        .string()
+        .min(1, "Front side must be at least 1 character")
+        .transform((s) => s.trim())
+        .optional(),
+    back: z
+        .string()
+        .min(1, "Back side must be at least 1 character")
+        .transform((s) => s.trim())
+        .optional(),
+    context: z
+        .string()
+        .nullable()
+        .transform((s) => (s && s.trim() !== "" ? s.trim() : null))
+        .optional(),
+    intervalStrength: z.number().min(0).max(1).nullable().optional(),
+});
+
+export type UpdateCardValues = z.infer<typeof UpdateCardSchema>;

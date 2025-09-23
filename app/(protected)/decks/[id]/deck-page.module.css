@@ -105,9 +105,11 @@
     border-radius: 15px;
     color: #fff;
     cursor: pointer;
+    transition: background-color 200ms ease-in, color 200ms ease-in, transform 200ms ease-in;
 
     &:disabled {
-        cursor: not-allowed;
+        background-color: #afaeae !important;
+        cursor: default;
     }
 }
 
