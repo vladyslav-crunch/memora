@@ -1,4 +1,4 @@
-// app/api/decks/[id]/route.ts
+// app/api/card-list/[id]/route.ts
 import {NextResponse} from "next/server";
 import {z} from "zod";
 import {prisma} from "@/lib/prisma";

@@ -1,19 +1,3 @@
-
-.title {
-    font-size: 1.25rem; /* text-xl */
-    font-weight: 700; /* font-bold */
-    margin-bottom: 1rem; /* mb-4 */
-}
-
-/* Scrollable table container */
-.cardTableContainer {
-    max-height: calc(100%); /* limit table height */
-    overflow-y: auto; /* vertical scroll */
-    overflow-x: auto; /* horizontal scroll on small screens */
-    border-radius: 15px; /* optional rounding */
-}
-
-/* Table basics */
 .table {
     width: 100%;
     border-collapse: collapse; /* inner borders only */
@@ -49,7 +33,7 @@
     border-right: none;
 }
 
-/* Last row: remove bottom border */
+
 .table tr:last-child td {
     border-bottom: none;
 }
@@ -76,42 +60,19 @@
     color: #a882b6;
 }
 
+/* Scrollable table container */
+.cardTableContainer {
+    max-height: calc(100%); /* limit table height */
+    overflow-y: auto; /* vertical scroll */
+    overflow-x: auto; /* horizontal scroll on small screens */
+    border-radius: 15px; /* optional rounding */
+}
+
+/* Table basics */
+
 
 /* Footer */
-.cardsFooter {
-    margin-top: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
-.cardsFooter h2 {
-    font-size: 24px;
-    font-weight: 500;
-}
-
-.cardsFooterButtons {
-    display: flex;
-    gap: 15px;
-}
-
-.cardsFooterButtons button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #555555;
-    height: 55px;
-    width: 55px;
-    border-radius: 15px;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 200ms ease-in, color 200ms ease-in, transform 200ms ease-in;
-
-    &:disabled {
-        background-color: #afaeae !important;
-        cursor: default;
-    }
-}
 
 /* Memory level badge */
 .cardLevel {
@@ -138,9 +99,29 @@
     background-color: #49dc7f;
 }
 
-/*!* Optional: row hover effect *!*/
-/*.tr:hover td {*/
-/*    background-color: #ffd7c1;*/
-/*}*/
+.cardTableContainer::-webkit-scrollbar {
+    width: 10px; /* vertical scrollbar width */
+    height: 10px; /* horizontal scrollbar height */
+}
 
+.cardTableContainer::-webkit-scrollbar-track {
+    background: #ffe9db; /* track color */
+    border-radius: 10px;
+}
+
+.cardTableContainer::-webkit-scrollbar-thumb {
+    background: #eb9d8e; /* thumb color */
+    border-radius: 10px; /* makes it rounded */
+    border: 2px solid #ffe9db; /* creates padding effect */
+}
+
+.cardTableContainer::-webkit-scrollbar-thumb:hover {
+    background: #e5462b; /* darker on hover */
+}
+
+/* Firefox support */
+.cardTableContainer {
+    scrollbar-width: thin; /* slim scrollbar */
+    scrollbar-color: #eb9d8e #ffe9db; /* thumb + track */
+}
 

@@ -1,4 +1,4 @@
-// app/api/decks/stats/route.ts
+// app/api/card-list/stats/route.ts
 import {NextResponse} from "next/server";
 import {z} from "zod";
 import {prisma} from "@/lib/prisma";
@@ -22,7 +22,7 @@ export async function GET(req: Request) {
         });
         const {take = 20, skip = 0} = parsed.success ? parsed.data : {take: 20, skip: 0};
 
-        // 1) Fetch paginated decks + total card count
+        // 1) Fetch paginated card-list + total card count
         const [decks, totalDecks] = await Promise.all([
             prisma.deck.findMany({
                 where: {userId},

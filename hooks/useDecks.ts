@@ -13,7 +13,7 @@ export function useDecks(params?: { take?: number; skip?: number }) {
     if (params?.skip !== undefined) search.set("skip", String(params.skip));
 
     const query = search.toString();
-    const url = query ? `/api/decks?${query}` : "/api/decks";
+    const url = query ? `/api/decks?${query}` : "/api/card-list";
 
     return useQuery({
         queryKey: decksKey(params),

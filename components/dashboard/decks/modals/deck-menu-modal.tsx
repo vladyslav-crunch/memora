@@ -34,7 +34,7 @@ function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
     const [showNoCards, setShowNoCards] = useState(false);
 
     const router = useRouter();
-    const {data: dueCardsExist, error} = useDueCards(deck.id);
+    const {data: dueCardsExist} = useDueCards(deck.id);
     const {data: cardsExist} = useCardsExist(deck.id);
     const startPractice = () => {
         router.push(`/practice?deckId=${deck.id}`);
@@ -76,7 +76,7 @@ function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
                     buttonType={BUTTON_VARIANT.modal}
                     buttonColor={BUTTON_COLOR.orangeLight}
                     icon={List}
-                    onClick={() => router.push(`/decks/${deck.id}`)}
+                    onClick={() => router.push(`/card-list/${deck.id}`)}
                 >
                     Card list
                 </Button>

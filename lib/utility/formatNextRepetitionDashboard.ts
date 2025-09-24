@@ -1,4 +1,4 @@
-export function formatNextRepetition(nextRepetition: string | null, dueCards: number): string {
+export function formatNextRepetitionDashboard(nextRepetition: string | null, dueCards: number): string {
     if (dueCards > 0) {
         return "Ready to review";
     }
@@ -21,4 +21,16 @@ export function formatNextRepetition(nextRepetition: string | null, dueCards: nu
     if (days > 0) return `Review in ${days}d`;
     if (hours > 0) return `Review in ${hours}h`;
     return `Review in ${minutes}m`;
+}
+
+export function formatNextRepetitionTimeCardList(dateString: string) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }

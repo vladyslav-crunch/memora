@@ -69,7 +69,7 @@ export async function GET(req: Request) {
         if (err?.status === 401) {
             return NextResponse.json({error: "Unauthorized"}, {status: 401});
         }
-        console.error("List decks error:", err);
+        console.error("List card-list error:", err);
         return NextResponse.json({error: "Internal Server Error"}, {status: 500});
     }
 }

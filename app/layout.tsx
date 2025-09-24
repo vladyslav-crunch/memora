@@ -14,7 +14,7 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
     title: "Memora – Flashcards App",
     description:
-        "Memora helps you practice and retain new words faster with personalized decks, spaced repetition, and progress tracking. Study smarter, not harder.",
+        "Memora helps you practice and retain new words faster with personalized card-list, spaced repetition, and progress tracking. Study smarter, not harder.",
 };
 
 export default function RootLayout({children}: { children: React.ReactNode }) {

@@ -12,7 +12,7 @@ export async function GET(req: Request) {
         const deckIdParam = url.searchParams.get("deckId");
         const onlyDeckId = deckIdParam ? Number(deckIdParam) : undefined;
 
-        // fetch decks with cards
+        // fetch card-list with cards
         const decks = await prisma.deck.findMany({
             where: onlyDeckId ? {userId, id: onlyDeckId} : {userId},
             include: {cards: true},

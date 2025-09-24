@@ -113,6 +113,7 @@ export function useDeleteCards(deckId?: number) {
             }
             qc.invalidateQueries({queryKey: ["decks"]});
             qc.invalidateQueries({queryKey: ["cardsExist"]});
+            qc.invalidateQueries({queryKey: ["dueCards"]});
         },
     });
 }

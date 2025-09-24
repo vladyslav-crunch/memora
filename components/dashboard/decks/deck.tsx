@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import styles from './deck.module.css';
 import {DeckStatsItem} from "@/lib/types/api";
 import DeckMenuModal from "@/components/dashboard/decks/modals/deck-menu-modal";
-import {formatNextRepetition} from "@/lib/utility/formatNextRepetition";
+import {formatNextRepetitionDashboard} from "@/lib/utility/formatNextRepetitionDashboard";
 
 type DeckProps = {
     deck: DeckStatsItem;
@@ -11,19 +11,19 @@ type DeckProps = {
 function Deck({deck}: DeckProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [review, setReview] = useState(
-        formatNextRepetition(deck.nextRepetition, deck.counts.dueCards)
+        formatNextRepetitionDashboard(deck.nextRepetition, deck.counts.dueCards)
     );
 
     useEffect(() => {
         const update = () => {
-            setReview(formatNextRepetition(deck.nextRepetition, deck.counts.dueCards));
+            setReview(formatNextRepetitionDashboard(deck.nextRepetition, deck.counts.dueCards));
         };
 
         update();
         const interval = setInterval(update, 60_000); // 1 min
         return () => clearInterval(interval);
     }, [deck.nextRepetition, deck.counts.dueCards]);
-    
+
     return (
         <>
             <div className={styles.deckContainer} onClick={() => setIsModalOpen(true)}>
