@@ -13,7 +13,7 @@ export function useDecks(params?: { take?: number; skip?: number }) {
     if (params?.skip !== undefined) search.set("skip", String(params.skip));
 
     const query = search.toString();
-    const url = query ? `/api/decks?${query}` : "/api/card-list";
+    const url = query ? `/api/decks?${query}` : "/api/decks";
 
     return useQuery({
         queryKey: decksKey(params),
@@ -69,19 +69,21 @@ export function useDeleteDeck(id: number) {
     });
 }
 
-export const deckStatsKey = (params?: { take?: number; skip?: number }) =>
+export const deckStatsKey = (params?: { take?: number; skip?: number; search?: string }) =>
     ["deckStats", params ?? {}] as const;
 
-export function useDeckStats(params?: { take?: number; skip?: number }) {
-    const search = new URLSearchParams();
-    if (params?.take !== undefined) search.set("take", String(params.take));
-    if (params?.skip !== undefined) search.set("skip", String(params.skip));
+export function useDeckStats(params?: { take?: number; skip?: number; search?: string }) {
+    const searchParams = new URLSearchParams();
+    if (params?.take !== undefined) searchParams.set("take", String(params.take));
+    if (params?.skip !== undefined) searchParams.set("skip", String(params.skip));
+    if (params?.search) searchParams.set("search", params.search.trim()); // trim spaces
 
-    const query = search.toString();
-    const url = query ? `/api/decks/stats?${query}` : `/api/decks/stats`;
+    const queryString = searchParams.toString();
+    const url = queryString ? `/api/decks/stats?${queryString}` : `/api/decks/stats`;
 
     return useQuery({
-        queryKey: deckStatsKey(params),
-        queryFn: () => getJSON<DeckStatsResponse>(url), refetchInterval: 1000 * 60,
+        queryKey: deckStatsKey(params), // includes search
+        queryFn: () => getJSON<DeckStatsResponse>(url),
+        refetchInterval: 1000 * 60,
     });
 }

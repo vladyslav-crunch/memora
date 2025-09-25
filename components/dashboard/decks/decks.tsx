@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import {Deck as DeckType} from '@/lib/types/api'
 import AddCardModal from "@/components/dashboard/cards/modals/add-card-modal";
+import {useSearchStore} from "@/stores/useSearchStore";
 
 const CreateDeckModal = dynamic(
     () => import("@/components/dashboard/decks/modals/create-deck-modal"),
@@ -16,7 +17,8 @@ const CreateDeckModal = dynamic(
 );
 
 export default function Decks() {
-    const {data: decksRes, isLoading: decksLoading} = useDeckStats();
+    const search = useSearchStore((s) => s.debouncedValue);
+    const {data: decksRes, isLoading: decksLoading} = useDeckStats({search});
     const [isCreateOpen, setCreateOpen] = useState(false);
     const [isAddCardOpen, setAddCardOpen] = useState(false);
     const [newDeck, setNewDeck] = useState<DeckType | null>(null);

@@ -15,6 +15,7 @@ const listQuery = z.object({
     deckId: z.coerce.number().int(),
     take: z.coerce.number().int().positive().max(100).optional(),
     skip: z.coerce.number().int().min(0).optional(),
+    search: z.string().min(1).max(200).optional(),
 });
 
 
@@ -27,22 +28,45 @@ export async function GET(req: Request) {
         );
         if (!parsed.success) {
             return NextResponse.json(
-                {error: parsed.error.flatten()},
+                {error: parsed.error},
                 {status: 400}
             );
         }
 
-        const {deckId, take, skip = 0} = parsed.data;
+        const {deckId, take, skip = 0, search} = parsed.data;
+        const trimmedSearch = search?.trim();
         await ensureDeckOwnership(deckId, userId);
 
         const [items, total] = await Promise.all([
             prisma.card.findMany({
-                where: {deckId},
+                where: {
+                    deckId,
+                    ...(trimmedSearch
+                        ? {
+                            OR: [
+                                {front: {contains: trimmedSearch, mode: "insensitive"}},
+                                {back: {contains: trimmedSearch, mode: "insensitive"}},
+                            ],
+                        }
+                        : {}),
+                },
                 orderBy: {id: "asc"},
                 take,
                 skip,
             }),
-            prisma.card.count({where: {deckId}}),
+            prisma.card.count({
+                where: {
+                    deckId,
+                    ...(trimmedSearch
+                        ? {
+                            OR: [
+                                {front: {contains: trimmedSearch, mode: "insensitive"}},
+                                {back: {contains: trimmedSearch, mode: "insensitive"}},
+                            ],
+                        }
+                        : {}),
+                },
+            }),
         ]);
 
         return NextResponse.json({items, total, take, skip});
@@ -59,7 +83,7 @@ export async function POST(req: Request) {
         const userId = await requireUserId();
         const parsed = CreateCardSchema.safeParse(await req.json());
         if (!parsed.success) {
-            return NextResponse.json({error: parsed.error.flatten()}, {status: 400});
+            return NextResponse.json({error: parsed.error}, {status: 400});
         }
 
         const {deckId, front, back, context, intervalStrength} = parsed.data;
@@ -69,7 +93,6 @@ export async function POST(req: Request) {
         const indication = bucketFromInterval(intervalStrength ?? 0);
 
         const created = await prisma.$transaction(async (tx) => {
-            // 1. create card
             const card = await tx.card.create({
                 data: {
                     deckId,
@@ -107,7 +130,7 @@ export async function DELETE(req: Request) {
 
         if (!parsed.success) {
             return NextResponse.json(
-                {error: parsed.error.flatten()},
+                {error: parsed.error},
                 {status: 400}
             );
         }

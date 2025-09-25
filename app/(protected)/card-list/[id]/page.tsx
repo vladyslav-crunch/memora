@@ -8,23 +8,25 @@ import {ConfirmModal} from "@/components/ui/confirm-modal/confirm-modal";
 import CardListTable from "@/components/card-list/card-list-table/card-list-table";
 import CardListFooter from "@/components/card-list/card-list-footer/card-list-footer";
 import CardListHeader from "@/components/card-list/card-list-header/card-list-header";
+import Spinner from "@/components/ui/spinner/spinner";
+import styles from './card-list.module.css'
+import {useDeck} from "@/hooks/useDecks";
+import {useSearchStore} from "@/stores/useSearchStore";
 
-function DeckPage({params}: { params: Promise<{ id: string }> }) {
+function CardListPage({params}: { params: Promise<{ id: string }> }) {
     const {id} = use(params);
-    const {data: cards, isLoading, error} = useCards(Number(id));
+    const {data: deck} = useDeck(Number(id));
+    const search = useSearchStore((s) => s.debouncedValue);
+    const {data: cards, isLoading, error} = useCards(Number(id), {search});
     const [selectedCards, setSelectedCards] = useState<Card[]>([]);
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isMoveCardOpen, setMoveCardOpen] = useState(false);
     const [isDeleteOpen, setDeleteOpen] = useState(false);
-
     const deleteCards = useDeleteCards(Number(id));
-
-
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div className={styles.cardListLoading}><Spinner size={60}/></div>;
     if (error) return <div>Failed to load deck</div>;
-    if (!cards) return <div>No deck found</div>;
-
-
+    if (!deck || !cards) return <div>No deck found</div>;
+    console.log("cards", cards);
     const toggleAll = () => {
         if (selectedCards.length === cards.items.length) {
             setSelectedCards([]);
@@ -35,13 +37,11 @@ function DeckPage({params}: { params: Promise<{ id: string }> }) {
 
     const handleDelete = async () => {
         if (!selectedCards.length) return;
-
         await deleteCards.mutateAsync({
             deckId: Number(id),
             cardIds: selectedCards.map((c) => c.id),
         });
-
-        setSelectedCards([]); // clear selection
+        setSelectedCards([]);
     };
 
     const toggleRow = (card: Card) => {
@@ -55,7 +55,7 @@ function DeckPage({params}: { params: Promise<{ id: string }> }) {
 
     return (
         <>
-            <CardListHeader deckId={Number(id)}/>
+            <CardListHeader deck={deck}/>
             <CardListTable cards={cards} selectedCards={selectedCards} onToggleAll={toggleAll} onToggleRow={toggleRow}/>
             <CardListFooter selectedCardsCount={selectedCards.length} cardsCount={cards.items.length}
                             onDelete={() => setDeleteOpen(true)} onMove={() => setMoveCardOpen(true)}
@@ -89,4 +89,4 @@ function DeckPage({params}: { params: Promise<{ id: string }> }) {
     );
 }
 
-export default DeckPage;
+export default CardListPage;

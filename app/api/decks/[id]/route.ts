@@ -19,10 +19,10 @@ const EditSchema = z.object({
     isPrivate: z.boolean().optional(),
 });
 
-export async function GET(_req: Request, {params}: { params: { id: string } }) {
+export async function GET(_req: Request, context: { params: Promise<{ id: string }> }) {
     try {
         const userId = await requireUserId();
-        const {id} = IdParam.parse(params);
+        const {id} = IdParam.parse(await context.params);
 
         const deck = await prisma.deck.findFirst({where: {id, userId}});
         if (!deck) return NextResponse.json({error: "Not found"}, {status: 404});

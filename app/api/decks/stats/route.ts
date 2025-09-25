@@ -9,6 +9,7 @@ export const runtime = "nodejs";
 const QuerySchema = z.object({
     take: z.coerce.number().min(1).max(100).optional(),
     skip: z.coerce.number().min(0).optional(),
+    search: z.string().min(1).max(200).optional(),
 });
 
 export async function GET(req: Request) {
@@ -19,13 +20,20 @@ export async function GET(req: Request) {
         const parsed = QuerySchema.safeParse({
             take: searchParams.get("take") ?? undefined,
             skip: searchParams.get("skip") ?? undefined,
+            search: searchParams.get("search")?.trim() || undefined, // trim spaces
         });
+
         const {take = 20, skip = 0} = parsed.success ? parsed.data : {take: 20, skip: 0};
 
         // 1) Fetch paginated card-list + total card count
         const [decks, totalDecks] = await Promise.all([
             prisma.deck.findMany({
-                where: {userId},
+                where: {
+                    userId,
+                    ...(parsed?.data?.search
+                        ? {name: {contains: parsed.data.search, mode: "insensitive"}}
+                        : {}),
+                },
                 orderBy: {createdAt: "desc"},
                 take,
                 skip,
@@ -41,7 +49,14 @@ export async function GET(req: Request) {
                     _count: {select: {cards: true}}, // totalCards
                 },
             }),
-            prisma.deck.count({where: {userId}}),
+            prisma.deck.count({
+                where: {
+                    userId,
+                    ...(parsed?.data?.search
+                        ? {name: {contains: parsed.data.search, mode: "insensitive"}}
+                        : {}),
+                },
+            }),
         ]);
 
         const deckIds = decks.map(d => d.id);

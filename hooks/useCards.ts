@@ -4,19 +4,28 @@ import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import {getJSON, sendJSON} from "@/lib/http";
 import type {Card, CardListResponse} from "@/lib/types/api";
 
-const cardsKey = (deckId: number, params?: { take?: number; skip?: number }) =>
+const cardsKey = (
+    deckId: number,
+    params?: { take?: number; skip?: number; search?: string }
+) =>
     ["cards", {deckId, ...(params ?? {})}] as const;
 
-export function useCards(deckId: number | undefined, params?: { take?: number; skip?: number }) {
-    const search = new URLSearchParams();
-    if (params?.take !== undefined) search.set("take", String(params.take));
-    if (params?.skip !== undefined) search.set("skip", String(params.skip));
+export function useCards(
+    deckId: number | undefined,
+    params?: { take?: number; skip?: number; search?: string }
+) {
+    const searchParams = new URLSearchParams();
+    if (params?.take !== undefined) searchParams.set("take", String(params.take));
+    if (params?.skip !== undefined) searchParams.set("skip", String(params.skip));
+    if (params?.search) searchParams.set("search", params.search); // add search
 
-    const query = search.toString();
-    const url = deckId ? `/api/cards?deckId=${deckId}${query ? `&${query}` : ""}` : "";
+    const queryString = searchParams.toString();
+    const url = deckId
+        ? `/api/cards?deckId=${deckId}${queryString ? `&${queryString}` : ""}`
+        : "";
 
     return useQuery({
-        queryKey: deckId ? cardsKey(deckId, params) : ["cards", "disabled"],
+        queryKey: deckId ? cardsKey(deckId, params) : ["cards", "disabled"], // ✅ now includes search
         queryFn: () => getJSON<CardListResponse>(url),
         enabled: !!deckId,
     });

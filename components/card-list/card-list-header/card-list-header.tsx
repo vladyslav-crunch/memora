@@ -4,14 +4,15 @@ import {ArrowLeft, PlusIcon} from "lucide-react";
 import AddCardModal from "@/components/dashboard/cards/modals/add-card-modal";
 import styles from './card-list-header.module.css'
 import {useRouter} from "next/navigation";
+import {Deck} from "@/lib/types/api";
 
 
 type CardListHeaderProps = {
-    deckId: number;
+    deck: Deck;
 }
 
-function CardListHeader({deckId}: CardListHeaderProps) {
-    const {data: deck} = useDeck(deckId);
+function CardListHeader({deck}: CardListHeaderProps) {
+
     const [isAddOpen, setIsAddOpen] = useState(false);
     const router = useRouter();
     return (
