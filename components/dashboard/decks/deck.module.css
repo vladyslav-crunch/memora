@@ -1,46 +1,52 @@
 .deckContainer {
-    background: #FFE9DB;
-    width: 350px;
-    height: 100px;
-    border-radius: 15px;
-    padding: 10px 15px;
-    position: relative;
-    cursor: pointer;
+  background: #ffe9db;
+  width: 350px;
+  height: 100px;
+  border-radius: 15px;
+  padding: 10px 15px;
+  position: relative;
+  cursor: pointer;
 }
 
 @media (max-width: 900px) {
-    .deckContainer {
-        width: 100%;
-    }
+  .deckContainer {
+    width: 100%;
+  }
 }
 
 .deckCount {
-    color: #6b6b6b;
+  color: #6b6b6b;
 }
 
 .deckName {
-    font-weight: 500;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 35px;
 }
 
 .deckRepeat {
-    height: 30px;
-    width: 30px;
-    display: flex;
-    position: absolute;
-    align-items: center;
-    justify-content: center;
-    right: 15px;
-    bottom: 10px;
-    background: #FF7F7F;
-    padding: 10px;
-    border-radius: 50%;
-    font-size: 14px;
-    color: #fff;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  right: 15px;
+  bottom: 10px;
+  background: #ff7f7f;
+  padding: 10px;
+  border-radius: 50%;
+  font-size: 14px;
+  color: #fff;
 }
 
 .deckReview {
-    position: absolute;
-    top: 12px;
-    right: 15px;
-    font-size: 13px;
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  font-size: 13px;
 }
