@@ -1,4 +1,4 @@
-// app/api/card-list/[id]/route.ts
+// app/api/card-list/[[id]]/route.ts
 import {NextResponse} from "next/server";
 import {z} from "zod";
 import {prisma} from "@/lib/prisma";
@@ -33,7 +33,7 @@ export async function GET(_req: Request, context: { params: Promise<{ id: string
             return NextResponse.json({error: "Unauthorized"}, {status: 401});
         }
         if (err?.name === "ZodError") {
-            return NextResponse.json({error: "Invalid id", issues: err.issues}, {status: 400});
+            return NextResponse.json({error: "Invalid [id]", issues: err.issues}, {status: 400});
         }
         console.error("Get deck error:", err);
         return NextResponse.json({error: "Internal Server Error"}, {status: 500});
@@ -57,7 +57,7 @@ export async function PATCH(req: Request, context: { params: Promise<{ id: strin
         }
         if (err?.name === "ZodError") {
             return NextResponse.json(
-                {error: "Invalid body or id", issues: err.issues},
+                {error: "Invalid body or [id]", issues: err.issues},
                 {status: 400}
             );
         }
@@ -81,7 +81,7 @@ export async function DELETE(_req: Request, context: { params: Promise<{ id: str
             return NextResponse.json({error: "Unauthorized"}, {status: 401});
         }
         if (err?.name === "ZodError") {
-            return NextResponse.json({error: "Invalid id", issues: err.issues}, {status: 400});
+            return NextResponse.json({error: "Invalid [id]", issues: err.issues}, {status: 400});
         }
         console.error("Delete deck error:", err);
         return NextResponse.json({error: "Internal Server Error"}, {status: 500});

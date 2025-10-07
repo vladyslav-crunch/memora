@@ -2,13 +2,13 @@
 import {auth} from "@/lib/auth";
 import {prisma} from "@/lib/prisma";
 
-/** Get the current user's id or null */
+/** Get the current user's [id] or null */
 export async function getSessionUserId(): Promise<string | null> {
     const session = await auth();
     return session?.user?.id ?? null;
 }
 
-/** Get the current user's id or throw a 401 response you can return */
+/** Get the current user's [id] or throw a 401 response you can return */
 export async function requireUserId(): Promise<string> {
     const userId = await getSessionUserId();
     if (!userId) {

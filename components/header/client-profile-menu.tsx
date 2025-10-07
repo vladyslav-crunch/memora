@@ -1,22 +1,31 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styles from "./client-profile-menu.module.css";
 import {LogOut, UserRound, Settings} from "lucide-react";
+import {useUser} from "@/hooks/useUser";
+import {CldImage} from "next-cloudinary";
 
 type Props = {
-    userImage: string;
-    userName: string;
     signOutAction: () => Promise<void>;
 };
 
-export default function ClientProfileMenu({userImage, userName, signOutAction}: Props) {
+export default function ClientProfileMenu({signOutAction}: Props) {
     const [open, setOpen] = useState(false);
     const btnRef = useRef<HTMLButtonElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
+    const {user} = useUser();
+    const avatarPlaceHolder = "/avatar-placeholder.png"
+    const [imageUrl, setImageUrl] = useState(avatarPlaceHolder);
 
-    // Close on click outside
+    useEffect(() => {
+        if (user) {
+            setImageUrl(user.image || avatarPlaceHolder);
+        }
+    }, [user]);
+
+
     useEffect(() => {
         function onDocClick(e: MouseEvent) {
             if (!open) return;
@@ -51,14 +60,28 @@ export default function ClientProfileMenu({userImage, userName, signOutAction}: 
                 onClick={() => setOpen((v) => !v)}
                 className={styles.trigger}
             >
-                <Image
-                    src={userImage}
-                    alt={`${userName} avatar`}
-                    width={75}
-                    height={75}
-                    priority
-                    className={styles.ProfileMenuImage}
-                />
+                {imageUrl && (
+                    imageUrl.includes("res.cloudinary.com") ? (
+                        <CldImage
+                            src={imageUrl}
+                            width="75"
+                            height="75"
+                            crop="fill"
+                            alt="Profile Picture"
+                            priority
+                            className={styles.ProfileMenuImage}
+                        />
+                    ) : (
+                        <Image
+                            src={imageUrl}
+                            width={75}
+                            height={75}
+                            alt="Profile Picture"
+                            priority
+                            className={styles.ProfileMenuImage}
+                        />
+                    )
+                )}
             </button>
 
             {open && (

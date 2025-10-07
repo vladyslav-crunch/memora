@@ -3,7 +3,6 @@ import {prisma} from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import {SignUpSchema} from "@/lib/validation/auth/auth-schemas";
 
-
 export async function POST(req: Request) {
     try {
         const json = await req.json();
