@@ -12,6 +12,11 @@
     position: relative;
 }
 
+.buttonText {
+    display: flex;
+    align-items: center;
+}
+
 .base {
 }
 

@@ -20,6 +20,8 @@ import {useRouter} from "next/navigation";
 import {useDueCards} from "@/hooks/useDueCards";
 import {NoCardsModal} from "@/components/ui/no-cards-modal/no-cards.modal";
 import {useCardsExist} from "@/hooks/useCardsExist";
+import ExportDeckModal from "@/components/dashboard/decks/modals/export-deck-modal";
+import ImportDeckModal from "@/components/dashboard/decks/modals/import-deck-modal";
 
 
 type DeckMenuModalProps = {
@@ -31,6 +33,8 @@ type DeckMenuModalProps = {
 function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
     const [isEdit, setEdit] = useState(false);
     const [isAdd, setAdd] = useState(false);
+    const [isExport, setExport] = useState(false);
+    const [isImport, setImport] = useState(false);
     const [showNoCards, setShowNoCards] = useState(false);
 
     const router = useRouter();
@@ -94,6 +98,7 @@ function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
                     buttonType={BUTTON_VARIANT.modal}
                     buttonColor={BUTTON_COLOR.orangeLight}
                     icon={FolderInput}
+                    onClick={() => setImport(true)}
                 >
                     Import cards
                 </Button>
@@ -102,6 +107,7 @@ function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
                     buttonType={BUTTON_VARIANT.modal}
                     buttonColor={BUTTON_COLOR.orangeLight}
                     icon={FolderOutput}
+                    onClick={() => setExport(true)}
                 >
                     Export cards
                 </Button>
@@ -110,6 +116,8 @@ function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
             {/* Sub-modals */}
             <EditDeckModal deck={deck} open={isEdit} onOpenChange={() => setEdit(false)}/>
             <AddCardModal deck={deck} open={isAdd} onOpenChange={() => setAdd(false)}/>
+            <ExportDeckModal deck={deck} open={isExport} onOpenChange={() => setExport(false)}/>
+            <ImportDeckModal deck={deck} open={isImport} onOpenChange={() => setImport(false)}/>
 
             {/* No cards modal */}
             <NoCardsModal

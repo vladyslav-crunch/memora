@@ -116,3 +116,15 @@
 .noIcon {
     padding-left: 20px; /* override when no icon */
 }
+
+.textArea {
+    width: 100%;
+    padding: 15px;
+    height: 200px;
+    max-height: 200px;
+
+    /* Firefox scrollbar */
+    scrollbar-width: thin; /* options: auto | thin | none */
+    scrollbar-color: #888 #f0f0f0; /* thumb | track */
+    outline: none;
+}
