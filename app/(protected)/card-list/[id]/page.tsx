@@ -12,21 +12,36 @@ import Spinner from "@/components/ui/spinner/spinner";
 import styles from './card-list.module.css'
 import {useDeck} from "@/hooks/useDecks";
 import {useSearchStore} from "@/stores/useSearchStore";
+import SortCardsModal from "@/components/dashboard/cards/modals/sort-card-modal";
 
 function CardListPage({params}: { params: Promise<{ id: string }> }) {
     const {id} = use(params);
-    const {data: deck} = useDeck(Number(id));
-    const search = useSearchStore((s) => s.debouncedValue);
-    const {data: cards, isLoading, error} = useCards(Number(id), {search});
     const [selectedCards, setSelectedCards] = useState<Card[]>([]);
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isMoveCardOpen, setMoveCardOpen] = useState(false);
     const [isDeleteOpen, setDeleteOpen] = useState(false);
+    const [isSortOpen, setSortOpen] = useState(false);
+
+    const [sortBy, setSortBy] = useState<"intervalStrength" | "nextRepetitionTime" | "createdAt" | undefined>("intervalStrength");
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
+    const {data: deck} = useDeck(Number(id));
+    const search = useSearchStore((s) => s.debouncedValue);
+
+    const {data: cards, isLoading, error} = useCards(Number(id), {
+        search,
+        sortBy,
+        sortOrder,
+    });
+
     const deleteCards = useDeleteCards(Number(id));
+
     if (isLoading) return <div className={styles.cardListLoading}><Spinner size={60}/></div>;
     if (error) return <div>Failed to load deck</div>;
     if (!deck || !cards) return <div>No deck found</div>;
+
     console.log("cards", cards);
+
     const toggleAll = () => {
         if (selectedCards.length === cards.items.length) {
             setSelectedCards([]);
@@ -55,7 +70,7 @@ function CardListPage({params}: { params: Promise<{ id: string }> }) {
 
     return (
         <>
-            <CardListHeader deck={deck}/>
+            <CardListHeader deck={deck} onSort={() => setSortOpen(true)}/>
             <CardListTable cards={cards} selectedCards={selectedCards} onToggleAll={toggleAll} onToggleRow={toggleRow}/>
             <CardListFooter selectedCardsCount={selectedCards.length} cardsCount={cards.items.length}
                             onDelete={() => setDeleteOpen(true)} onMove={() => setMoveCardOpen(true)}
@@ -84,6 +99,15 @@ function CardListPage({params}: { params: Promise<{ id: string }> }) {
                 message={`Are you sure you want to delete ${selectedCards.length} card(s)?`}
                 confirmLabel="Delete"
                 cancelLabel="Cancel"
+            />
+            <SortCardsModal
+                open={isSortOpen}
+                onOpenChange={setSortOpen}
+                onApply={(newSortBy, newSortOrder) => {
+                    setSortBy(newSortBy);
+                    setSortOrder(newSortOrder);
+                }}
+                initialSort={{sortBy, sortOrder}}
             />
         </>
     );

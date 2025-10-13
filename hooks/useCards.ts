@@ -12,12 +12,20 @@ const cardsKey = (
 
 export function useCards(
     deckId: number | undefined,
-    params?: { take?: number; skip?: number; search?: string }
+    params?: {
+        take?: number;
+        skip?: number;
+        search?: string;
+        sortBy?: "intervalStrength" | "nextRepetitionTime" | "createdAt";
+        sortOrder?: "asc" | "desc";
+    }
 ) {
     const searchParams = new URLSearchParams();
     if (params?.take !== undefined) searchParams.set("take", String(params.take));
     if (params?.skip !== undefined) searchParams.set("skip", String(params.skip));
-    if (params?.search) searchParams.set("search", params.search); // add search
+    if (params?.search) searchParams.set("search", params.search);
+    if (params?.sortBy) searchParams.set("sortBy", params.sortBy);
+    if (params?.sortOrder) searchParams.set("sortOrder", params.sortOrder);
 
     const queryString = searchParams.toString();
     const url = deckId
@@ -25,11 +33,12 @@ export function useCards(
         : "";
 
     return useQuery({
-        queryKey: deckId ? cardsKey(deckId, params) : ["cards", "disabled"], // ✅ now includes search
+        queryKey: deckId ? cardsKey(deckId, params) : ["cards", "disabled"],
         queryFn: () => getJSON<CardListResponse>(url),
         enabled: !!deckId,
     });
 }
+
 
 export function useCard(id: number | undefined) {
     return useQuery({

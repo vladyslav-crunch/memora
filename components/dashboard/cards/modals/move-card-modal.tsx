@@ -2,8 +2,8 @@
 
 import React, {useEffect} from "react";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "@/components/ui/modal/modal";
-import Button, {BUTTON_COLOR} from "@/components/ui/button/button";
-import {useForm, Controller} from "react-hook-form";
+import Button, {BUTTON_COLOR, BUTTON_VARIANT} from "@/components/ui/button/button";
+import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 import Spinner from "@/components/ui/spinner/spinner";
@@ -98,6 +98,7 @@ export default function MoveCardModal({open, onOpenChange, selectedCards, onMove
 
                         <ModalFooter>
                             <Button
+                                buttonType={BUTTON_VARIANT.modal}
                                 buttonColor={BUTTON_COLOR.orange}
                                 disabled={moveCards.isPending}
                                 type="submit"

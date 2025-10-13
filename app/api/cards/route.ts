@@ -16,6 +16,8 @@ const listQuery = z.object({
     take: z.coerce.number().int().positive().max(100).optional(),
     skip: z.coerce.number().int().min(0).optional(),
     search: z.string().min(1).max(200).optional(),
+    sortBy: z.enum(["intervalStrength", "nextRepetitionTime", "createdAt"]).optional(),
+    sortOrder: z.enum(["asc", "desc"]).optional(),
 });
 
 
@@ -50,7 +52,9 @@ export async function GET(req: Request) {
                         }
                         : {}),
                 },
-                orderBy: {id: "asc"},
+                orderBy: parsed.data.sortBy
+                    ? {[parsed.data.sortBy]: parsed.data.sortOrder ?? "asc"}
+                    : {id: "asc"},
                 take,
                 skip,
             }),

@@ -1,5 +1,5 @@
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "@/components/ui/modal/modal";
-import Button, {BUTTON_COLOR} from "@/components/ui/button/button";
+import Button, {BUTTON_COLOR, BUTTON_VARIANT} from "@/components/ui/button/button";
 import Spinner from "@/components/ui/spinner/spinner";
 import {useState} from "react";
 
@@ -41,17 +41,18 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
                 <p>{message}</p>
             </ModalBody>
             <ModalFooter>
-                <Button buttonColor={BUTTON_COLOR.cancel} onClick={onClose} disabled={isLoading}>
+                <Button buttonType={BUTTON_VARIANT.modal} buttonColor={BUTTON_COLOR.cancel} onClick={onClose}
+                        disabled={isLoading}>
                     {cancelLabel}
                 </Button>
 
-                <Button
-                    buttonColor={BUTTON_COLOR.red}
-                    onClick={async () => {
-                        await handleConfirm();
-                        onClose();
-                    }}
-                    disabled={isLoading}
+                <Button buttonType={BUTTON_VARIANT.modal}
+                        buttonColor={BUTTON_COLOR.red}
+                        onClick={async () => {
+                            await handleConfirm();
+                            onClose();
+                        }}
+                        disabled={isLoading}
                 >
                     {isLoading ? <Spinner size={35}/> : confirmLabel}
                 </Button>
