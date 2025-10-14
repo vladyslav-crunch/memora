@@ -11,6 +11,7 @@ export type UserProfile = {
     email: string;
     image?: string;
     createdAt: string;
+    hasPassword: boolean;
 };
 
 export type UserStats = {
@@ -40,8 +41,11 @@ export function useUser() {
     });
 
     const changePassword = useMutation({
-        mutationFn: (body: { currentPassword: string; newPassword: string }) =>
+        mutationFn: (body: { currentPassword?: string; newPassword: string }) =>
             sendJSON("/api/user/me/password-reset", {method: "PATCH", body}),
+        onSuccess: () => {
+            qc.removeQueries({queryKey: userKey});
+        },
     });
 
     const deleteUser = useMutation({

@@ -1,0 +1,19 @@
+.profileContainer {
+    background-color: #FFE9DB;
+    border-radius: 30px;
+    max-width: 600px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 265px;
+    justify-content: space-between;
+}
+
+.profileLoading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70%;
+}
+

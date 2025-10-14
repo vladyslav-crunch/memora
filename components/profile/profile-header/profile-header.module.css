@@ -1,0 +1,24 @@
+.profileHeader {
+    display: flex;
+    gap: 15px;
+}
+
+.profileUserInfo {
+    & p {
+        gap: 5px;
+        font-weight: 500;
+        display: flex;
+
+    }
+}
+
+#userName {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#userEmail {
+    color: #555;
+    font-weight: 400;
+    margin-bottom: 11px;
+}

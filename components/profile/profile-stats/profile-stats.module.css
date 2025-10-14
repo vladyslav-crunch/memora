@@ -1,0 +1,28 @@
+.statsContainer {
+    display: flex;
+    gap: 15px;
+}
+
+.statsItem {
+    border: 2px #f68f7d solid;
+    border-radius: 15px;
+    padding: 5px;
+    width: 80px;
+
+    & h6 {
+        font-weight: 300;
+    }
+
+    & p {
+        color: #f14d30;
+        font-weight: 500;
+        display: block;
+        text-align: center;
+        font-size: 18px;
+
+        &:nth-of-type(2n) {
+            font-size: 16px;
+            font-weight: 400;
+        }
+    }
+}

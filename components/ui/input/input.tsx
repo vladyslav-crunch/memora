@@ -5,7 +5,6 @@ import type {LucideIcon} from "lucide-react";
 export enum INPUT_OPTION_CLASSES {
     base = "base",
     modal = "modal",
-    tabs = "tabs",
     error = "error",
 }
 

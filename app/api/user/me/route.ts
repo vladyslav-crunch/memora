@@ -9,9 +9,6 @@ export async function GET() {
 
         const user = await prisma.user.findUnique({
             where: {id: userId},
-            include: {
-                progression: true,
-            },
         });
 
         if (!user) {
@@ -29,7 +26,13 @@ export async function GET() {
             totalDecks,
             totalCards,
         };
-        return NextResponse.json({user: safeUser, stats});
+
+        const userWithStatus = {
+            ...safeUser,
+            hasPassword: !!passwordHash,
+        };
+
+        return NextResponse.json({user: userWithStatus, stats});
     } catch (error: any) {
         console.error("Error fetching user profile:", error);
         return NextResponse.json({error: "Unauthorized"}, {status: 401});

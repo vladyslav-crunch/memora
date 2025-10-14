@@ -1,0 +1,32 @@
+.profileImage {
+    position: relative;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: 128px;
+    height: 128px;
+  
+
+    & img {
+        border-radius: 50%;
+
+    }
+}
+
+
+.changeImageHint {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #f78873;
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
