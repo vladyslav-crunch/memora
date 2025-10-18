@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import {Pencil} from "lucide-react";
 import ProfileImage from "@/components/profile/profile-image/profile-image";

@@ -1,6 +1,5 @@
-"use client";
 import React from "react";
-import {CldImage, CldUploadWidget, CloudinaryUploadWidgetInfo} from "next-cloudinary";
+import {CldImage, CldUploadWidget, CloudinaryUploadWidgetInfo, CloudinaryUploadWidgetResults} from "next-cloudinary";
 import Image from "next/image";
 import {Pencil} from "lucide-react";
 import styles from './profile-image.module.css'
@@ -12,7 +11,8 @@ type Props = {
 };
 
 export default function ProfileImage({imageUrl, onUpload, disabled}: Props) {
-    const handleUpload = (result: any) => {
+    
+    const handleUpload = (result: CloudinaryUploadWidgetResults) => {
         if (result && typeof result.info !== "string") {
             const info = result.info as CloudinaryUploadWidgetInfo;
             const newUrl = info.secure_url || info.url;
