@@ -1,21 +1,25 @@
-// app/api/user/password/route.ts
 import {NextResponse} from "next/server";
 import bcrypt from "bcrypt";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
-
+import {ChangePasswordServerSchema} from "@/lib/validation/user/user-schemas";
+import {ZodError} from "zod";
 
 export async function PATCH(req: Request) {
     try {
-        const userId = await requireUserId(); // ensures user is logged in
-        const {currentPassword, newPassword} = await req.json();
+        const userId = await requireUserId();
+        const body = await req.json();
 
-        if (!newPassword) {
-            return NextResponse.json(
-                {error: "New password is required"},
-                {status: 400}
-            );
+        const parseResult = ChangePasswordServerSchema.safeParse(body);
+        if (!parseResult.success) {
+            const errors = parseResult.error.issues.map(issue => ({
+                field: issue.path.join("."),
+                message: issue.message,
+            }));
+            return NextResponse.json({errors}, {status: 400});
         }
+
+        const {currentPassword, newPassword} = parseResult.data;
 
         const user = await prisma.user.findUnique({
             where: {id: userId},
@@ -23,41 +27,61 @@ export async function PATCH(req: Request) {
         });
 
         if (!user) {
-            return NextResponse.json({error: "User not found"}, {status: 404});
+            return NextResponse.json(
+                {errors: [{field: "user", message: "User not found"}]},
+                {status: 404}
+            );
         }
-        
-        if (user.passwordHash) {
-            if (!currentPassword) {
-                return NextResponse.json(
-                    {error: "Current password is required"},
-                    {status: 400}
-                );
-            }
 
+        if (user.passwordHash) {
             const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
             if (!isMatch) {
+                console.log("Not match");
                 return NextResponse.json(
-                    {error: "Current password is incorrect"},
+                    {
+                        errors: [
+                            {
+                                field: "currentPassword",
+                                message: "Current password is incorrect",
+                            },
+                        ],
+                    },
                     {status: 400}
                 );
             }
         }
 
-        // 🧩 CASE 2: Google user (no password yet) → just set one
         const newHash = await bcrypt.hash(newPassword, 12);
-
         await prisma.user.update({
             where: {id: userId},
             data: {passwordHash: newHash},
         });
 
-        return NextResponse.json({ok: true, message: "Password updated successfully"});
-    } catch (err: any) {
+        return NextResponse.json({
+            ok: true,
+            message: "Password updated successfully",
+        });
+    } catch (err) {
         console.error("Password change error:", err);
-        const status = err.status ?? 500;
+
+        if (err instanceof ZodError) {
+            const errors = err.issues.map(issue => ({
+                field: issue.path.join("."),
+                message: issue.message,
+            }));
+            return NextResponse.json({errors}, {status: 400});
+        }
+
+        if (err instanceof Error) {
+            return NextResponse.json(
+                {errors: [{field: "server", message: err.message}]},
+                {status: 500}
+            );
+        }
+
         return NextResponse.json(
-            {error: err.message || "Server error"},
-            {status}
+            {errors: [{field: "unknown", message: "Unknown server error"}]},
+            {status: 500}
         );
     }
 }

@@ -59,3 +59,14 @@ export type DeckStatsResponse = {
     take: number;
     skip: number;
 };
+
+export type ApiFieldError<TFields extends string = string> = {
+    field: TFields;
+    message: string;
+};
+
+export type ApiErrorResponse<TFields extends string = string> = {
+    status: number;
+    message?: string;
+    errors?: ApiFieldError<TFields>[];
+};

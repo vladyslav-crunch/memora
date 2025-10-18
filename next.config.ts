@@ -12,15 +12,15 @@ const nextConfig: NextConfig = {
         ],
     },
 
-    // ✅ delete later
-    typescript: {
-        ignoreBuildErrors: true,
-    },
-
-    // ✅ delete later
-    eslint: {
-        ignoreDuringBuilds: true,
-    },
+    // // ✅ delete later
+    // typescript: {
+    //     ignoreBuildErrors: true,
+    // },
+    //
+    // // ✅ delete later
+    // eslint: {
+    //     ignoreDuringBuilds: true,
+    // },
 };
 
 export default nextConfig;
