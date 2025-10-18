@@ -11,8 +11,8 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useCreateDeck} from "@/hooks/useDecks";
 import Spinner from "@/components/ui/spinner/spinner";
 import {toast} from "sonner";
-import {Deck} from "@/lib/types/api";
 import {CreateDeckInput, CreateDeckSchema, CreateDeckValues} from "@/lib/validation/deck/create-deck.chema";
+import {Deck} from "@/lib/types/deck.types";
 
 const MODE_OPTIONS: ToggleOption[] = [
     {id: "normal", label: "Normal"},

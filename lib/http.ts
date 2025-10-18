@@ -1,4 +1,4 @@
-import {ApiError, ApiErrorResponse} from "@/lib/types/api";
+import {ApiError, ApiErrorResponse} from "@/lib/types/api.types";
 
 async function fetchJSON<T>(
     input: RequestInfo,

@@ -7,9 +7,9 @@ import {useState} from "react";
 import Spinner from "@/components/ui/spinner/spinner";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import {Deck as DeckType} from '@/lib/types/api'
 import AddCardModal from "@/components/dashboard/cards/modals/add-card-modal";
 import {useSearchStore} from "@/stores/useSearchStore";
+import {Deck as DeckType} from "@/lib/types/deck.types";
 
 const CreateDeckModal = dynamic(
     () => import("@/components/dashboard/decks/modals/create-deck-modal"),

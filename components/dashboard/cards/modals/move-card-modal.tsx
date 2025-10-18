@@ -6,10 +6,10 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 import Spinner from "@/components/ui/spinner/spinner";
 import {toast} from "sonner";
-import type {Card} from "@/lib/types/api";
 import {useMoveCards} from "@/hooks/useCards";
 import {useDecks} from "@/hooks/useDecks";
 import {Select, type SelectOption} from "@/components/ui/select/select";
+import {Card} from "@/lib/types/card.types";
 
 // Schema for selecting new deck
 const MoveCardsSchema = z.object({

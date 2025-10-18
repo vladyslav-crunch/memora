@@ -3,7 +3,7 @@ import {NextResponse} from "next/server";
 import {z} from "zod";
 import {prisma} from "@/lib/prisma";
 import {ensureCardOwnership, requireUserId} from "@/lib/api/auth-helper";
-import {ApiError} from "@/lib/types/api";
+import {ApiError} from "@/lib/types/api.types";
 
 export const runtime = "nodejs";
 

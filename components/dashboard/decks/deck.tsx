@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import styles from './deck.module.css';
-import {DeckStatsItem} from "@/lib/types/api";
 import DeckMenuModal from "@/components/dashboard/decks/modals/deck-menu-modal";
 import {formatNextRepetitionDashboard} from "@/lib/utility/formatNextRepetitionDashboard";
+import {DeckStatsItem} from "@/lib/types/deck.types";
 
 type DeckProps = {
     deck: DeckStatsItem;

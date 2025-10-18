@@ -1,4 +1,3 @@
-"use client";
 import React, {useEffect} from "react";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "@/components/ui/modal/modal";
 import Button, {BUTTON_COLOR} from "@/components/ui/button/button";
@@ -7,9 +6,9 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import Spinner from "@/components/ui/spinner/spinner";
 import {toast} from "sonner";
-import {Card} from "@/lib/types/api";
 import {UpdateCardSchema, type UpdateCardValues} from "@/lib/validation/card/update-card.schema";
 import {useUpdateCard} from "@/hooks/useCards";
+import {Card} from "@/lib/types/card.types";
 
 
 type EditCardModalProps = {

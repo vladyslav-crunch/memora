@@ -3,7 +3,7 @@ import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
 import {SessionCard} from "@/hooks/useSession";
-import {ApiError} from "@/lib/types/api";
+import {ApiError} from "@/lib/types/api.types";
 
 type Mode = "normal" | "reversed" | "typing";
 

@@ -3,7 +3,7 @@ import {z, ZodError} from "zod";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
 
-import {ApiError} from "@/lib/types/api";
+import {ApiError} from "@/lib/types/api.types";
 import {CreateDeckSchema} from "@/lib/validation/deck/create-deck.chema";
 
 export const runtime = "nodejs";

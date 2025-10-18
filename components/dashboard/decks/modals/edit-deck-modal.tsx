@@ -10,9 +10,9 @@ import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useDeleteDeck, useUpdateDeck} from "@/hooks/useDecks"; // <-- use update, not create
 import Spinner from "@/components/ui/spinner/spinner";
-import {Deck} from "@/lib/types/api";
 import {ConfirmModal} from "@/components/ui/confirm-modal/confirm-modal";
 import {toast} from "sonner";
+import {Deck} from "@/lib/types/deck.types";
 
 const MODE_OPTIONS: ToggleOption[] = [
     {id: "normal", label: "Normal"},

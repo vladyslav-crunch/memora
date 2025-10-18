@@ -1,7 +1,7 @@
 // lib/api/auth-helpers.ts
 import {auth} from "@/lib/auth";
 import {prisma} from "@/lib/prisma";
-import {ApiError} from "@/lib/types/api";
+import {ApiError} from "@/lib/types/api.types";
 
 /** Get the current user's [id] or null */
 export async function getSessionUserId(): Promise<string | null> {

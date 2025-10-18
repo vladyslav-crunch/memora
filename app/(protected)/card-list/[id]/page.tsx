@@ -2,7 +2,6 @@
 import React, {use, useState} from "react";
 import {useCards, useDeleteCards} from "@/hooks/useCards";
 import EditCardModal from "@/components/dashboard/cards/modals/edit-card-modal";
-import type {Card} from "@/lib/types/api";
 import MoveCardModal from "@/components/dashboard/cards/modals/move-card-modal";
 import {ConfirmModal} from "@/components/ui/confirm-modal/confirm-modal";
 import CardListTable from "@/components/card-list/card-list-table/card-list-table";
@@ -13,6 +12,7 @@ import styles from './card-list.module.css'
 import {useDeck} from "@/hooks/useDecks";
 import {useSearchStore} from "@/stores/useSearchStore";
 import SortCardsModal from "@/components/dashboard/cards/modals/sort-card-modal";
+import {Card} from "@/lib/types/card.types";
 
 function CardListPage({params}: { params: Promise<{ id: string }> }) {
     const {id} = use(params);

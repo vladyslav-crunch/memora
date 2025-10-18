@@ -6,11 +6,11 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import Spinner from "@/components/ui/spinner/spinner";
 import {toast} from "sonner";
-import {Deck} from "@/lib/types/api";
 
 
 import {useCreateCard} from "@/hooks/useCards";
 import {CreateCardSchema, CreateCardValues} from "@/lib/validation/card/create-card.schema";
+import {Deck} from "@/lib/types/deck.types";
 
 type AddCardModalProps = {
     open: boolean;

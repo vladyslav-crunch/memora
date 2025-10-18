@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './card-list-table.module.css'
 import Checkbox from "@/components/ui/checkbox/checkbox";
-import type {Card, CardListResponse} from "@/lib/types/api";
 import {bucketFromInterval} from "@/lib/api/progression-helpers";
 import {formatNextRepetitionTimeCardList} from "@/lib/utility/formatNextRepetitionDashboard";
+import {Card, CardListResponse} from "@/lib/types/card.types";
 
 type CardListTableProps = {
     cards: CardListResponse;

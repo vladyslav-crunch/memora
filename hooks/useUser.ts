@@ -2,27 +2,10 @@
 
 import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import {getJSON, sendJSON} from "@/lib/http";
+import {UserMeResponse, UserProfile} from "@/lib/types/user.types";
 
 export const userKey = ["user", "me"] as const;
 
-export type UserProfile = {
-    id: string;
-    name: string;
-    email: string;
-    image?: string;
-    createdAt: string;
-    hasPassword: boolean;
-};
-
-export type UserStats = {
-    totalDecks: number;
-    totalCards: number;
-};
-
-export type UserMeResponse = {
-    user: UserProfile;
-    stats: UserStats;
-};
 
 export function useUser() {
     const qc = useQueryClient();
@@ -42,7 +25,7 @@ export function useUser() {
 
     const changePassword = useMutation({
         mutationFn: (body: { currentPassword?: string; newPassword: string }) =>
-            sendJSON("/api/user/me/password-reset", {method: "PATCH", body}),
+            sendJSON("/api/user/me/password-change", {method: "PATCH", body}),
         onSuccess: () => {
             qc.removeQueries({queryKey: userKey});
         },

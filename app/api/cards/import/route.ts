@@ -3,7 +3,7 @@ import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {bucketFromInterval, upsertUserProgressionEntry} from "@/lib/api/progression-helpers";
 import {ensureDeckOwnership, requireUserId} from "@/lib/api/auth-helper";
-import {ApiError} from "@/lib/types/api";
+import {ApiError} from "@/lib/types/api.types";
 import {ImportCardsSchema} from "@/lib/validation/card/import-cards.schema";
 
 export const runtime = "nodejs";

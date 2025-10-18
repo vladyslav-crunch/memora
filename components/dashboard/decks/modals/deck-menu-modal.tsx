@@ -1,7 +1,6 @@
 "use client";
 import React, {useState} from "react";
 import Modal from "@/components/ui/modal/modal";
-import {Deck} from "@/lib/types/api";
 import Button, {
     BUTTON_COLOR,
     BUTTON_VARIANT,
@@ -22,6 +21,7 @@ import {NoCardsModal} from "@/components/ui/no-cards-modal/no-cards.modal";
 import {useCardsExist} from "@/hooks/useCardsExist";
 import ExportDeckModal from "@/components/dashboard/decks/modals/export-deck-modal";
 import ImportDeckModal from "@/components/dashboard/decks/modals/import-deck-modal";
+import {Deck} from "@/lib/types/deck.types";
 
 
 type DeckMenuModalProps = {

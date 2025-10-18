@@ -2,7 +2,7 @@
 
 import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import {getJSON, sendJSON} from "@/lib/http";
-import type {Card, CardListResponse} from "@/lib/types/api";
+import {Card, CardListResponse} from "@/lib/types/card.types";
 
 const cardsKey = (
     deckId: number,

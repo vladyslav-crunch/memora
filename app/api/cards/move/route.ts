@@ -3,7 +3,7 @@ import {z} from "zod";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
 import {ensureCardOwnership} from "@/lib/api/auth-helper";
-import {ApiError} from "@/lib/types/api";
+import {ApiError} from "@/lib/types/api.types";
 
 export const runtime = "nodejs";
 
@@ -44,7 +44,7 @@ export async function PUT(req: Request) {
             success: true,
             movedCount: updated.count,
         });
-        
+
     } catch (err) {
         if (err instanceof ApiError) return NextResponse.json({error: err.message}, {status: err.status});
         console.error("Cards MOVE error:", err);

@@ -1,7 +1,8 @@
 "use client";
 import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import {getJSON, sendJSON} from "@/lib/http";
-import {Deck, DeckListResponse, DeckStatsResponse} from "@/lib/types/api";
+
+import {Deck, DeckListResponse, DeckStatsResponse} from "@/lib/types/deck.types";
 
 const decksKey = (params?: { take?: number; skip?: number }) =>
     ["decks", params ?? {}] as const;

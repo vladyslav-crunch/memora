@@ -1,16 +1,14 @@
-"use client";
-
 import React, {useState} from "react";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "@/components/ui/modal/modal";
 import Button, {BUTTON_COLOR} from "@/components/ui/button/button";
 import {toast} from "sonner";
-import {Deck} from "@/lib/types/api";
 import {Copy, Download} from "lucide-react";
 import {useCards} from "@/hooks/useCards";
 import TextField from "@/components/ui/text-field/text-field";
 import {getSeparator} from "@/lib/utility/getSeparator";
 import {getPlaceholderExample} from "@/lib/utility/getPlaceholderExample";
 import {copyToClipBoard} from "@/lib/utility/copyToClipBoard";
+import {Deck} from "@/lib/types/deck.types";
 
 type ExportDeckModalProps = {
     deck: Deck;
