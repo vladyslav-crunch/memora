@@ -7,8 +7,9 @@ import {
     upsertUserProgressionEntry,
 } from "@/lib/api/progression-helpers";
 import {ensureDeckOwnership, requireUserId} from "@/lib/api/auth-helper";
-import {CreateCardSchema} from "@/lib/validation/card/card-shemas";
+
 import {ApiError} from "@/lib/types/api";
+import {CreateCardSchema} from "@/lib/validation/card/create-card.schema";
 
 export const runtime = "nodejs";
 

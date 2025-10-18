@@ -2,7 +2,7 @@ import {NextResponse} from "next/server";
 import bcrypt from "bcrypt";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
-import {ChangePasswordServerSchema} from "@/lib/validation/user/user-schemas";
+import {ChangePasswordServerSchema} from "@/lib/validation/user/change-password.schema";
 import {ZodError} from "zod";
 
 export async function PATCH(req: Request) {

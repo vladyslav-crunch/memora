@@ -4,7 +4,7 @@ import Google from "next-auth/providers/google";
 import {PrismaAdapter} from "@auth/prisma-adapter";
 import bcrypt from "bcrypt";
 import {prisma} from "@/lib/prisma";
-import {SignInSchema} from "@/lib/validation/auth/auth-schemas";
+import {SignInSchema} from "@/lib/validation/auth/sign-in.schema";
 
 export const {
     auth,

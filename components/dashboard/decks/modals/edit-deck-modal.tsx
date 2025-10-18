@@ -5,7 +5,7 @@ import Input from "@/components/ui/input/input";
 import ToggleGroup, {ToggleOption} from "@/components/ui/toggle/toggle-group";
 import Switch from "@/components/ui/switch/switch";
 import {Trash2} from "lucide-react";
-import {UpdateDeckInput, UpdateDeckSchema,} from "@/lib/validation/deck/deck-schemas";
+import {UpdateDeckInput, UpdateDeckSchema,} from "@/lib/validation/deck/deck-update.schema";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useDeleteDeck, useUpdateDeck} from "@/hooks/useDecks"; // <-- use update, not create

@@ -2,8 +2,9 @@ import {NextResponse} from "next/server";
 import {z, ZodError} from "zod";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
-import {CreateDeckSchema} from "@/lib/validation/deck/deck-schemas";
+
 import {ApiError} from "@/lib/types/api";
+import {CreateDeckSchema} from "@/lib/validation/deck/create-deck.chema";
 
 export const runtime = "nodejs";
 

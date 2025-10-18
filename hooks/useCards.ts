@@ -40,14 +40,6 @@ export function useCards(
 }
 
 
-export function useCard(id: number | undefined) {
-    return useQuery({
-        queryKey: ["cards", "one", id],
-        queryFn: () => getJSON<Card>(`/api/cards/${id}`),
-        enabled: !!id,
-    });
-}
-
 export function useCreateCard() {
     const qc = useQueryClient();
     return useMutation({
@@ -83,19 +75,6 @@ export function useUpdateCard(id: number) {
     });
 }
 
-export function useDeleteCard(id: number, deckId?: number) {
-    const qc = useQueryClient();
-    return useMutation({
-        mutationFn: () =>
-            sendJSON<{ success: true }>(`/api/cards/${id}`, {method: "DELETE"}),
-        onSuccess: () => {
-            qc.invalidateQueries({queryKey: ["cards"]});
-            if (deckId) qc.invalidateQueries({queryKey: ["cards", {deckId}]});
-            qc.invalidateQueries({queryKey: ["decks"]});
-            qc.invalidateQueries({queryKey: ["cardsExist"]});
-        },
-    });
-}
 
 export function useMoveCards() {
     const qc = useQueryClient();
@@ -124,7 +103,6 @@ export function useDeleteCards(deckId?: number) {
                 body,
             }),
         onSuccess: (_data, variables) => {
-            // Invalidate cache to refresh lists
             qc.invalidateQueries({queryKey: ["cards"]});
             if (deckId ?? variables.deckId) {
                 qc.invalidateQueries({queryKey: ["cards", {deckId: variables.deckId}]});

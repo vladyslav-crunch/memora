@@ -1,5 +1,3 @@
-"use client";
-
 import React, {useEffect} from "react";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "@/components/ui/modal/modal";
 import Button, {BUTTON_COLOR, BUTTON_VARIANT} from "@/components/ui/button/button";

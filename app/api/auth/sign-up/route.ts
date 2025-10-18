@@ -1,7 +1,8 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import bcrypt from "bcrypt";
-import {SignUpSchema} from "@/lib/validation/auth/auth-schemas";
+import {SignUpSchema} from "@/lib/validation/auth/sign-up.schema";
+
 
 export async function POST(req: Request) {
     try {

@@ -1,5 +1,3 @@
-"use client";
-
 import React, {useEffect} from "react";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "@/components/ui/modal/modal";
 import Button, {BUTTON_COLOR, BUTTON_VARIANT} from "@/components/ui/button/button";
@@ -8,17 +6,8 @@ import Spinner from "@/components/ui/spinner/spinner";
 import {useUser} from "@/hooks/useUser";
 import {toast} from "sonner";
 import {useForm} from "react-hook-form";
-import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
-
-const ChangeUsernameSchema = z.object({
-    name: z
-        .string()
-        .min(1, "Username is required")
-        .max(30, "Username must be 30 characters or less"),
-});
-
-type ChangeUsernameValues = z.infer<typeof ChangeUsernameSchema>;
+import {ChangeUsernameSchema, ChangeUsernameValues} from "@/lib/validation/user/change-username.schema";
 
 type Props = {
     open: boolean;
@@ -38,7 +27,7 @@ export default function ChangeUsernameModal({open, onOpenChange, currentName}: P
         resolver: zodResolver(ChangeUsernameSchema),
         defaultValues: {name: currentName},
     });
-    
+
     useEffect(() => {
         if (open) reset({name: currentName});
     }, [open, currentName, reset]);

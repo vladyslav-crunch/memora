@@ -1,7 +1,7 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
-
+import {UpdateUserSchema} from "@/lib/validation/user/update-user.schema";
 
 export async function GET() {
     try {
@@ -42,17 +42,20 @@ export async function GET() {
 export async function PUT(req: Request) {
     try {
         const userId = await requireUserId();
-        const data = await req.json();
+        const body = await req.json();
 
-        // Only allow updating specific fields
-        const allowedFields: Partial<{ name: string; email: string; image: string }> = {};
-        if (data.name) allowedFields.name = data.name;
-        if (data.email) allowedFields.email = data.email;
-        if (data.image) allowedFields.image = data.image;
+        const parsed = UpdateUserSchema.safeParse(body);
+        if (!parsed.success) {
+            const errors = parsed.error.issues.map(issue => ({
+                field: issue.path.join("."),
+                message: issue.message,
+            }));
+            return NextResponse.json({errors}, {status: 400});
+        }
 
         const updatedUser = await prisma.user.update({
             where: {id: userId},
-            data: allowedFields,
+            data: parsed.data,
         });
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

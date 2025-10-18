@@ -8,7 +8,7 @@ import {toast} from "sonner";
 import {useUser} from "@/hooks/useUser";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {ChangePasswordSchema, ChangePasswordValues} from "@/lib/validation/user/user-schemas";
+import {ChangePasswordSchema, ChangePasswordValues} from "@/lib/validation/user/change-password.schema";
 import {ApiErrorResponse} from "@/lib/types/api";
 
 

@@ -5,17 +5,14 @@ import Input from "@/components/ui/input/input";
 import ToggleGroup, {ToggleOption} from "@/components/ui/toggle/toggle-group";
 import Switch from "@/components/ui/switch/switch";
 
-import {
-    CreateDeckSchema,
-    type CreateDeckInput,
-    type CreateDeckValues,
-} from "@/lib/validation/deck/deck-schemas";
+
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useCreateDeck} from "@/hooks/useDecks";
 import Spinner from "@/components/ui/spinner/spinner";
 import {toast} from "sonner";
 import {Deck} from "@/lib/types/api";
+import {CreateDeckInput, CreateDeckSchema, CreateDeckValues} from "@/lib/validation/deck/create-deck.chema";
 
 const MODE_OPTIONS: ToggleOption[] = [
     {id: "normal", label: "Normal"},
@@ -87,8 +84,8 @@ export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateD
             <ModalHeader>Create new deck</ModalHeader>
             <ModalBody>
                 <form onSubmit={(e) => {
-                    e.preventDefault(); // ✅ stop native dialog close
-                    handleSubmit(onSubmit)(e); // run RHF submit + validation
+                    e.preventDefault();
+                    handleSubmit(onSubmit)(e);
                 }} className="flex flex-col gap-3">
                     <Input
                         label="Deck name"

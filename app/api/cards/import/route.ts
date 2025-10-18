@@ -1,26 +1,13 @@
 // app/api/cards/import/route.ts
 import {NextResponse} from "next/server";
-import {z} from "zod";
 import {prisma} from "@/lib/prisma";
 import {bucketFromInterval, upsertUserProgressionEntry} from "@/lib/api/progression-helpers";
 import {ensureDeckOwnership, requireUserId} from "@/lib/api/auth-helper";
 import {ApiError} from "@/lib/types/api";
+import {ImportCardsSchema} from "@/lib/validation/card/import-cards.schema";
 
 export const runtime = "nodejs";
 
-const ImportCardsSchema = z.object({
-    deckId: z.coerce.number().int(),
-    cards: z
-        .array(
-            z.object({
-                front: z.string().min(1),
-                back: z.string().min(1),
-                context: z.string().nullable().optional(),
-                intervalStrength: z.number().optional(),
-            })
-        )
-        .nonempty(),
-});
 
 export async function POST(req: Request) {
     try {

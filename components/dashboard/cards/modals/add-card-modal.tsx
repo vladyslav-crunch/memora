@@ -1,17 +1,16 @@
-"use client";
 import React, {useEffect} from "react";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "@/components/ui/modal/modal";
 import Button, {BUTTON_COLOR} from "@/components/ui/button/button";
 import Input from "@/components/ui/input/input";
-
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import Spinner from "@/components/ui/spinner/spinner";
 import {toast} from "sonner";
 import {Deck} from "@/lib/types/api";
-import {CreateCardSchema, type CreateCardValues} from "@/lib/validation/card/card-shemas";
+
 
 import {useCreateCard} from "@/hooks/useCards";
+import {CreateCardSchema, CreateCardValues} from "@/lib/validation/card/create-card.schema";
 
 type AddCardModalProps = {
     open: boolean;

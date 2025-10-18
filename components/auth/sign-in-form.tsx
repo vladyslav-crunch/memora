@@ -7,7 +7,7 @@ import {useState} from "react";
 import {useRouter} from "next/navigation";
 import Input from "@/components/ui/input/input";
 import Button, {BUTTON_COLOR, BUTTON_VARIANT} from "@/components/ui/button/button";
-import {SignInInputsType, SignInSchema} from "@/lib/validation/auth/auth-schemas";
+import {SignInInputsType, SignInSchema} from "@/lib/validation/auth/sign-in.schema";
 import Link from "next/link";
 
 

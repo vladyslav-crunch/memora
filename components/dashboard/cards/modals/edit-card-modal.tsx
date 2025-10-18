@@ -8,7 +8,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import Spinner from "@/components/ui/spinner/spinner";
 import {toast} from "sonner";
 import {Card} from "@/lib/types/api";
-import {UpdateCardSchema, type UpdateCardValues} from "@/lib/validation/card/card-shemas";
+import {UpdateCardSchema, type UpdateCardValues} from "@/lib/validation/card/update-card.schema";
 import {useUpdateCard} from "@/hooks/useCards";
 
 
