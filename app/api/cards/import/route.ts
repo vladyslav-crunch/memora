@@ -4,6 +4,7 @@ import {z} from "zod";
 import {prisma} from "@/lib/prisma";
 import {bucketFromInterval, upsertUserProgressionEntry} from "@/lib/api/progression-helpers";
 import {ensureDeckOwnership, requireUserId} from "@/lib/api/auth-helper";
+import {ApiError} from "@/lib/types/api";
 
 export const runtime = "nodejs";
 
@@ -59,10 +60,8 @@ export async function POST(req: Request) {
         });
 
         return NextResponse.json({count: created.length, items: created}, {status: 201});
-    } catch (err: any) {
-        if (err?.status) {
-            return NextResponse.json({error: err.message}, {status: err.status});
-        }
+    } catch (err) {
+        if (err instanceof ApiError) return NextResponse.json({error: err.message}, {status: err.status});
         console.error("Cards bulk import error:", err);
         return NextResponse.json({error: "Internal Server Error"}, {status: 500});
     }

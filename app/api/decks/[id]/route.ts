@@ -1,8 +1,9 @@
 // app/api/card-list/[[id]]/route.ts
 import {NextResponse} from "next/server";
-import {z} from "zod";
+import {z, ZodError} from "zod";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
+import {ApiError} from "@/lib/types/api";
 
 export const runtime = "nodejs";
 
@@ -28,15 +29,18 @@ export async function GET(_req: Request, context: { params: Promise<{ id: string
         if (!deck) return NextResponse.json({error: "Not found"}, {status: 404});
 
         return NextResponse.json(deck);
-    } catch (err: any) {
-        if (err?.status === 401) {
-            return NextResponse.json({error: "Unauthorized"}, {status: 401});
+    } catch (err) {
+        if (err instanceof ApiError) {
+            return NextResponse.json({message: err.message}, {status: err.status});
         }
-        if (err?.name === "ZodError") {
-            return NextResponse.json({error: "Invalid [id]", issues: err.issues}, {status: 400});
+        if (err instanceof ZodError) {
+            return NextResponse.json(
+                {message: "Invalid [id]", errors: err.issues.map(i => ({field: i.path.join("."), message: i.message}))},
+                {status: 400}
+            );
         }
         console.error("Get deck error:", err);
-        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+        return NextResponse.json({message: "Internal Server Error"}, {status: 500});
     }
 }
 
@@ -51,18 +55,21 @@ export async function PATCH(req: Request, context: { params: Promise<{ id: strin
 
         const updated = await prisma.deck.update({where: {id}, data});
         return NextResponse.json(updated);
-    } catch (err: any) {
-        if (err?.status === 401) {
-            return NextResponse.json({error: "Unauthorized"}, {status: 401});
+    } catch (err) {
+        if (err instanceof ApiError) {
+            return NextResponse.json({message: err.message}, {status: err.status});
         }
-        if (err?.name === "ZodError") {
+        if (err instanceof ZodError) {
             return NextResponse.json(
-                {error: "Invalid body or [id]", issues: err.issues},
+                {
+                    message: "Invalid body or [id]",
+                    errors: err.issues.map(i => ({field: i.path.join("."), message: i.message}))
+                },
                 {status: 400}
             );
         }
         console.error("Update deck error:", err);
-        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+        return NextResponse.json({message: "Internal Server Error"}, {status: 500});
     }
 }
 
@@ -76,14 +83,17 @@ export async function DELETE(_req: Request, context: { params: Promise<{ id: str
 
         await prisma.deck.delete({where: {id}});
         return NextResponse.json({success: true});
-    } catch (err: any) {
-        if (err?.status === 401) {
-            return NextResponse.json({error: "Unauthorized"}, {status: 401});
+    } catch (err) {
+        if (err instanceof ApiError) {
+            return NextResponse.json({message: err.message}, {status: err.status});
         }
-        if (err?.name === "ZodError") {
-            return NextResponse.json({error: "Invalid [id]", issues: err.issues}, {status: 400});
+        if (err instanceof ZodError) {
+            return NextResponse.json(
+                {message: "Invalid [id]", errors: err.issues.map(i => ({field: i.path.join("."), message: i.message}))},
+                {status: 400}
+            );
         }
         console.error("Delete deck error:", err);
-        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+        return NextResponse.json({message: "Internal Server Error"}, {status: 500});
     }
 }

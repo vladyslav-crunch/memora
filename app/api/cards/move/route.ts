@@ -3,6 +3,7 @@ import {z} from "zod";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
 import {ensureCardOwnership} from "@/lib/api/auth-helper";
+import {ApiError} from "@/lib/types/api";
 
 export const runtime = "nodejs";
 
@@ -23,12 +24,10 @@ export async function PUT(req: Request) {
 
         const {cardIds, newDeckId} = parsed.data;
 
-        // 🔒 Ensure user owns all the cards before moving
         for (const cardId of cardIds) {
             await ensureCardOwnership(cardId, userId);
         }
 
-        // 🔒 Also ensure user owns the target deck
         const targetDeck = await prisma.deck.findUnique({
             where: {id: newDeckId},
         });
@@ -36,7 +35,6 @@ export async function PUT(req: Request) {
             return NextResponse.json({error: "You do not own the target deck"}, {status: 403});
         }
 
-        // ✅ Move cards
         const updated = await prisma.card.updateMany({
             where: {id: {in: cardIds}},
             data: {deckId: newDeckId},
@@ -46,10 +44,9 @@ export async function PUT(req: Request) {
             success: true,
             movedCount: updated.count,
         });
-    } catch (err: any) {
-        if (err?.status) {
-            return NextResponse.json({error: err.message}, {status: err.status});
-        }
+        
+    } catch (err) {
+        if (err instanceof ApiError) return NextResponse.json({error: err.message}, {status: err.status});
         console.error("Cards MOVE error:", err);
         return NextResponse.json({error: "Internal Server Error"}, {status: 500});
     }

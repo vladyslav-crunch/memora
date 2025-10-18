@@ -1,6 +1,6 @@
 // app/api/cards/route.ts
 import {NextResponse} from "next/server";
-import {z} from "zod";
+import {z, ZodError} from "zod";
 import {prisma} from "@/lib/prisma";
 import {
     bucketFromInterval,
@@ -8,6 +8,7 @@ import {
 } from "@/lib/api/progression-helpers";
 import {ensureDeckOwnership, requireUserId} from "@/lib/api/auth-helper";
 import {CreateCardSchema} from "@/lib/validation/card/card-shemas";
+import {ApiError} from "@/lib/types/api";
 
 export const runtime = "nodejs";
 
@@ -74,9 +75,12 @@ export async function GET(req: Request) {
         ]);
 
         return NextResponse.json({items, total, take, skip});
-    } catch (err: any) {
-        if (err?.status)
-            return NextResponse.json({error: err.message}, {status: err.status});
+    } catch (err) {
+        if (err instanceof ApiError) return NextResponse.json({error: err.message}, {status: err.status});
+        if (err instanceof ZodError) return NextResponse.json({
+            error: "Invalid query",
+            issues: err.issues
+        }, {status: 400});
         console.error("Cards GET error:", err);
         return NextResponse.json({error: "Internal Server Error"}, {status: 500});
     }
@@ -115,8 +119,12 @@ export async function POST(req: Request) {
         });
 
         return NextResponse.json(created, {status: 201});
-    } catch (err: any) {
-        if (err?.status) return NextResponse.json({error: err.message}, {status: err.status});
+    } catch (err) {
+        if (err instanceof ApiError) return NextResponse.json({error: err.message}, {status: err.status});
+        if (err instanceof ZodError) return NextResponse.json({
+            error: "Invalid body",
+            issues: err.issues
+        }, {status: 400});
         console.error("Cards POST error:", err);
         return NextResponse.json({error: "Internal Server Error"}, {status: 500});
     }
@@ -153,17 +161,13 @@ export async function DELETE(req: Request) {
             {deletedCount: deleted.count},
             {status: 200}
         );
-    } catch (err: any) {
-        if (err?.status) {
-            return NextResponse.json(
-                {error: err.message},
-                {status: err.status}
-            );
-        }
+    } catch (err) {
+        if (err instanceof ApiError) return NextResponse.json({error: err.message}, {status: err.status});
+        if (err instanceof ZodError) return NextResponse.json({
+            error: "Invalid body",
+            issues: err.issues
+        }, {status: 400});
         console.error("Cards DELETE error:", err);
-        return NextResponse.json(
-            {error: "Internal Server Error"},
-            {status: 500}
-        );
+        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
     }
 }

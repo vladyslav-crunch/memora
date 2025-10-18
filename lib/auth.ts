@@ -8,7 +8,6 @@ import {SignInSchema} from "@/lib/validation/auth/auth-schemas";
 
 export const {
     auth,
-    signIn,
     signOut,
     handlers: {GET, POST},
 } = NextAuth({

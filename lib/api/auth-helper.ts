@@ -1,6 +1,7 @@
 // lib/api/auth-helpers.ts
 import {auth} from "@/lib/auth";
 import {prisma} from "@/lib/prisma";
+import {ApiError} from "@/lib/types/api";
 
 /** Get the current user's [id] or null */
 export async function getSessionUserId(): Promise<string | null> {
@@ -12,9 +13,7 @@ export async function getSessionUserId(): Promise<string | null> {
 export async function requireUserId(): Promise<string> {
     const userId = await getSessionUserId();
     if (!userId) {
-        const err = new Error("Unauthorized");
-        (err as any).status = 401;
-        throw err;
+        throw new ApiError(401, "Unauthorized");
     }
     return userId;
 }
@@ -23,9 +22,7 @@ export async function requireUserId(): Promise<string> {
 export async function ensureDeckOwnership(deckId: number, userId: string) {
     const deck = await prisma.deck.findUnique({where: {id: deckId}});
     if (!deck || deck.userId !== userId) {
-        const err = new Error("Not found");
-        (err as any).status = 404;
-        throw err;
+        throw new ApiError(404, "Deck not found.");
     }
     return deck;
 }
@@ -37,9 +34,7 @@ export async function ensureCardOwnership(cardId: number, userId: string) {
         include: {deck: true},
     });
     if (!card || card.deck.userId !== userId) {
-        const err = new Error("Not found");
-        (err as any).status = 404;
-        throw err;
+        throw new ApiError(404, "Card not found.");
     }
     return card;
 }

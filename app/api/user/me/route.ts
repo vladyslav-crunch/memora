@@ -33,7 +33,7 @@ export async function GET() {
         };
 
         return NextResponse.json({user: userWithStatus, stats});
-    } catch (error: any) {
+    } catch (error) {
         console.error("Error fetching user profile:", error);
         return NextResponse.json({error: "Unauthorized"}, {status: 401});
     }
@@ -55,9 +55,10 @@ export async function PUT(req: Request) {
             data: allowedFields,
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const {passwordHash, ...safeUser} = updatedUser;
         return NextResponse.json(safeUser);
-    } catch (error: any) {
+    } catch (error) {
         console.error("Error updating user:", error);
         return NextResponse.json({error: "Internal server error"}, {status: 500});
     }
@@ -69,7 +70,7 @@ export async function DELETE() {
         await prisma.user.delete({where: {id: userId}});
 
         return NextResponse.json({message: "User account deleted successfully"});
-    } catch (error: any) {
+    } catch (error) {
         console.error("Error deleting user:", error);
         return NextResponse.json({error: "Internal server error"}, {status: 500});
     }

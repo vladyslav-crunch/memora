@@ -41,7 +41,7 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
         });
 
         return NextResponse.json(updatedCard);
-    } catch (err: any) {
+    } catch (err) {
         console.error("Card answer error:", err);
         return NextResponse.json({error: "Internal Server Error"}, {status: 500});
     }

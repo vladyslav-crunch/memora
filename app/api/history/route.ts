@@ -20,7 +20,7 @@ export async function GET() {
         });
 
         return NextResponse.json(history);
-    } catch (err: any) {
+    } catch (err) {
         console.error("Progression history error:", err);
         return NextResponse.json({error: "Internal Server Error"}, {status: 500});
     }

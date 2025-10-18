@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {useDeck} from "@/hooks/useDecks";
 import {ArrowLeft, ListFilter, PlusIcon} from "lucide-react";
 import AddCardModal from "@/components/dashboard/cards/modals/add-card-modal";
 import styles from './card-list-header.module.css'

@@ -2,6 +2,7 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
+import {ApiError} from "@/lib/types/api";
 
 export async function GET(req: Request) {
     try {
@@ -34,10 +35,12 @@ export async function GET(req: Request) {
             hasDue: dueCount > 0,
             count: dueCount,
         });
-    } catch (err: any) {
+    } catch (err) {
         console.error("practice due GET error:", err);
-        if (err?.status === 401) {
-            return NextResponse.json({error: "Unauthorized"}, {status: 401});
+        if (err instanceof ApiError) {
+            if (err?.status === 401) {
+                return NextResponse.json({error: "Unauthorized"}, {status: 401});
+            }
         }
         return NextResponse.json({error: "Internal server error"}, {status: 500});
     }

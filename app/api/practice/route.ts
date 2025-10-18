@@ -3,6 +3,7 @@ import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
 import {SessionCard} from "@/hooks/useSession";
+import {ApiError} from "@/lib/types/api";
 
 type Mode = "normal" | "reversed" | "typing";
 
@@ -103,10 +104,12 @@ export async function GET(req: Request) {
         }
 
         return NextResponse.json({session, sessionType});
-    } catch (err: any) {
+    } catch (err) {
         console.error("practice GET error:", err);
-        if (err?.status === 401) {
-            return NextResponse.json({error: "Unauthorized"}, {status: 401});
+        if (err instanceof ApiError) {
+            if (err?.status === 401) {
+                return NextResponse.json({error: "Unauthorized"}, {status: 401});
+            }
         }
         return NextResponse.json({error: "Internal server error"}, {status: 500});
     }

@@ -1,5 +1,5 @@
 "use client";
-import React, {PropsWithChildren, createContext, useContext, useEffect, useRef} from "react";
+import React, {PropsWithChildren, createContext, useContext, useEffect, useRef, useCallback} from "react";
 import {createPortal} from "react-dom";
 import styles from "./modal.module.css";
 import {X} from "lucide-react";
@@ -45,7 +45,7 @@ export default function Modal({
                                   children,
                               }: PropsWithChildren<Props>) {
     const modalRef = useRef<HTMLDivElement>(null);
-    const close = () => onOpenChange(false);
+    const close = useCallback(() => onOpenChange(false), [onOpenChange]);
 
     useEffect(() => {
         if (open) {
@@ -61,7 +61,7 @@ export default function Modal({
         };
         if (open) document.addEventListener("keydown", handleKey);
         return () => document.removeEventListener("keydown", handleKey);
-    }, [open]);
+    }, [open, close]);
 
     return createPortal(
         <ModalCtx.Provider value={{close}}>

@@ -1,8 +1,9 @@
 // app/api/card-list/stats/route.ts
 import {NextResponse} from "next/server";
-import {z} from "zod";
+import {z, ZodError} from "zod";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
+import {ApiError} from "@/lib/types/api";
 
 export const runtime = "nodejs";
 
@@ -114,17 +115,21 @@ export async function GET(req: Request) {
         }));
 
         return NextResponse.json({items, total: totalDecks, take, skip});
-    } catch (err: any) {
-        if (err?.status === 401) {
-            return NextResponse.json({error: "Unauthorized"}, {status: 401});
+    } catch (err) {
+        if (err instanceof ApiError) {
+            return NextResponse.json({message: err.message, errors: err.errors}, {status: err.status});
         }
-        if (err?.name === "ZodError") {
+        if (err instanceof ZodError) {
             return NextResponse.json(
-                {error: "Invalid query", issues: err.issues},
+                {
+                    message: "Invalid query",
+                    errors: err.issues.map(i => ({field: i.path.join("."), message: i.message}))
+                },
                 {status: 400}
             );
         }
+
         console.error("Deck stats error:", err);
-        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+        return NextResponse.json({message: "Internal Server Error"}, {status: 500});
     }
 }

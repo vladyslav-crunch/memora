@@ -1,8 +1,9 @@
 import {NextResponse} from "next/server";
-import {z} from "zod";
+import {z, ZodError} from "zod";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
 import {CreateDeckSchema} from "@/lib/validation/deck/deck-schemas";
+import {ApiError} from "@/lib/types/api";
 
 export const runtime = "nodejs";
 
@@ -21,18 +22,21 @@ export async function POST(req: Request) {
         });
 
         return NextResponse.json(deck, {status: 201});
-    } catch (err: any) {
-        if (err?.status === 401) {
-            return NextResponse.json({error: "Unauthorized"}, {status: 401});
+    } catch (err) {
+        if (err instanceof ApiError) {
+            return NextResponse.json({message: err.message, errors: err.errors}, {status: err.status});
         }
-        if (err?.name === "ZodError") {
+        if (err instanceof ZodError) {
             return NextResponse.json(
-                {error: "Invalid body", issues: err.issues},
+                {
+                    message: "Invalid body",
+                    errors: err.issues.map(issue => ({field: issue.path.join("."), message: issue.message})),
+                },
                 {status: 400}
             );
         }
         console.error("Create deck error:", err);
-        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+        return NextResponse.json({message: "Internal Server Error"}, {status: 500});
     }
 }
 
@@ -65,12 +69,12 @@ export async function GET(req: Request) {
         ]);
 
         return NextResponse.json({items, total, take, skip});
-    } catch (err: any) {
-        if (err?.status === 401) {
-            return NextResponse.json({error: "Unauthorized"}, {status: 401});
+    } catch (err) {
+        if (err instanceof ApiError) {
+            return NextResponse.json({message: err.message, errors: err.errors}, {status: err.status});
         }
         console.error("List card-list error:", err);
-        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+        return NextResponse.json({message: "Internal Server Error"}, {status: 500});
     }
 }
 

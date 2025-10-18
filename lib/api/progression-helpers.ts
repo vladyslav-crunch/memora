@@ -1,5 +1,5 @@
 // lib/api/progression-helpers.ts
-import {Prisma, PrismaClient} from "@prisma/client";
+import {Prisma, PrismaClient, UserProgressionEntry} from "@prisma/client";
 
 type Tx = PrismaClient | Prisma.TransactionClient;
 
@@ -23,11 +23,17 @@ export function utcDayBounds(d = new Date()) {
  * Upsert the single persistent UserProgressionEntry for (userId, cardId).
  * Assumes you have a composite unique @@unique([userId, cardId]) in Prisma schema.
  */
-export async function upsertUserProgressionEntry(tx: Tx, userId: string, cardId: number, bucket: string, now = new Date()) {
+export async function upsertUserProgressionEntry(
+    tx: Prisma.TransactionClient, // or your Tx type
+    userId: string,
+    cardId: number,
+    bucket: string,
+    now = new Date()
+): Promise<UserProgressionEntry> {
     return tx.userProgressionEntry.upsert({
-        where: {userId_cardId: {userId, cardId} as any},
-        create: {userId, cardId, bucket, lastSeenAt: now} as any,
-        update: {bucket, lastSeenAt: now} as any,
+        where: {userId_cardId: {userId, cardId}},
+        create: {userId, cardId, bucket, lastSeenAt: now},
+        update: {bucket, lastSeenAt: now},
     });
 }
 
@@ -35,32 +41,49 @@ export async function upsertUserProgressionEntry(tx: Tx, userId: string, cardId:
  * Recalculate today's UserProgressionHistory from UserProgressionEntry rows.
  * Creates today's row if missing, or updates it to match current counts.
  */
-export async function recalcUserProgressionHistoryForToday(tx: Tx, userId: string, now = new Date()) {
+
+export async function recalcUserProgressionHistoryForToday(
+    tx: Tx,
+    userId: string,
+    now = new Date()
+) {
     const {start} = utcDayBounds(now);
 
-    // Count buckets from entries (preferred)
     const group = await tx.userProgressionEntry.groupBy({
         by: ["bucket"],
         where: {userId},
         _count: {bucket: true},
     });
 
-    const counts: Record<string, number> = {high: 0, mid: 0, low: 0, veryLow: 0};
-    for (const g of group as any) counts[g.bucket] = Number(g._count.bucket);
+    type BucketCounts = { bucket: UserProgressionEntry["bucket"]; _count: { bucket: number } };
+    const counts: Record<UserProgressionEntry["bucket"], number> = {
+        high: 0,
+        mid: 0,
+        low: 0,
+        veryLow: 0,
+    };
 
-    // Fallback to cards if no entries
+    for (const g of group as BucketCounts[]) {
+        counts[g.bucket] = g._count.bucket;
+    }
+
     if (group.length === 0) {
         counts.veryLow = await tx.card.count({
             where: {deck: {userId}, OR: [{intervalStrength: null}, {intervalStrength: {lt: 0.25}}]},
         });
-        counts.low = await tx.card.count({where: {deck: {userId}, intervalStrength: {gte: 0.25, lt: 0.5}}});
-        counts.mid = await tx.card.count({where: {deck: {userId}, intervalStrength: {gte: 0.5, lt: 0.75}}});
-        counts.high = await tx.card.count({where: {deck: {userId}, intervalStrength: {gte: 0.75}}});
+        counts.low = await tx.card.count({
+            where: {deck: {userId}, intervalStrength: {gte: 0.25, lt: 0.5}},
+        });
+        counts.mid = await tx.card.count({
+            where: {deck: {userId}, intervalStrength: {gte: 0.5, lt: 0.75}},
+        });
+        counts.high = await tx.card.count({
+            where: {deck: {userId}, intervalStrength: {gte: 0.75}},
+        });
     }
 
-    // Upsert today's history
     await tx.userProgressionHistory.upsert({
-        where: {userId_createdAt: {userId, createdAt: start} as any}, // needs @@unique([userId, createdAt])
+        where: {userId_createdAt: {userId, createdAt: start}}, // TS infers type from schema
         update: {
             lastModifiedAt: now,
             highIndicationCount: counts.high,

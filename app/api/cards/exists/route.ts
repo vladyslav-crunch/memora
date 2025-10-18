@@ -1,6 +1,7 @@
 import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";
+import {ApiError} from "@/lib/types/api";
 
 export const runtime = "nodejs";
 
@@ -22,9 +23,8 @@ export async function GET(req: Request) {
         });
 
         return NextResponse.json({exists: !!exists});
-    } catch (err: any) {
-        if (err?.status)
-            return NextResponse.json({error: err.message}, {status: err.status});
+    } catch (err) {
+        if (err instanceof ApiError) return NextResponse.json({error: err.message}, {status: err.status});
         console.error("Card EXISTS error:", err);
         return NextResponse.json(
             {error: "Internal Server Error"},

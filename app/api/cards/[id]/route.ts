@@ -3,6 +3,7 @@ import {NextResponse} from "next/server";
 import {z} from "zod";
 import {prisma} from "@/lib/prisma";
 import {ensureCardOwnership, requireUserId} from "@/lib/api/auth-helper";
+import {ApiError} from "@/lib/types/api";
 
 export const runtime = "nodejs";
 
@@ -16,24 +17,31 @@ const updateSchema = z.object({
     nextRepetitionTime: z.string().datetime().optional(),
 });
 
-export async function GET(_req: Request, ctx: { params: { id: string } }) {
+export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
     try {
         const userId = await requireUserId();
-        const id = idParam.parse(ctx.params.id);
-        const card = await ensureCardOwnership(id, userId);
+        const {id} = await ctx.params;
+        const cardId = idParam.parse(id);
+        const card = await ensureCardOwnership(cardId, userId);
         return NextResponse.json(card);
-    } catch (err: any) {
-        if (err?.status) return NextResponse.json({error: err.message}, {status: err.status});
+    } catch (err) {
+        if (err instanceof ApiError) {
+            return NextResponse.json(
+                {message: err.message, errors: err.errors},
+                {status: err.status}
+            );
+        }
         console.error("Card GET error:", err);
-        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+        return NextResponse.json({message: "Internal Server Error"}, {status: 500});
     }
 }
 
-export async function PUT(req: Request, ctx: { params: { id: string } }) {
+export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }) {
     try {
         const userId = await requireUserId();
-        const id = idParam.parse(ctx.params.id);
-        await ensureCardOwnership(id, userId);
+        const {id} = await ctx.params;
+        const cardId = idParam.parse(id);
+        await ensureCardOwnership(cardId, userId);
 
         const parsed = updateSchema.safeParse(await req.json());
         if (!parsed.success) {
@@ -43,7 +51,7 @@ export async function PUT(req: Request, ctx: { params: { id: string } }) {
         const {nextRepetitionTime, ...rest} = parsed.data;
 
         const updated = await prisma.card.update({
-            where: {id},
+            where: {id: cardId},
             data: {
                 ...rest,
                 ...(nextRepetitionTime ? {nextRepetitionTime: new Date(nextRepetitionTime)} : {}),
@@ -51,23 +59,34 @@ export async function PUT(req: Request, ctx: { params: { id: string } }) {
         });
 
         return NextResponse.json(updated);
-    } catch (err: any) {
-        if (err?.status) return NextResponse.json({error: err.message}, {status: err.status});
+    } catch (err) {
+        if (err instanceof ApiError) {
+            return NextResponse.json(
+                {message: err.message, errors: err.errors},
+                {status: err.status}
+            );
+        }
         console.error("Card PUT error:", err);
-        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+        return NextResponse.json({message: "Internal Server Error"}, {status: 500});
     }
 }
 
-export async function DELETE(_req: Request, ctx: { params: { id: string } }) {
+export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string }> }) {
     try {
         const userId = await requireUserId();
-        const id = idParam.parse(ctx.params.id);
-        await ensureCardOwnership(id, userId);
-        await prisma.card.delete({where: {id}});
+        const {id} = await ctx.params;
+        const cardId = idParam.parse(id);
+        await ensureCardOwnership(cardId, userId);
+        await prisma.card.delete({where: {id: cardId}});
         return NextResponse.json({success: true});
-    } catch (err: any) {
-        if (err?.status) return NextResponse.json({error: err.message}, {status: err.status});
+    } catch (err) {
+        if (err instanceof ApiError) {
+            return NextResponse.json(
+                {message: err.message, errors: err.errors},
+                {status: err.status}
+            );
+        }
         console.error("Card DELETE error:", err);
-        return NextResponse.json({error: "Internal Server Error"}, {status: 500});
+        return NextResponse.json({message: "Internal Server Error"}, {status: 500});
     }
 }

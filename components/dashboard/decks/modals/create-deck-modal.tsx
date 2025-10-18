@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import Modal, {ModalBody, ModalFooter, ModalHeader} from "@/components/ui/modal/modal";
 import Button, {BUTTON_COLOR} from "@/components/ui/button/button";
@@ -109,12 +108,6 @@ export default function CreateDeckModal({open, onOpenChange, onCreated}: CreateD
                         }}
                         minSelected={1}
                     />
-                    {"modes" in errors && (
-                        <p style={{color: "#b91c1c", fontSize: 12, marginTop: 6}}>
-                            {(errors as any).modes?.message}
-                        </p>
-                    )}
-
                     <div>
                         <label
                             style={{
