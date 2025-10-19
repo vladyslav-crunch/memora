@@ -1,7 +1,9 @@
 .deckContainer {
     background: #ffe9db;
     width: 350px;
-    height: 100px;
+    display: flex;
+    flex-direction: column;
+    height: 135px;
     border-radius: 15px;
     padding: 10px 15px;
     position: relative;
@@ -10,6 +12,7 @@
 
 @media (max-width: 900px) {
     .deckContainer {
+        height: 105px;
         width: 100%;
     }
 }
@@ -29,25 +32,25 @@
     font-weight: 500;
 }
 
-.deckRepeat {
-    height: 30px;
-    width: 30px;
-    display: flex;
-    position: absolute;
-    align-items: center;
-    justify-content: center;
-    right: 15px;
-    bottom: 10px;
-    background: #ff7f7f;
-    padding: 10px;
-    border-radius: 50%;
-    font-size: 14px;
-    color: #fff;
+@media (max-width: 900px) {
+    .deckName {
+        line-clamp: 1;
+        -webkit-line-clamp: 1;
+    }
 }
 
-.deckReview {
-    position: absolute;
-    top: 12px;
-    right: 15px;
-    font-size: 13px;
+.deckOwner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.deckOwnerImage {
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+    height: 30px;
+    width: 30px;
 }

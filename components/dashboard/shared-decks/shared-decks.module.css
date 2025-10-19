@@ -1,0 +1,18 @@
+.decksGrid {
+    display: flex;
+    gap: 10px;
+}
+
+@media (max-width: 900px) {
+    .decksGrid {
+        flex-wrap: wrap;
+    }
+}
+
+.deckFallback {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+}

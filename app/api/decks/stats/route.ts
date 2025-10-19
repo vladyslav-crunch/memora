@@ -24,7 +24,7 @@ export async function GET(req: Request) {
             search: searchParams.get("search")?.trim() || undefined, // trim spaces
         });
 
-        const {take = 20, skip = 0} = parsed.success ? parsed.data : {take: 20, skip: 0};
+        const {take, skip = 0} = parsed.success ? parsed.data : {skip: 0};
 
         // 1) Fetch paginated card-list + total card count
         const [decks, totalDecks] = await Promise.all([
