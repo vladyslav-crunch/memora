@@ -14,10 +14,11 @@ import {Card} from "@/lib/types/card.types";
 type EditCardModalProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    onEditSuccess: () => void;
     card: Card;
 };
 
-export default function EditCardModal({open, onOpenChange, card}: EditCardModalProps) {
+export default function EditCardModal({open, onOpenChange, onEditSuccess, card}: EditCardModalProps) {
     const updateCard = useUpdateCard(card.id);
 
     const {
@@ -52,6 +53,7 @@ export default function EditCardModal({open, onOpenChange, card}: EditCardModalP
         try {
             await updateCard.mutateAsync({id: card.id, ...values});
             toast.success("Card updated successfully!");
+            onEditSuccess();
             onOpenChange(false);
         } catch (error) {
             console.error(error);

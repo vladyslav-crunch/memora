@@ -81,6 +81,7 @@ function CardListPage({params}: { params: Promise<{ id: string }> }) {
                     open={isEditModalOpen}
                     onOpenChange={setEditModalOpen}
                     card={selectedCards[0]}
+                    onEditSuccess={() => setSelectedCards([])}
                 />
             )}
             {selectedCards.length !== 0 && (
