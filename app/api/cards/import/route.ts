@@ -14,8 +14,18 @@ export async function POST(req: Request) {
         const userId = await requireUserId();
         const parsed = ImportCardsSchema.safeParse(await req.json());
         if (!parsed.success) {
-            return NextResponse.json({error: parsed.error}, {status: 400});
+            return NextResponse.json(
+                {
+                    message: "Invalid request body",
+                    errors: parsed.error.issues.map((i) => ({
+                        field: i.path.join("."),
+                        message: i.message,
+                    })),
+                },
+                {status: 400}
+            );
         }
+
 
         const {deckId, cards} = parsed.data;
         await ensureDeckOwnership(deckId, userId);

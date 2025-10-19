@@ -9,6 +9,7 @@ import {getSeparator} from "@/lib/utility/getSeparator";
 import {getPlaceholderExample} from "@/lib/utility/getPlaceholderExample";
 import {copyToClipBoard} from "@/lib/utility/copyToClipBoard";
 import {Deck} from "@/lib/types/deck.types";
+import {SeparatorSelector} from "@/components/dashboard/decks/separator-selector";
 
 type ExportDeckModalProps = {
     deck: Deck;
@@ -20,8 +21,6 @@ export default function ExportDeckModal({open, onOpenChange, deck}: ExportDeckMo
     const [fieldSeparator, setFieldSeparator] = useState<"tab" | "comma">("tab");
     const [rowSeparator, setRowSeparator] = useState<"semicolon" | "newline">("newline");
     const [output, setOutput] = useState("");
-    const fieldOptions: Array<"tab" | "comma"> = ["tab", "comma"];
-    const rowOptions: Array<"semicolon" | "newline"> = ["semicolon", "newline"];
     const {data, isLoading} = useCards(deck?.id);
 
 
@@ -61,43 +60,12 @@ export default function ExportDeckModal({open, onOpenChange, deck}: ExportDeckMo
             <ModalBody>
                 <div className="flex flex-col gap-4">
                     {/* Field separator */}
-                    <div>
-                        <label className="block text-lg mb-2 text-gray-700">Between fields</label>
-                        <div className="flex gap-3">
-                            {fieldOptions.map((option) => (
-                                <label key={option} className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="fieldSeparator"
-                                        value={option}
-                                        checked={fieldSeparator === option}
-                                        onChange={() => setFieldSeparator(option)}
-                                    />
-                                    <span className="capitalize">{option}</span>
-                                </label>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-lg mb-2 text-gray-700">Between rows</label>
-                        <div className="flex gap-3">
-                            {rowOptions.map((option) => (
-                                <label key={option} className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="rowSeparator"
-                                        value={option}
-                                        checked={rowSeparator === option}
-                                        onChange={() => setRowSeparator(option)}
-                                    />
-                                    <span className="capitalize">
-                                    {option === "semicolon" ? "Semicolon (;)" : "New line (↵)"}
-                                </span>
-                                </label>
-                            ))}
-                        </div>
-                    </div>
+                    <SeparatorSelector
+                        fieldSeparator={fieldSeparator}
+                        rowSeparator={rowSeparator}
+                        onFieldChange={setFieldSeparator}
+                        onRowChange={setRowSeparator}
+                    />
                     <div>
                         <div className="flex flex-col gap-2 ">
                             <TextField

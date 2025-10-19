@@ -122,7 +122,7 @@
     padding: 15px;
     height: 200px;
     max-height: 200px;
-
+    font-family: monospace;
     /* Firefox scrollbar */
     scrollbar-width: thin; /* options: auto | thin | none */
     scrollbar-color: #888 #f0f0f0; /* thumb | track */

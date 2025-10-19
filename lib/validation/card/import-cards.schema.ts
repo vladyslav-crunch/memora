@@ -1,10 +1,15 @@
 import {z} from "zod";
-import {CardFieldsSchema} from "@/lib/validation/card/card-fields.schema";
 
-
-export const ImportCardsSchema = z.object({
-    deckId: z.coerce.number().int(),
-    cards: z.array(CardFieldsSchema).nonempty(),
+export const ImportCardSchema = z.object({
+    front: z.string().min(1, "Front text is required"),
+    back: z.string().min(1, "Back text is required"),
+    context: z.string().nullable().optional(),
+    intervalStrength: z.number().min(0).max(1).nullable().optional(),
 });
 
-export type ImportCardsValues = z.infer<typeof ImportCardsSchema>;
+export const ImportCardsSchema = z.object({
+    deckId: z.number().int(),
+    cards: z.array(ImportCardSchema).min(1, "At least one card is required"),
+});
+
+export type ImportCardsInput = z.infer<typeof ImportCardsSchema>;

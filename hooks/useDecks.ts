@@ -66,6 +66,8 @@ export function useDeleteDeck(id: number) {
             qc.invalidateQueries({queryKey: ["progressionHistory"]});
             qc.invalidateQueries({queryKey: ["cardsExist"]});
             qc.invalidateQueries({queryKey: ["cards"]});
+            qc.invalidateQueries({queryKey: ["dueCards"]});
+
         },
     });
 }

@@ -9,6 +9,8 @@ import {z} from "zod";
 import {getSeparator} from "@/lib/utility/getSeparator";
 import {getPlaceholderExample} from "@/lib/utility/getPlaceholderExample";
 import {Deck} from "@/lib/types/deck.types";
+import {ImportCardSchema} from "@/lib/validation/card/import-cards.schema";
+import {SeparatorSelector} from "@/components/dashboard/decks/separator-selector";
 
 type ImportDeckModalProps = {
     deck: Deck;
@@ -16,18 +18,11 @@ type ImportDeckModalProps = {
     onOpenChange: (open: boolean) => void;
 };
 
-const ImportedCardSchema = z.object({
-    front: z.string().min(1, "Front text is required"),
-    back: z.string().min(1, "Back text is required"),
-    context: z.string().optional().nullable(),
-});
 
 export default function ImportDeckModal({open, onOpenChange, deck}: ImportDeckModalProps) {
     const [fieldSeparator, setFieldSeparator] = useState<"tab" | "comma">("tab");
     const [rowSeparator, setRowSeparator] = useState<"semicolon" | "newline">("newline");
     const [input, setInput] = useState("");
-    const fieldOptions: Array<"tab" | "comma"> = ["tab", "comma"];
-    const rowOptions: Array<"semicolon" | "newline"> = ["semicolon", "newline"];
     const importCards = useImportCards();
 
 
@@ -48,7 +43,7 @@ export default function ImportDeckModal({open, onOpenChange, deck}: ImportDeckMo
                 return;
             }
 
-            const validCards: z.infer<typeof ImportedCardSchema>[] = [];
+            const validCards: z.infer<typeof ImportCardSchema>[] = [];
             const invalidRows: string[] = [];
 
             rows.forEach((row, i) => {
@@ -56,7 +51,7 @@ export default function ImportDeckModal({open, onOpenChange, deck}: ImportDeckMo
                     .split(fieldSep)
                     .map((val) => val.trim());
 
-                const parsed = ImportedCardSchema.safeParse({front, back, context});
+                const parsed = ImportCardSchema.safeParse({front, back, context});
 
                 if (parsed.success) {
                     validCards.push(parsed.data);
@@ -98,46 +93,12 @@ export default function ImportDeckModal({open, onOpenChange, deck}: ImportDeckMo
             <ModalBody>
                 <div className="flex flex-col gap-4">
                     {/* Field separator */}
-                    <div className="flex flex-col gap-4">
-                        {/* Field separator */}
-                        <div>
-                            <label className="block text-lg mb-2 text-gray-700">Between fields</label>
-                            <div className="flex gap-3">
-                                {fieldOptions.map((option) => (
-                                    <label key={option} className="flex items-center gap-2 cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="fieldSeparator"
-                                            value={option}
-                                            checked={fieldSeparator === option}
-                                            onChange={() => setFieldSeparator(option)}
-                                        />
-                                        <span className="capitalize">{option}</span>
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-lg mb-2 text-gray-700">Between rows</label>
-                            <div className="flex gap-3">
-                                {rowOptions.map((option) => (
-                                    <label key={option} className="flex items-center gap-2 cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="rowSeparator"
-                                            value={option}
-                                            checked={rowSeparator === option}
-                                            onChange={() => setRowSeparator(option)}
-                                        />
-                                        <span className="capitalize">
-                                    {option === "semicolon" ? "Semicolon (;)" : "New line (↵)"}
-                                </span>
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
+                    <SeparatorSelector
+                        fieldSeparator={fieldSeparator}
+                        rowSeparator={rowSeparator}
+                        onFieldChange={setFieldSeparator}
+                        onRowChange={setRowSeparator}
+                    />
 
                     {/* Input field with preview */}
                     <div>
