@@ -1,0 +1,46 @@
+/* shared-decks.module.css */
+
+.decksGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 15px;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+@media (max-width: 900px) {
+    .decksGrid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+/* Center the spinner */
+.deckFallback {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.spinnerWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.paginationButton {
+    cursor: pointer;
+    background-color: #ff8671;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 10px;
+    width: 100px;
+    color: white;
+
+    &:disabled {
+        background-color: #eb9d8e;
+        cursor: default;
+    }
+}

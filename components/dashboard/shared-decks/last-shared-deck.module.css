@@ -1,6 +1,5 @@
 .deckContainer {
     background: #ffe9db;
-    width: 350px;
     display: flex;
     flex-direction: column;
     height: 135px;
@@ -8,6 +7,7 @@
     padding: 10px 15px;
     position: relative;
     cursor: pointer;
+    width: 100%;
 }
 
 @media (max-width: 900px) {

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {PublicDeck} from "@/lib/types/shared-deck.types";
-import styles from './shared-deck.module.css'
+import styles from './last-shared-deck.module.css'
 import Image from "next/image";
 import {CldImage} from "next-cloudinary";
 

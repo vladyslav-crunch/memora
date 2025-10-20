@@ -2,7 +2,7 @@
 
 import {useState, useEffect} from "react";
 import Report from "@/components/dashboard/report/report";
-import SharedDecks from "@/components/dashboard/shared-decks/shared-decks";
+import LastSharedDecks from "@/components/dashboard/shared-decks/last-shared-decks";
 import Decks from "@/components/dashboard/decks/decks";
 import {useMediaQuery} from "usehooks-ts";
 import styles from "./dashboard.module.css";
@@ -23,13 +23,13 @@ export default function Dashboard() {
                 <div className={styles.mobile}>
                     <Report/>
                     <Decks/>
-                    <SharedDecks/>
+                    <LastSharedDecks/>
                 </div>
             ) : (
                 <div className={styles.desktop}>
                     <div className={styles.left}>
                         <Report/>
-                        <SharedDecks/>
+                        <LastSharedDecks/>
                     </div>
                     <div className={styles.right}>
                         <Decks/>

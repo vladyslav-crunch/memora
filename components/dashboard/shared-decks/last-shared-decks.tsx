@@ -5,7 +5,7 @@ import SharedDeck from "@/components/dashboard/shared-decks/shared-deck";
 import {ArrowRight} from "lucide-react";
 import Spinner from "@/components/ui/spinner/spinner";
 
-function SharedDecks() {
+function LastSharedDecks() {
     const {data: latestDecks, isLoading} = usePublicDecksQuery({
         take: 3,
         sortBy: "createdAt",
@@ -48,4 +48,4 @@ function SharedDecks() {
     );
 }
 
-export default SharedDecks;
+export default LastSharedDecks;
