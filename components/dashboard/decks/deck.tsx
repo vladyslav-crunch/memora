@@ -32,7 +32,13 @@ function Deck({deck}: DeckProps) {
                 <span className={styles.deckRepeat}>{deck.counts.dueCards}</span>
                 <span className={styles.deckReview}>{review}</span>
             </div>
-            <DeckMenuModal open={isModalOpen} onOpenChange={() => setIsModalOpen(false)} deck={deck}/>
+            {isModalOpen && (
+                <DeckMenuModal
+                    open={isModalOpen}
+                    onOpenChange={() => setIsModalOpen(false)}
+                    deck={deck}
+                />
+            )}
         </>
     );
 }
