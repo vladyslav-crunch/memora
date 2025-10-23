@@ -1,13 +1,13 @@
 .headerContainer {
-  display: flex;
-  height: 80px;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
+    display: flex;
+    height: 80px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
 }
 
 .headerRightSide {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }

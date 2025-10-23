@@ -1,11 +1,26 @@
-/* shared-decks.module.css */
+.pageWrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+}
+
+
+.scrollArea {
+    flex-grow: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #f28b82 #fce8e6;
+    padding-right: 4px;
+}
+
 
 .decksGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 15px;
     width: 100%;
-    margin-top: 1rem;
+
 }
 
 @media (max-width: 900px) {
@@ -14,12 +29,15 @@
     }
 }
 
-/* Center the spinner */
 .deckFallback {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: calc(100% - 150px);
+
+    & p {
+        font-size: 24px;
+    }
 }
 
 .spinnerWrapper {
@@ -28,19 +46,21 @@
     align-items: center;
 }
 
-.paginationButton {
-    cursor: pointer;
-    background-color: #ff8671;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0.5rem;
-    border-radius: 10px;
-    width: 100px;
-    color: white;
+.scrollArea::-webkit-scrollbar {
+    width: 8px;
+}
 
-    &:disabled {
-        background-color: #eb9d8e;
-        cursor: default;
-    }
+.scrollArea::-webkit-scrollbar-track {
+    background: #fce8e6;
+    border-radius: 10px;
+}
+
+.scrollArea::-webkit-scrollbar-thumb {
+    background-color: #f28b82;
+    border-radius: 10px;
+    border: 2px solid #fce8e6;
+}
+
+.scrollArea::-webkit-scrollbar-thumb:hover {
+    background-color: #e57373;
 }

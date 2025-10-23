@@ -87,6 +87,5 @@ export function useDeckStats(params?: { take?: number; skip?: number; search?: s
     return useQuery({
         queryKey: deckStatsKey(params), // includes search
         queryFn: () => getJSON<DeckStatsResponse>(url),
-        refetchInterval: 1000 * 60,
     });
 }

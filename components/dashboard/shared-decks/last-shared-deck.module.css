@@ -2,7 +2,7 @@
     background: #ffe9db;
     display: flex;
     flex-direction: column;
-    height: 135px;
+    height: 131px;
     border-radius: 15px;
     padding: 10px 15px;
     position: relative;
@@ -12,7 +12,7 @@
 
 @media (max-width: 900px) {
     .deckContainer {
-        height: 105px;
+        height: 106px;
         width: 100%;
     }
 }
