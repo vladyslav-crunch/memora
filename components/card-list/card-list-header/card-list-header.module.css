@@ -19,3 +19,27 @@
     justify-content: center;
     gap: 10px;
 }
+
+.cardListHeaderOwner {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    color: #333333;
+    font-weight: 300;
+
+    & span {
+        font-weight: 500;
+        font-size: 16px;
+    }
+}
+
+.cardListHeaderImage {
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+    height: 45px;
+    width: 45px;
+}

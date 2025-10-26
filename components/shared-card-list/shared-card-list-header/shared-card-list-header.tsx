@@ -1,31 +1,34 @@
 import React, {useEffect, useState} from 'react';
-import {PublicDeck} from "@/lib/types/shared-deck.types";
-import styles from './last-shared-deck.module.css'
-import Image from "next/image";
+import {ArrowLeft} from "lucide-react";
+import styles from '../../card-list/card-list-header/card-list-header.module.css'
+import {useRouter} from "next/navigation";
+import {PublicDeckResponse} from "@/lib/types/shared-deck.types";
 import {CldImage} from "next-cloudinary";
-import SharedDeckMenuModal from "@/components/dashboard/shared-decks/modals/shared-deck-menu-modal";
+import Image from "next/image";
 
-type SharedDeckProps = {
-    deck: PublicDeck;
+type CardListHeaderProps = {
+    deck: PublicDeckResponse;
 }
 
-function SharedDeck({deck}: SharedDeckProps) {
+function SharedCardListHeader({deck}: CardListHeaderProps) {
+    const router = useRouter();
     const avatarPlaceHolder = "/avatar-placeholder.png"
     const [imageUrl, setImageUrl] = useState(avatarPlaceHolder);
-    const [isModalOpen, setModalOpen] = useState(false);
     useEffect(() => {
         if (deck) {
             setImageUrl(deck.owner.image || avatarPlaceHolder);
         }
     }, [deck]);
 
+    console.log(deck)
     return (
-        <div className={styles.deckContainer} onClick={() => {
-            setModalOpen(true)
-        }}>
-            <p className={styles.deckCount}>{deck.cardCount} cards</p>
-            <p className={styles.deckName}>{deck.name}</p>
-            <div className={styles.deckOwner}>
+        <div className={styles.cardListHeaderContainer}>
+            <p className={styles.cardListHeaderTitle}><ArrowLeft size={30}
+                                                                 onClick={() => router.back()}
+                                                                 className={'cursor-pointer'}/>{deck?.name}
+            </p>
+            <div className={styles.cardListHeaderOwner}>
+                <p>Created by: <span>{deck.owner.name}</span></p>
                 {imageUrl && (
                     imageUrl.includes("res.cloudinary.com") ? (
                         <CldImage
@@ -35,7 +38,7 @@ function SharedDeck({deck}: SharedDeckProps) {
                             crop="fill"
                             alt="Profile Picture"
                             priority
-                            className={styles.deckOwnerImage}
+                            className={styles.cardListHeaderImage}
                         />
                     ) : (
                         <Image
@@ -44,21 +47,13 @@ function SharedDeck({deck}: SharedDeckProps) {
                             height={75}
                             alt="Profile Picture"
                             priority
-                            className={styles.deckOwnerImage}
+                            className={styles.cardListHeaderImage}
                         />
                     )
                 )}
-                <p className={styles.deckOwnerName}>{deck.owner.name}</p>
             </div>
-            {isModalOpen && (
-                <SharedDeckMenuModal
-                    open={isModalOpen}
-                    onOpenChange={() => setModalOpen(false)}
-                    deck={deck}
-                />
-            )}
         </div>
     );
 }
 
-export default SharedDeck;
+export default SharedCardListHeader;

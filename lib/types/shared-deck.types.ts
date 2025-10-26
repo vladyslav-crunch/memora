@@ -24,3 +24,12 @@ export type PublicDecksParams = {
     sortOrder?: "asc" | "desc";
     search?: string;
 }
+
+export type PublicDeckResponse = {
+    id: number;
+    name: string;
+    owner: {
+        name: string;
+        image: string | null;
+    };
+}

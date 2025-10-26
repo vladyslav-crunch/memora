@@ -3,26 +3,26 @@ import Modal, {ModalBody, ModalFooter, ModalHeader} from "@/components/ui/modal/
 import Button, {BUTTON_COLOR} from "@/components/ui/button/button";
 import {toast} from "sonner";
 import {Copy, Download} from "lucide-react";
-import {useCards} from "@/hooks/useCards";
 import TextField from "@/components/ui/text-field/text-field";
 import {getSeparator} from "@/lib/utility/getSeparator";
 import {getPlaceholderExample} from "@/lib/utility/getPlaceholderExample";
 import {copyToClipBoard} from "@/lib/utility/copyToClipBoard";
-import {Deck} from "@/lib/types/deck.types";
 import {SeparatorSelector} from "@/components/dashboard/decks/separator-selector";
+import {useDeckCards} from "@/hooks/useDeckCards";
 
 type ExportDeckModalProps = {
-    deck: Deck;
+    deckId: number;
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    isPublic?: boolean;
 };
 
-export default function ExportDeckModal({open, onOpenChange, deck}: ExportDeckModalProps) {
+export default function ExportDeckModal({open, onOpenChange, deckId, isPublic = false}: ExportDeckModalProps) {
     const [fieldSeparator, setFieldSeparator] = useState<"tab" | "comma">("tab");
     const [rowSeparator, setRowSeparator] = useState<"semicolon" | "newline">("newline");
     const [output, setOutput] = useState("");
-    const {data, isLoading} = useCards(deck?.id);
-
+    const {data, isLoading} = useDeckCards(deckId, isPublic);
+    
 
     const handleExport = () => {
         try {

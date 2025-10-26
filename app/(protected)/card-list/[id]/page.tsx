@@ -37,10 +37,11 @@ function CardListPage({params}: { params: Promise<{ id: string }> }) {
     const deleteCards = useDeleteCards(Number(id));
 
     if (isLoading) return <div className={styles.cardListLoading}><Spinner size={60}/></div>;
-    if (error) return <div>Failed to load deck</div>;
+    if (error) {
+        console.log(error)
+        return <div>Failed to load deck</div>;
+    }
     if (!deck || !cards) return <div>No deck found</div>;
-
-    console.log("cards", cards);
 
     const toggleAll = () => {
         if (selectedCards.length === cards.items.length) {

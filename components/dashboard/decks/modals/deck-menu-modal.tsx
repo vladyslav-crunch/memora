@@ -116,7 +116,7 @@ function DeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
             {/* Sub-modals */}
             <EditDeckModal deck={deck} open={isEdit} onOpenChange={() => setEdit(false)}/>
             <AddCardModal deck={deck} open={isAdd} onOpenChange={() => setAdd(false)}/>
-            <ExportDeckModal deck={deck} open={isExport} onOpenChange={() => setExport(false)}/>
+            <ExportDeckModal deckId={deck.id} open={isExport} onOpenChange={() => setExport(false)}/>
             <ImportDeckModal deck={deck} open={isImport} onOpenChange={() => setImport(false)}/>
 
             {/* No cards modal */}

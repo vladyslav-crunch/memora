@@ -22,7 +22,7 @@ export async function requireUserId(): Promise<string> {
 export async function ensureDeckOwnership(deckId: number, userId: string) {
     const deck = await prisma.deck.findUnique({where: {id: deckId}});
     if (!deck || deck.userId !== userId) {
-        throw new ApiError(404, "Deck not found.");
+        throw new ApiError(404, "Deck not found or not associated with this user.");
     }
     return deck;
 }
