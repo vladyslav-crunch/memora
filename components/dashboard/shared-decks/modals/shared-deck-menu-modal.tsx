@@ -58,13 +58,8 @@ function SharedDeckMenuModal({open, onOpenChange, deck}: DeckMenuModalProps) {
                 >
                     Copy deck
                 </Button>
-
-
             </Modal>
-
-
-            <ExportDeckModal deckId={deck.id} open={isExport} onOpenChange={() => setExport(false)}/>
-
+            <ExportDeckModal deckId={deck.id} open={isExport} onOpenChange={() => setExport(false)} isPublic={true}/>
         </>
     );
 }

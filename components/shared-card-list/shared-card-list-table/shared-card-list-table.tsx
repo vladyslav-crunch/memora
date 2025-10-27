@@ -38,7 +38,6 @@ function SharedCardListTable({cards}: SharedCardListTableProps) {
                             <td className={styles.td}>
                                 <p className={styles.cardContext}>{card.context}</p>
                             </td>
-
                         </tr>
                     );
                 })}

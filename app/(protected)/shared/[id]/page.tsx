@@ -12,7 +12,9 @@ import ExportDeckModal from "@/components/dashboard/decks/modals/export-deck-mod
 
 function SharedCardListPage({params}: { params: Promise<{ id: string }> }) {
     const [isExportModalOpen, setExportModalOpen] = useState(false);
+
     const {id} = use(params);
+
     const search = useSearchStore((s) => s.debouncedValue);
 
     const {data: deck, isLoading: loadingDecks, error} = usePublicDeck(Number(id));
@@ -26,9 +28,7 @@ function SharedCardListPage({params}: { params: Promise<{ id: string }> }) {
         <>
             <SharedCardListHeader deck={deck}/>
             <SharedCardListTable cards={cards}/>
-            <SharedCardListFooter cardsCount={cards.total} onExport={() => setExportModalOpen(true)} onCopy={() => {
-            }}/>
-
+            <SharedCardListFooter cardsCount={cards.total} onExport={() => setExportModalOpen(true)} deckId={deck.id}/>
             {isExportModalOpen && <ExportDeckModal deckId={deck.id} open={isExportModalOpen}
                                                    onOpenChange={() => setExportModalOpen(false)}
                                                    isPublic={true}/>}
