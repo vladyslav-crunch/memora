@@ -3,7 +3,7 @@ import Image from "next/image";
 
 function Logo() {
     return (
-        <div>
+        <div className={styles.headerLogo}>
             <div className={styles.logo}>
                 <Image
                     src="/logo.svg"
