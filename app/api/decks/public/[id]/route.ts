@@ -1,4 +1,3 @@
-// app/api/decks/public/[id]/route.ts
 import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {ApiError} from "@/lib/types/api.types";

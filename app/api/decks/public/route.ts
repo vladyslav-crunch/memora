@@ -5,7 +5,6 @@ import {ApiError} from "@/lib/types/api.types";
 
 export const runtime = "nodejs";
 
-// Query validation
 const QuerySchema = z.object({
     take: z.coerce.number().min(1).max(100).optional(),
     skip: z.coerce.number().min(0).optional(),
@@ -27,7 +26,6 @@ export async function GET(req: Request) {
             ? parsed.data
             : {sortBy: "createdAt", sortOrder: "desc"};
 
-        // Fetch public decks
         const [decks, total] = await Promise.all([
             prisma.deck.findMany({
                 where: {
@@ -38,9 +36,9 @@ export async function GET(req: Request) {
                 },
                 orderBy:
                     sortBy === "cardCount"
-                        ? {cards: {_count: sortOrder}} // sort by card count
+                        ? {cards: {_count: sortOrder}}
                         : {[sortBy]: sortOrder},
-                take: take ?? undefined, // no limit if undefined
+                take: take ?? undefined,
                 skip,
                 select: {
                     id: true,
@@ -64,8 +62,7 @@ export async function GET(req: Request) {
                 },
             }),
         ]);
-
-        // Shape response
+        
         const items = decks.map((d) => ({
             id: d.id,
             name: d.name,

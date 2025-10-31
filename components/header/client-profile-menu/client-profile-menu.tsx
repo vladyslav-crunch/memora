@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, {useEffect, useRef, useState} from "react";
 import styles from "./client-profile-menu.module.css";
-import {LogOut, UserRound, Settings} from "lucide-react";
+import {LogOut, UserRound} from "lucide-react";
 import {useUser} from "@/hooks/useUser";
 import {CldImage} from "next-cloudinary";
 
@@ -69,7 +69,7 @@ export default function ClientProfileMenu({signOutAction}: Props) {
                             crop="fill"
                             alt="Profile Picture"
                             priority
-                            className={styles.ProfileMenuImage}
+                            className={styles.profileMenuImage}
                         />
                     ) : (
                         <Image
@@ -78,7 +78,7 @@ export default function ClientProfileMenu({signOutAction}: Props) {
                             height={75}
                             alt="Profile Picture"
                             priority
-                            className={styles.ProfileMenuImage}
+                            className={styles.profileMenuImage}
                         />
                     )
                 )}
@@ -96,9 +96,6 @@ export default function ClientProfileMenu({signOutAction}: Props) {
                         <UserRound strokeWidth={1.2}/> Profile
                     </Link>
 
-                    <Link href="/settings" role="menuitem" className={styles.item} onClick={() => setOpen(false)}>
-                        <Settings strokeWidth={1.2}/> Settings
-                    </Link>
 
                     <form action={signOutAction}>
                         <button type="submit" role="menuitem" className={styles.item}>

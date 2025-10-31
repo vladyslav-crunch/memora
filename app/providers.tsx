@@ -1,9 +1,9 @@
 "use client";
 import {Toaster} from "sonner";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {useState} from "react";
+import {ReactNode, useState} from "react";
 
-export default function Providers({children}: { children: React.ReactNode }) {
+export default function Providers({children}: { children: ReactNode }) {
     const [qc] = useState(() => new QueryClient());
     return (
         <QueryClientProvider client={qc}>

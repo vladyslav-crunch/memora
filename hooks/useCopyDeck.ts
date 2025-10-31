@@ -15,7 +15,7 @@ export function useCopyDeck() {
 
         onSuccess: (data) => {
             toast.success(`Deck copied successfully! ${data.copiedCount} cards added.`);
-
+            
             qc.invalidateQueries({queryKey: ["decks"]});
             qc.invalidateQueries({queryKey: ["deckStats"]});
             qc.invalidateQueries({queryKey: ["cards"]});

@@ -1,5 +1,8 @@
 .wrapper {
     position: relative;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
 }
 
 .trigger {
@@ -7,7 +10,7 @@
     border-radius: 50%;
 }
 
-.ProfileMenuImage {
+.profileMenuImage {
     border-radius: 50%;
     object-fit: cover;
     display: block;
@@ -16,6 +19,7 @@
 
 .menu {
     position: absolute;
+    top: 85px;
     right: 0;
     min-width: 200px;
     background: white;
@@ -36,7 +40,6 @@
 
 
 .item {
-
     display: flex;
     align-items: center;
     gap: 16px;
@@ -56,4 +59,16 @@
 .item:focus {
     background: rgba(0, 0, 0, 0.04);
     outline: none;
+}
+
+@media (max-width: 900px) {
+    .profileMenuImage {
+        height: 50px;
+        width: 50px;
+    }
+
+    .menu {
+        top: 60px;
+    }
+
 }

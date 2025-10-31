@@ -1,0 +1,24 @@
+.headerLogo {
+    font-size: 28px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    width: 75px;
+    height: 75px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+    .logoText {
+        display: none;
+    }
+
+    .logo {
+        width: 50px;
+        height: 50px;
+    }
+}

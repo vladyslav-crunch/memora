@@ -14,11 +14,8 @@ body {
 }
 
 .pageShell {
-    /* full viewport height (mobile-safe) */
     height: 100dvh;
-    /* your padding */
     padding: 20px 50px;
-    /* so children can stretch */
     display: flex;
     flex-direction: column;
     box-sizing: border-box;

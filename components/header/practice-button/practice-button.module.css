@@ -23,3 +23,12 @@
     align-items: center;
     border-radius: 50%;
 }
+
+@media (max-width: 900px) {
+    .practiceButtonContainer {
+        z-index: 2;
+        position: absolute;
+        bottom: 25px;
+        right: 25px;
+    }
+}
