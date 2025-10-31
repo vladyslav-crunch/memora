@@ -5,9 +5,10 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    height: 265px;
+    gap: 10px;
+    height: 100%;
     justify-content: space-between;
+
 }
 
 .profileLoading {
@@ -17,3 +18,10 @@
     height: 70%;
 }
 
+@media (max-width: 900px) {
+    .profileContainer {
+        margin: auto;
+        height: 100%;
+        max-width: 400px;
+    }
+}

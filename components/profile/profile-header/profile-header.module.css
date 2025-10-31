@@ -22,3 +22,21 @@
     font-weight: 400;
     margin-bottom: 11px;
 }
+
+@media (max-width: 900px) {
+    .profileHeader {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #userName {
+        display: flex;
+        justify-content: center;
+    }
+
+    #userEmail {
+        display: flex;
+        justify-content: center;
+    }
+}
