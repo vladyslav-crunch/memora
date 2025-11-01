@@ -26,7 +26,9 @@ export default function PracticeFinalsStats({stats}: SessionCompleteProps) {
                     <tbody>
                     {uniqueStats.map((s, idx) => (
                         <tr key={idx}>
-                            <td>{s.question}</td>
+                            <td>
+                                <div className={styles.clampedText}>{s.question}</div>
+                            </td>
                             <td>
                                 {s.oldStrength?.toFixed(2)} {s.correct ? "→" : "←"}{" "}
                                 <b>{s.newStrength?.toFixed(2)}</b>

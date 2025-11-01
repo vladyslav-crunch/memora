@@ -60,6 +60,12 @@ export default function Practice() {
         }
     }, [session, router]);
 
+    useEffect(() => {
+        if (queue && currentIndex >= queue.length && stats.length === 0) {
+            router.push("/");
+        }
+    }, [queue, currentIndex, stats.length, router]);
+
 
     if (isPending || queue === null) {
         return (
@@ -71,7 +77,8 @@ export default function Practice() {
     if (isError) return <p>Failed to generate session</p>;
     if (!data) return null;
     if (session?.length === 0) return <p>No cards due today 🎉</p>;
-    if (currentIndex >= queue.length) {
+
+    if (queue && currentIndex >= queue.length) {
         return <PracticeFinalsStats stats={stats}/>;
     }
 
