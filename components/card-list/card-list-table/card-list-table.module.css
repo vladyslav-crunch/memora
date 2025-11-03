@@ -1,119 +1,124 @@
 .table {
-    width: 100%;
-    border-collapse: collapse; /* inner borders only */
+  width: 100%;
+  border-collapse: collapse; /* inner borders only */
 }
 
 /* Table header */
 .thead {
-    background-color: #eb9d8e;
+  background-color: #eb9d8e;
 }
 
 .th {
-    padding: 0.5rem 1rem;
-    text-align: center;
-    font-weight: 600;
-    position: sticky;
-    top: 0; /* stick to top when scrolling */
-    background-color: #ffbbac;
-    z-index: 2; /* stay above rows */
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-weight: 600;
+  position: sticky;
+  top: 0; /* stick to top when scrolling */
+  background-color: #ffbbac;
+  z-index: 2; /* stay above rows */
 }
 
 /* Table cells */
 .td {
-    border-bottom: 1px solid #efb1a5; /* inner horizontal borders */
-    border-right: 1px solid #efb1a5; /* inner vertical borders */
-    padding: 0.5rem 1rem;
-    text-align: center;
-    background-color: #FFE9DB;
+  border-bottom: 1px solid #efb1a5; /* inner horizontal borders */
+  border-right: 1px solid #efb1a5; /* inner vertical borders */
+  padding: 0.5rem 1rem;
+  text-align: center;
+  background-color: #ffe9db;
 }
 
 /* Last column: remove right border */
 .tr td:last-child,
 .tr th:last-child {
-    border-right: none;
+  border-right: none;
 }
 
-
 .table tr:last-child td {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .tr td:nth-child(2),
 .tr th:nth-child(2) {
-    text-align: left;
+  text-align: left;
 }
 
 .thead th:nth-child(2) {
-    text-align: left;
+  text-align: left;
 }
 
 .cardFront {
-
 }
 
 .cardBack {
-    color: #e5462b;
+  color: #e5462b;
 }
 
 .cardContext {
-    font-size: 14px;
-    color: #a882b6;
+  font-size: 14px;
+  color: #a882b6;
 }
 
 /* Scrollable table container */
 .cardTableContainer {
-    max-height: calc(100%); /* limit table height */
-    overflow-y: auto; /* vertical scroll */
-    overflow-x: auto; /* horizontal scroll on small screens */
-    border-radius: 15px; /* optional rounding */
+  max-height: calc(100%); /* limit table height */
+  overflow-y: auto; /* vertical scroll */
+  overflow-x: auto; /* horizontal scroll on small screens */
+  border-radius: 15px; /* optional rounding */
 }
 
-
 .cardLevel {
-    font-weight: 500;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.375rem;
-    color: white;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  color: white;
 }
 
 .veryLow {
-    background-color: #ed6464;
+  background-color: #ed6464;
+  white-space: nowrap;
 }
 
 .low {
-    background-color: #ffcf4b;
+  background-color: #ffcf4b;
 }
 
 .mid {
-    background-color: #5fa4f8;
+  background-color: #5fa4f8;
 }
 
 .high {
-    background-color: #49dc7f;
+  background-color: #49dc7f;
 }
 
 .cardTableContainer::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+  width: 10px;
+  height: 10px;
 }
 
 .cardTableContainer::-webkit-scrollbar-track {
-    background: #ffe9db;
-    border-radius: 10px;
+  background: #ffe9db;
+  border-radius: 10px;
 }
 
 .cardTableContainer::-webkit-scrollbar-thumb {
-    background: #eb9d8e;
-    border-radius: 10px;
-    border: 2px solid #ffe9db;
+  background: #eb9d8e;
+  border-radius: 10px;
+  border: 2px solid #ffe9db;
 }
 
 .cardTableContainer::-webkit-scrollbar-thumb:hover {
-    background: #e5462b;
+  background: #e5462b;
 }
 
 .cardTableContainer {
-    scrollbar-width: thin;
-    scrollbar-color: #eb9d8e #ffe9db;
+  scrollbar-width: thin;
+  scrollbar-color: #eb9d8e #ffe9db;
 }
 
+@media (max-width: 900px) {
+  .th,
+  .td {
+    font-size: 14px;
+    padding: 5px 10px;
+  }
+}

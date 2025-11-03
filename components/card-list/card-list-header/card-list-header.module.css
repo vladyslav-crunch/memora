@@ -1,45 +1,68 @@
 .cardListHeaderContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
 .cardListHeaderTitle {
-    font-size: 24px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  font-size: 24px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  padding-right: 5px;
 }
 
 .cardListHeaderButtons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .cardListHeaderOwner {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    color: #333333;
-    font-weight: 300;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  color: #333333;
+  font-weight: 300;
 
-    & span {
-        font-weight: 500;
-        font-size: 16px;
-    }
+  & span {
+    font-weight: 500;
+    font-size: 16px;
+  }
 }
 
 .cardListHeaderImage {
-    border-radius: 50%;
-    object-fit: cover;
-    display: block;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
-    height: 45px;
-    width: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+  height: 45px;
+  width: 45px;
+}
+
+@media (max-width: 900px) {
+  .cardListHeaderTitle {
+    font-size: 18px;
+    gap: 5px;
+  }
+  .deckName {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  .cardListHeaderOwner {
+    display: none;
+  }
 }
