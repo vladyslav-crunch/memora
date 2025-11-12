@@ -3,11 +3,6 @@
     gap: 10px;
 }
 
-@media (max-width: 900px) {
-    .decksGrid {
-        flex-wrap: wrap;
-    }
-}
 
 .deckFallback {
     width: 100%;
@@ -15,4 +10,29 @@
     align-items: center;
     justify-content: center;
     height: 170px;
+}
+
+.lastSharedDecksTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lastSharedDecksList {
+    display: none;
+}
+
+
+@media (max-width: 900px) {
+    .decksGrid {
+        flex-wrap: wrap;
+    }
+
+    .lastSharedDecksList {
+        display: block;
+    }
+
+    .lastSharedDecksArrow {
+        display: none;
+    }
 }

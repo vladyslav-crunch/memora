@@ -56,7 +56,6 @@ export default function Page() {
                                 <SharedDeck key={deck.id} deck={deck}/>
                             ))}
                         </div>
-
                         {hasNextPage && (
                             <div ref={ref} className="flex justify-center py-8">
                                 {isFetchingNextPage && <Spinner size={40}/>}

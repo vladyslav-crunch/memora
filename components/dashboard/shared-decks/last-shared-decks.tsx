@@ -2,7 +2,7 @@
 import React from "react";
 import {useRouter} from "next/navigation";
 import styles from "./shared-decks.module.css";
-import {ArrowRight} from "lucide-react";
+import {ArrowRight, List} from "lucide-react";
 import Spinner from "@/components/ui/spinner/spinner";
 import SharedDeck from "@/components/dashboard/shared-decks/shared-deck";
 import {useInfinitePublicDecks} from "@/hooks/useInfinitePublicDecks";
@@ -19,14 +19,17 @@ function LastSharedDecks() {
         },
         3
     );
-    
+
     const decks = data?.pages.flatMap((page) => page.items) ?? [];
     const itemsCount = decks.length;
-
+    const handleMore = () => {
+        router.push("/shared")
+    }
     return (
-        <div>
-            <div>
-                <h3 className="text-2xl font-semibold mb-4">Last shared decks</h3>
+        <div className='mb-6'>
+            <div className={`${styles.lastSharedDecksTitle} mb-4`}>
+                <h3 className="text-2xl font-semibold ">Last shared decks</h3>
+                <span className={styles.lastSharedDecksList} onClick={handleMore}><List size={30}/></span>
             </div>
 
             {isLoading && (
@@ -44,14 +47,15 @@ function LastSharedDecks() {
                             <SharedDeck deck={deck} key={deck.id}/>
                         ))}
                     </div>
-
+                    <span className={styles.lastSharedDecksArrow}>
                     <h2
-                        className="text-xl mt-3 flex items-center gap-1 cursor-pointer "
-                        onClick={() => router.push("/shared")}
+                        className="text-xl mt-3 flex items-center gap-1 cursor-pointer"
+                        onClick={handleMore}
                     >
                         See more
                         <ArrowRight size={21} strokeWidth={1.3}/>
                     </h2>
+                        </span>
                 </div>
             )}
 

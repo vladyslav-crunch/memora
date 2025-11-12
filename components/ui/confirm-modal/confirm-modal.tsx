@@ -12,6 +12,7 @@ interface ConfirmModalProps {
     message: string;
     confirmLabel?: string;
     cancelLabel?: string;
+    variant?: 'danger' | 'primary';
 }
 
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -22,16 +23,17 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
                                                               title,
                                                               confirmLabel = "Confirm",
                                                               cancelLabel = "Cancel",
+                                                              variant = "primary",
                                                           }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleConfirm = async () => {
         setIsLoading(true);
         try {
-            await onConfirm();   // await the promise from parent
+            await onConfirm();
         } finally {
             setIsLoading(false);
-            onClose();           // close modal after success/failure
+            onClose();
         }
     };
     return (
@@ -47,7 +49,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
                 </Button>
 
                 <Button buttonType={BUTTON_VARIANT.modal}
-                        buttonColor={BUTTON_COLOR.red}
+                        buttonColor={variant === "danger" ? BUTTON_COLOR.red : BUTTON_COLOR.orange}
                         onClick={async () => {
                             await handleConfirm();
                             onClose();

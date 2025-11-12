@@ -43,8 +43,6 @@ export default function EditDeckModal({open, onOpenChange, deck}: UpdateDeckModa
         defaultValues: deck as UpdateDeckInput, // prefill with deck
     });
 
-    // reset when deck changes
-
     useEffect(() => {
         reset(deck as UpdateDeckInput);
     }, [deck, reset]);
@@ -172,6 +170,7 @@ export default function EditDeckModal({open, onOpenChange, deck}: UpdateDeckModa
                           onClose={() => setIsConfirm(false)}
                           onConfirm={handleDelete}
                           message={"Are you sure you want to delete this deck? This action cannot be undone."}
+                          variant={"danger"}
             />
         </>
     );

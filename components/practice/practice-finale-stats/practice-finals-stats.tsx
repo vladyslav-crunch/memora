@@ -2,6 +2,7 @@ import {CardStat} from "@/app/(protected-without-header)/practice/page";
 import styles from "./practice-finals-stats.module.css";
 import Button, {BUTTON_COLOR} from "@/components/ui/button/button";
 import Link from "next/link";
+import {formatLabel} from "@/lib/utility/formatLabel";
 
 type SessionCompleteProps = {
     stats: CardStat[];
@@ -33,7 +34,7 @@ export default function PracticeFinalsStats({stats}: SessionCompleteProps) {
                                 {s.oldStrength?.toFixed(2)} {s.correct ? "→" : "←"}{" "}
                                 <b>{s.newStrength?.toFixed(2)}</b>
                             </td>
-                            <td>{s.bucket}</td>
+                            <td>{formatLabel(s.bucket)}</td>
                         </tr>
                     ))}
                     </tbody>

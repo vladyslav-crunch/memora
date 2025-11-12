@@ -1,4 +1,3 @@
-// app/api/cards/[[id]]/answer/route.ts
 import {NextResponse} from "next/server";
 import {prisma} from "@/lib/prisma";
 import {requireUserId} from "@/lib/api/auth-helper";

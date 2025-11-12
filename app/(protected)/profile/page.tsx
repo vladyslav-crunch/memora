@@ -86,8 +86,8 @@ export default function ProfilePage() {
                 confirmLabel="Delete"
                 cancelLabel="Cancel"
                 onConfirm={handleDelete}
+                variant={"danger"}
             />
-
         </div>
     );
 }
