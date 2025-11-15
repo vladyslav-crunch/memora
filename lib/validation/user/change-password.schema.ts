@@ -19,7 +19,7 @@ export type ChangePasswordValues = z.infer<typeof ChangePasswordSchema>;
 //BACKEND schema
 
 export const ChangePasswordServerSchema = z.object({
-    currentPassword: z.string().min(1, "Current password is required"),
+    currentPassword: z.string().min(1, "Current password is required").optional(),
     newPassword: PasswordSchema,
 });
 

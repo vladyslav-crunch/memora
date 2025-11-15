@@ -34,20 +34,17 @@ export async function PATCH(req: Request) {
         }
 
         if (user.passwordHash) {
+            if (!currentPassword) {
+                return NextResponse.json({
+                    errors: [{field: "currentPassword", message: "Current password is required"}],
+                }, {status: 400});
+            }
+
             const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
             if (!isMatch) {
-                console.log("Not match");
-                return NextResponse.json(
-                    {
-                        errors: [
-                            {
-                                field: "currentPassword",
-                                message: "Current password is incorrect",
-                            },
-                        ],
-                    },
-                    {status: 400}
-                );
+                return NextResponse.json({
+                    errors: [{field: "currentPassword", message: "Current password is incorrect"}],
+                }, {status: 400});
             }
         }
 

@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import React, {useEffect, useRef, useState} from "react";
 import styles from "./client-profile-menu.module.css";
@@ -72,12 +71,11 @@ export default function ClientProfileMenu({signOutAction}: Props) {
                             className={styles.profileMenuImage}
                         />
                     ) : (
-                        <Image
+                        <img
                             src={imageUrl}
                             width={75}
                             height={75}
                             alt="Profile Picture"
-                            priority
                             className={styles.profileMenuImage}
                         />
                     )

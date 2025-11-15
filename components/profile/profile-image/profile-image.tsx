@@ -1,6 +1,5 @@
 import React from "react";
 import {CldImage, CldUploadWidget, CloudinaryUploadWidgetInfo, CloudinaryUploadWidgetResults} from "next-cloudinary";
-import Image from "next/image";
 import {Pencil} from "lucide-react";
 import styles from './profile-image.module.css'
 
@@ -11,7 +10,7 @@ type Props = {
 };
 
 export default function ProfileImage({imageUrl, onUpload, disabled}: Props) {
-    
+
     const handleUpload = (result: CloudinaryUploadWidgetResults) => {
         if (result && typeof result.info !== "string") {
             const info = result.info as CloudinaryUploadWidgetInfo;
@@ -26,8 +25,8 @@ export default function ProfileImage({imageUrl, onUpload, disabled}: Props) {
                 imageUrl.includes("res.cloudinary.com") ? (
                     <CldImage src={imageUrl} width="128" height="128" crop="fill" alt="Profile Picture" priority/>
                 ) : (
-                    <Image src={imageUrl.replace(/=s\d+-c$/, "=s512-c")} width={128} height={128}
-                           alt="Profile Picture"/>
+                    <img src={imageUrl.replace(/=s\d+-c$/, "=s512-c")} width={128} height={128}
+                         alt="Profile Picture"/>
                 )
             ) : (
                 <div className={styles.profileImage}>No Image</div>
