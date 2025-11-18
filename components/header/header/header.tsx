@@ -38,7 +38,7 @@ export default function Header({mode}: HeaderProps) {
                 <div className={styles.headerMobile}>
                     {mode !== "auth" && (
                         <>
-                            <Link href="/">
+                            <Link href="/public">
                                 <Logo/>
                             </Link>
                             {pathname === "/" && <PracticeButton/>}
@@ -50,7 +50,7 @@ export default function Header({mode}: HeaderProps) {
             ) : (
                 <>
                     <div className={styles.headerLeftSide}>
-                        <Link href="/">
+                        <Link href="/public">
                             <Logo/>
                         </Link>
                     </div>

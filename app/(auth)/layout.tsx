@@ -1,4 +1,4 @@
-import Header from "@/components/header/header";
+import Header from "@/components/header/header/header";
 import styles from "./auth-layout.module.css";
 import AuthCards from "@/components/ui/auth-cards/auth-cards";
 import {auth} from "@/lib/auth";

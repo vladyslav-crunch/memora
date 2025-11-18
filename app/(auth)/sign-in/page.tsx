@@ -1,7 +1,7 @@
 "use client";
 
-import SignInForm from "@/components/auth/sign-in-form";
-import AuthFormWrapper from "@/components/auth/auth-form-wrapper";
+import SignInForm from "@/components/auth/auth-forms/sign-in-form";
+import AuthFormWrapper from "@/components/auth/auth-forms/auth-form-wrapper";
 
 function SignInPage() {
     return (

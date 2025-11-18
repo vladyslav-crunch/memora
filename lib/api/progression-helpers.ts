@@ -83,7 +83,7 @@ export async function recalcUserProgressionHistoryForToday(
     }
 
     await tx.userProgressionHistory.upsert({
-        where: {userId_createdAt: {userId, createdAt: start}}, // TS infers type from schema
+        where: {userId_createdAt: {userId, createdAt: start}},
         update: {
             lastModifiedAt: now,
             highIndicationCount: counts.high,

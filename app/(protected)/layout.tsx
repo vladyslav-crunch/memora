@@ -1,6 +1,6 @@
 import {auth} from "@/lib/auth";
 import {redirect} from "next/navigation";
-import Header from "@/components/header/header";
+import Header from "@/components/header/header/header";
 import React from "react";
 
 export default async function ProtectedLayout({children}: { children: React.ReactNode }) {

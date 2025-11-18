@@ -31,7 +31,8 @@ export async function GET(_req: Request, context: { params: Promise<{ id: string
             return NextResponse.json(
                 {
                     message: "Invalid parameters",
-                    errors: err.issues.map((i) => ({field: i.path.join("."), message: i.message})),
+                    errors: err.issues.map((i) =>
+                        ({field: i.path.join("."), message: i.message})),
                 },
                 {status: 400}
             );
