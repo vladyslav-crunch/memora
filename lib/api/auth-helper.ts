@@ -2,6 +2,10 @@
 import {auth} from "@/lib/auth";
 import {prisma} from "@/lib/prisma";
 import {ApiError} from "@/lib/types/api.types";
+import {SignInSchema} from "@/lib/validation/auth/sign-in.schema";
+import bcrypt from "bcrypt";
+import {JWT} from "@auth/core/jwt";
+import {Session, User} from "next-auth";
 
 /** Get the current user's [id] or null */
 export async function getSessionUserId(): Promise<string | null> {
@@ -37,4 +41,39 @@ export async function ensureCardOwnership(cardId: number, userId: string) {
         throw new ApiError(404, "Card not found.");
     }
     return card;
+}
+
+/** Authorize Credentials provider */
+export async function authorizeCredentials(credentials: unknown) {
+    const parsed = SignInSchema.safeParse(credentials);
+    if (!parsed.success) return null;
+    const email = parsed.data.email.toLowerCase().trim();
+    const {password} = parsed.data;
+
+    const user = await prisma.user.findUnique({where: {email}});
+    if (!user?.passwordHash) return null;
+
+    const ok = await bcrypt.compare(password, user.passwordHash);
+    if (!ok) return null;
+
+    return {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        image: user.image,
+    };
+}
+
+/** Add user.id to JWT */
+export function appendUserIdToToken(token: JWT, user: Pick<User, "id"> | null | undefined) {
+    if (user?.id) token.sub = user.id;
+    return token;
+}
+
+/** Add userId to session */
+export function appendTokenToSession(session: Session, token: JWT) {
+    if (session.user && typeof token.sub === "string") {
+        session.user.id = token.sub;
+    }
+    return session;
 }

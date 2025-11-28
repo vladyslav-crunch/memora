@@ -5,12 +5,20 @@ import styles from "./client-profile-menu.module.css";
 import {LogOut, UserRound} from "lucide-react";
 import {useUser} from "@/hooks/useUser";
 import {CldImage} from "next-cloudinary";
+import {signOut} from "next-auth/react";
+import {toast} from "sonner";
 
-type Props = {
-    signOutAction: () => Promise<void>;
+
+const handleSignOut = async () => {
+    try {
+        await signOut();
+    } catch (error) {
+        console.error(error);
+        toast.error("Error signing out");
+    }
 };
 
-export default function ClientProfileMenu({signOutAction}: Props) {
+export default function ClientProfileMenu() {
     const [open, setOpen] = useState(false);
     const btnRef = useRef<HTMLButtonElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -95,7 +103,7 @@ export default function ClientProfileMenu({signOutAction}: Props) {
                     </Link>
 
 
-                    <form action={signOutAction}>
+                    <form action={handleSignOut}>
                         <button type="submit" role="menuitem" className={styles.item}>
                             <LogOut strokeWidth={1.2}/> Log out
                         </button>

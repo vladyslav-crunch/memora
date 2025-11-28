@@ -3,12 +3,12 @@
 import styles from "./header.module.css";
 import Logo from "@/components/header/logo/logo";
 import SearchBar from "@/components/header/search-bar/search-bar";
-import ProfileMenu from "@/components/header/profile-menu/profile-menu";
 import Link from "next/link";
 import PracticeButton from "@/components/header/practice-button/practice-button";
 import {useMediaQuery} from "usehooks-ts";
 import {usePathname} from "next/navigation";
 import {useEffect, useState} from "react";
+import ClientProfileMenu from "@/components/header/client-profile-menu/client-profile-menu";
 
 type HeaderMode = "auth" | "dashboard" | "learning";
 
@@ -38,19 +38,19 @@ export default function Header({mode}: HeaderProps) {
                 <div className={styles.headerMobile}>
                     {mode !== "auth" && (
                         <>
-                            <Link href="/public">
+                            <Link href="/">
                                 <Logo/>
                             </Link>
                             {pathname === "/" && <PracticeButton/>}
                             <SearchBar/>
-                            <ProfileMenu/>
+                            <ClientProfileMenu/>
                         </>
                     )}
                 </div>
             ) : (
                 <>
                     <div className={styles.headerLeftSide}>
-                        <Link href="/public">
+                        <Link href="/">
                             <Logo/>
                         </Link>
                     </div>
@@ -58,7 +58,7 @@ export default function Header({mode}: HeaderProps) {
                         <div className={styles.headerRightSide}>
                             <PracticeButton/>
                             <SearchBar/>
-                            <ProfileMenu/>
+                            <ClientProfileMenu/>
                         </div>
                     )}
                 </>

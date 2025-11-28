@@ -4,7 +4,6 @@ export const ImportCardSchema = z.object({
     front: z.string().min(1, "Front text is required"),
     back: z.string().min(1, "Back text is required"),
     context: z.string().nullable().optional(),
-    intervalStrength: z.number().min(0).max(1).nullable().optional(),
 });
 
 export const ImportCardsSchema = z.object({

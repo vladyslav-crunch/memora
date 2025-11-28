@@ -36,8 +36,8 @@ export default function SignInForm() {
         }
     }
 
-    function handleGoogleSignIn() {
-        signIn("google", {redirectTo: "/"});
+    async function handleGoogleSignIn() {
+        await signIn("google", {redirectTo: "/"});
     }
 
     return (

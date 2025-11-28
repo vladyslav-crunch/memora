@@ -42,13 +42,13 @@ export async function POST(req: Request) {
                             front: c.front,
                             back: c.back,
                             context: c.context ?? null,
-                            intervalStrength: c.intervalStrength ?? 0,
+                            intervalStrength: 0,
                             nextRepetitionTime: now,
                             createdAt: now,
                         },
                     });
 
-                    const indication = bucketFromInterval(c.intervalStrength ?? 0);
+                    const indication = bucketFromInterval(0);
                     await upsertUserProgressionEntry(tx, userId, card.id, indication, now);
 
                     return card;
