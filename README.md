@@ -1,36 +1,134 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Memora – Spaced Repetition Flashcard Application
 
-## Getting Started
+**Memora** is a modern educational web application designed to support learning through the **Spaced Repetition System (SRS)**.
+By intelligently scheduling reviews based on user performance, it helps students and professionals retain large amounts of information efficiently.
 
-First, run the development server:
+![Memora Home](https://i.ibb.co/23KbKw1p/Memora-dashboard.png)
+![Momora Quiz](https://i.ibb.co/DPyJGQPX/Memora-play.png)
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Features
+
+### 🧠 Smart Learning
+
+* Uses an **SRS algorithm** to automatically adjust review intervals based on mastery level.
+
+### ❓ Multiple Quiz Modes
+
+* **Normal** – Standard term-to-definition review
+* **Reversed** – Definition-to-term learning
+* **Typing** – Active recall by typing the correct answer
+
+### 📚 Deck Management
+
+* Create, edit, and organize flashcards into custom decks.
+
+### 🌍 Community Sharing
+
+* Access and copy public decks shared by other users into your own library.
+
+### 📈 Progress Tracking
+
+* Visualize your learning journey with weekly reports and performance charts.
+
+### 🔄 Data Portability
+
+* Import and export flashcards in text format with customizable separators.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Framework:** Next.js (App Router)
+* **Database:** PostgreSQL
+* **ORM:** Prisma
+* **Authentication:** NextAuth.js (Google OAuth + Email/Password)
+* **State Management:** TanStack Query
+* **Validation:** Zod
+* **Styling:** CSS Modules
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Prerequisites
+
+* Node.js **v20 or higher**
+* PostgreSQL database
+
+### 2. Environment Variables
+
+Create a `.env` file in the root directory and configure the following:
+
+```env
+# DATABASE
+DATABASE_URL="postgresql://DB_USER:DB_PASSWORD@DB_HOST:DB_PORT/DB_NAME"
+
+# NEXTAUTH CONFIG
+AUTH_URL="http://localhost:3000"
+AUTH_SECRET="GENERATE_A_RANDOM_SECRET_HERE"
+
+# GOOGLE PROVIDER
+AUTH_GOOGLE_ID="YOUR_GOOGLE_OAUTH_CLIENT_ID"
+AUTH_GOOGLE_SECRET="YOUR_GOOGLE_OAUTH_CLIENT_SECRET"
+
+# CLOUDINARY
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="YOUR_CLOUDINARY_CLOUD_NAME"
+NEXT_PUBLIC_CLOUDINARY_API_KEY="YOUR_CLOUDINARY_API_KEY"
+CLOUDINARY_API_SECRET="YOUR_CLOUDINARY_API_SECRET"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Install dependencies
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Generate Prisma Client
+npx prisma generate
 
-## Learn More
+# Run database migrations
+npx prisma migrate dev
 
-To learn more about Next.js, take a look at the following resources:
+# Start development server
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The application will be available at:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```text
+http://localhost:3000
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧪 Testing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The project uses **Vitest** and **React Testing Library** for unit and integration tests.
+
+```bash
+npm run test
+```
+
+---
+
+## 📝 Project Structure
+
+```text
+/app         # Routing, API handlers, and page layouts
+/components  # Reusable UI elements and logic blocks
+/hooks       # Custom TanStack Query hooks for data fetching
+/lib         # Utility functions and server-side helpers
+/prisma      # Database schema and migration files
+```
+
+---
+
+## 📄 License / Academic Project
+
+This project was developed as an **engineering thesis** at the **Lublin University of Technology**, Faculty of Electrical Engineering and Computer Science.
+
+* **Author:** Vladyslav Tretiak
+* **Supervisor:** dr Beata Pańczyk
+* **Location:** Lublin
+* **Year:** 2025
